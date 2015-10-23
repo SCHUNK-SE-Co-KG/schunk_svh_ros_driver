@@ -54,9 +54,21 @@ void runCallback(const std_msgs::Empty&)
 
 int main(int argc, char **argv)
 {
+  //! Prefix for the driver to identify joint names if the Driver should expext "left_hand_Pinky" than the prefix is left_hand
+  std::string name_prefix;
+
   // Set up ROS.
   ros::init(argc, argv, "svh_sine_test");
   ros::NodeHandle nh("~");
+
+  try
+  {
+    nh.param<std::string>("name_prefix",name_prefix,"left_hand");
+  }
+  catch (ros::InvalidNameException e)
+  {
+    ROS_ERROR("Parameter Error!");
+  }
 
   // Subscribe connect topic (Empty)
   ros::Subscriber run_sub = nh.subscribe("toggle_run", 1, runCallback);
@@ -70,15 +82,15 @@ int main(int argc, char **argv)
   channel_pos.position.resize(9, 0.0);
 
   // Pre Fill the Names of the Finger
-  channel_pos.name[0] = "Thumb_Flexion";
-  channel_pos.name[1] = "Thumb_Opposition";
-  channel_pos.name[2] = "Index_Finger_Distal";
-  channel_pos.name[3] = "Index_Finger_Proximal";
-  channel_pos.name[4] = "Middle_Finger_Distal";
-  channel_pos.name[5] = "Middle_Finger_Proximal";
-  channel_pos.name[6] = "Ring_Finger";
-  channel_pos.name[7] = "Pinky";
-  channel_pos.name[8] = "Finger_Spread";
+  channel_pos.name[0] = name_prefix + "_" + "Thumb_Flexion";
+  channel_pos.name[1] = name_prefix + "_" + "Thumb_Opposition";
+  channel_pos.name[2] = name_prefix + "_" + "Index_Finger_Distal";
+  channel_pos.name[3] = name_prefix + "_" + "Index_Finger_Proximal";
+  channel_pos.name[4] = name_prefix + "_" + "Middle_Finger_Distal";
+  channel_pos.name[5] = name_prefix + "_" + "Middle_Finger_Proximal";
+  channel_pos.name[6] = name_prefix + "_" + "Ring_Finger";
+  channel_pos.name[7] = name_prefix + "_" + "Pinky";
+  channel_pos.name[8] = name_prefix + "_" + "Finger_Spread";
 
   // Set up the normalized time
   ros::Time counter = ros::Time::now();
