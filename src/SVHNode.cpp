@@ -94,7 +94,7 @@ SVHNode::SVHNode(const ros::NodeHandle & nh)
   {
     if(disable_flags[i])
     {
-      ROS_WARN("svh_controller disabling channel nr %i", i);
+      ROS_WARN_STREAM("svh_controller disabling channel nr " << i);
     }
   }
 
@@ -294,7 +294,7 @@ void SVHNode::jointStateCallback(const sensor_msgs::JointStateConstPtr& input )
       }
       else
       {
-        ROS_WARN("Vector of input joint state is too small! Cannot acces elemnt nr %i", index);
+        ROS_WARN_STREAM("Vector of input joint state is too small! Cannot acces elemnt nr " << index);
       }
     }
     else
