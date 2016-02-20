@@ -51,6 +51,7 @@ SVHRosControlNode::SVHRosControlNode()
   try
   {
     m_priv_nh.param<bool>("autostart",autostart,false);
+    m_priv_nh.param<bool>("use_ros_control",m_use_ros_control,true);
     m_priv_nh.param<bool>("use_internal_logging",use_internal_logging,false);
     m_priv_nh.param<std::string>("serial_device",m_serial_device_name,"/dev/ttyUSB0");
     // Note : Wrong values (like numerics) in the launch file will lead to a "true" value here
@@ -205,6 +206,7 @@ SVHRosControlNode::SVHRosControlNode()
   if (autostart && m_finger_manager->connect(m_serial_device_name, m_connect_retry_count))
   {
     m_finger_manager->resetChannel(driver_svh::eSVH_ALL);
+    initDevices();
     ROS_INFO("Driver was autostarted! Input can now be sent. Have a safe and productive day!");
   }
   else
@@ -264,7 +266,7 @@ void SVHRosControlNode::initDevices()
   if (m_use_ros_control)
   {
     m_hardware_interface.reset(
-      new SVHRosControlHWInterface(m_pub_nh, m_finger_manager));
+      new SVHRosControlHWInterface(m_pub_nh, m_finger_manager, m_name_prefix));
     m_controller_manager.reset(
       new controller_manager::ControllerManager( m_hardware_interface.get(), m_pub_nh));
 

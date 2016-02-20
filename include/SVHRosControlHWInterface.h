@@ -27,10 +27,6 @@
 #include <controller_manager/controller_manager.h>
 #include <ros/ros.h>
 #include <sensor_msgs/JointState.h>
-#include <joint_limits_interface/joint_limits.h>
-#include <joint_limits_interface/joint_limits_urdf.h>
-#include <joint_limits_interface/joint_limits_rosparam.h>
-#include <joint_limits_interface/joint_limits_interface.h>
 
 /*!
  * \brief This class defines a ros-control hardware interface.
@@ -39,7 +35,7 @@
 class SVHRosControlHWInterface : public hardware_interface::RobotHW
 {
 public:
-  SVHRosControlHWInterface (ros::NodeHandle& nh, boost::shared_ptr<driver_svh::SVHFingerManager> &finger_manager);
+  SVHRosControlHWInterface (ros::NodeHandle& nh, boost::shared_ptr<driver_svh::SVHFingerManager> &finger_manager, std::string &name_prefix);
 
   /// \brief Initialize the hardware interface
   virtual void init();
@@ -70,16 +66,16 @@ protected:
   ros::NodeHandle m_node_handle;
   //! Handle to the SVH finger manager for library access
   boost::shared_ptr<driver_svh::SVHFingerManager> m_finger_manager;
+  std::string m_name_prefix;
 
   // Interfaces
   hardware_interface::JointStateInterface m_joint_state_interface;
   hardware_interface::PositionJointInterface m_position_joint_interface;
-  joint_limits_interface::PositionJointSoftLimitsInterface m_jnt_limits_interface;
 
   size_t m_num_joints;
 
   std::vector<uint8_t> m_node_ids;
-  std::vector<std::string> m_channel_names;
+  std::vector<std::string> m_channel_names; //Combines prefix with channel_description
   std::vector<double> m_joint_positions;
   std::vector<double> m_joint_velocity;
   std::vector<double> m_joint_effort;

@@ -24,14 +24,12 @@
 #include <driver_svh/SVHCurrentSettings.h>
 
 using namespace hardware_interface;
-using joint_limits_interface::JointLimits;
-using joint_limits_interface::SoftJointLimits;
-using joint_limits_interface::PositionJointSoftLimitsHandle;
-using joint_limits_interface::PositionJointSoftLimitsInterface;
 
-SVHRosControlHWInterface::SVHRosControlHWInterface (ros::NodeHandle& nh, boost::shared_ptr<driver_svh::SVHFingerManager> &finger_manager)
+SVHRosControlHWInterface::SVHRosControlHWInterface (ros::NodeHandle& nh, boost::shared_ptr<driver_svh::SVHFingerManager> &finger_manager,
+                                                    std::string &name_prefix)
   : m_node_handle (nh),
-    m_finger_manager (finger_manager)
+    m_finger_manager (finger_manager),
+    m_name_prefix(name_prefix)
 {
   init();
 }
@@ -44,77 +42,31 @@ void SVHRosControlHWInterface::init()
   m_joint_velocity.resize(driver_svh::eSVH_DIMENSION);
   m_joint_effort.resize(driver_svh::eSVH_DIMENSION);
   m_nodes_in_fault.resize(driver_svh::eSVH_DIMENSION, false);
-  m_channel_names.clear();
-
-  bool rosparam_limits_ok = true;
-//  bool urdf_limits_ok = true;
-//  bool urdf_soft_limits_ok = true;
-
-//  boost::shared_ptr<urdf::ModelInterface> urdf = urdf::parseURDF("robot_description");
-
-  urdf::Model urdf_model;
-  if(!m_node_handle.hasParam("robot_description"))
-  {
-      ROS_ERROR("robot description not found!!");
-  }
-  if(!urdf_model.initParam("robot_description"))
-  {
-    ROS_ERROR("robot description parsing error!!");
-  }
-
-
+  m_channel_names.resize(driver_svh::eSVH_DIMENSION);
 
   // Initialize controller
   for (std::size_t channel = 0; channel < driver_svh::eSVH_DIMENSION; ++channel) {
-    std::string joint_name = driver_svh::SVHController::m_channel_description[channel];
-    m_channel_names.push_back(joint_name);
+    m_channel_names[channel] = m_name_prefix + "_" + driver_svh::SVHController::m_channel_description[channel];
 
-    ROS_DEBUG_STREAM("Controller Hardware interface: Loading joint with id " << channel << " named " << joint_name);
-    if (joint_name == "")
+    ROS_DEBUG_STREAM("Controller Hardware interface: Loading joint with id " << channel << " named " << m_channel_names[channel]);
+    if (m_channel_names[channel] == "")
     {
-      ROS_ERROR_STREAM ("Could not find joint name for canopen device " << channel <<
+      ROS_ERROR_STREAM ("Could not find joint name for SVH device " << channel <<
         ". You will not be able to use this device with the controller!");
     }
     else
     {
       // Create joint state interface
       m_joint_state_interface.registerHandle(
-          hardware_interface::JointStateHandle(driver_svh::SVHController::m_channel_description[channel],
+          hardware_interface::JointStateHandle(m_channel_names[channel],
               &m_joint_positions[channel], &m_joint_velocity[channel], &m_joint_effort[channel]));
 
       // Create position joint interface
       hardware_interface::JointHandle hwi_handle(
-          m_joint_state_interface.getHandle(driver_svh::SVHController::m_channel_description[channel]),
+          m_joint_state_interface.getHandle(m_channel_names[channel]),
           &m_joint_position_commands[channel]);
       m_position_joint_interface.registerHandle(hwi_handle);
 
-      // Create a joint_limit_interface:
-
-      // Populate (soft) joint limits from the ros parameter server
-      rosparam_limits_ok = getJointLimits(joint_name, m_node_handle, m_joint_limits);
-      if(!rosparam_limits_ok) {
-        ROS_ERROR_STREAM ("Could not set the joint limits for joint " << joint_name << "!");
-      }
-
-      // Populate (soft) joint limits from URDF
-      // Limits specified in URDF overwrite existing values in 'limits' and 'soft_limits'
-      // Limits not specified in URDF preserve their existing values
-/*      boost::shared_ptr<const urdf::Joint> urdf_joint = urdf_model.getJoint(joint_name);
-      urdf_limits_ok = getJointLimits(urdf_joint, m_joint_limits);
-      if(!urdf_limits_ok) {
-        ROS_ERROR_STREAM ("Could not set the joint limits for joint " << joint_name << "!");
-      }
-      urdf_soft_limits_ok = getSoftJointLimits(urdf_joint, m_joint_soft_limits);
-      if(!urdf_soft_limits_ok) {
-        ROS_ERROR_STREAM ("Could not set the joint soft limits for joint " << joint_name << "!");
-      }*/
-
-      // Register handle in joint limits interface
-      PositionJointSoftLimitsHandle limits_handle(hwi_handle, // We read the state and read/write the command
-                                                  m_joint_limits,       // Limits spec
-                                                  m_joint_soft_limits);  // Soft limits spec
-
-      m_jnt_limits_interface.registerHandle(limits_handle);
     }
   }
 
@@ -157,9 +109,6 @@ void SVHRosControlHWInterface::write(ros::Time time, ros::Duration period)
 {
   if (driver_svh::eSVH_DIMENSION == m_joint_position_commands.size())
   {
-    // For this position based interface, only the joint limits in degree and velocity are enforced. Acceleration is ignored.
-    m_jnt_limits_interface.enforceLimits(period);
-
     if (!m_finger_manager->setAllTargetPositions(m_joint_position_commands))
     {
       ROS_WARN_ONCE("Set target position command rejected!");
