@@ -10,6 +10,9 @@ find_package(catkin REQUIRED COMPONENTS
     rqt_gui
     rqt_gui_py
     xacro
+    hardware_interface
+    controller_manager
+    urdf
 )
 
 ## System dependencies are found with CMake's conventions
@@ -116,6 +119,45 @@ target_link_libraries(svh_sin_test
   ${icl_comm_LIBRARIES}
   ${icl_core_LIBRARIES}
 )
+
+## ROS Control
+add_library(svh_ros_control_hw_interface
+  src/SVHRosControlHWInterface.cpp
+)
+add_dependencies(svh_ros_control_hw_interface
+  icl_comm
+  icl_core
+  driver_svh
+  ${PROJECT_NAME}_gencfg
+)
+
+## Specify libraries to link a library or executable target against
+target_link_libraries(svh_ros_control_hw_interface
+  ${catkin_LIBRARIES}
+  ${icl_comm_LIBRARIES}
+  ${icl_core_LIBRARIES}
+  ${driver_svh_LIBRARIES}
+)
+
+add_executable(svh_ros_control_node
+  src/SVHRosControlNode.cpp
+)
+add_dependencies(svh_ros_control_node
+  icl_comm
+  icl_core
+  driver_svh
+  ${PROJECT_NAME}_gencfg
+)
+
+## Specify libraries to link a library or executable target against
+target_link_libraries(svh_ros_control_node
+  svh_ros_control_hw_interface
+  ${catkin_LIBRARIES}
+  ${icl_comm_LIBRARIES}
+  ${icl_core_LIBRARIES}
+  ${driver_svh_LIBRARIES}
+)
+
 
 #############
 ## Install ##

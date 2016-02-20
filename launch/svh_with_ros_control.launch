@@ -1,0 +1,59 @@
+<launch>
+  <!-- global PARAMS Change here if needed -->
+  <arg name="gui" default="False" />
+  <arg name="autostart" default="true"/>
+  <arg name="serial_device" default="/dev/ttyUSB0"/>
+  <arg name="simulation" default="False"/>
+  <arg name="logging_config" default="$(find schunk_svh_driver)/etc/logging.xml" />
+  <arg name="use_internal_logging" default="False"/>
+  <arg name="controller_config" default="$(find schunk_svh_driver)/etc/controller_user.yaml" />
+  <arg name="general_config" default="$(find schunk_svh_driver)/etc/svh.yaml" />
+  <arg name="name_prefix" default="left_hand" />
+  <arg name="trajectory_controller_name" />
+  <arg name="frequency" default="30" />
+
+  <!-- load basic configuration -->
+  <rosparam file="$(arg general_config)" command="load" ns="svh_controller"/>
+  <!-- Load Yaml Configuration file-->
+  <rosparam file="$(find schunk_svh_driver)/etc/controller_default.yaml" command="load" ns="svh_controller"/>
+  <!-- Load the User Config file which will overwrite values from default -->
+  <rosparam file="$(arg controller_config)" command="load" ns="svh_controller"/>
+
+  <!-- Robot description for State publishers -->
+  <param name="robot_description" command="$(find xacro)/xacro.py $(find schunk_svh_driver)/description/urdf/svh-standalone.urdf.xacro" />
+
+  <!-- Launch actual driver node (if not in simulation)-->
+  <node unless="$(arg simulation)" name="svh_ros_control_node" pkg="schunk_svh_driver" type="svh_ros_control_node" output="screen">
+    <param name="serial_device" value="$(arg serial_device)"/>
+    <param name="autostart" value="$(arg autostart)" />
+    <!-- Params for the ICL (driver internal) logging. General configuration in the given logging.xml, output will be saved to the who given files -->
+    <param name="logging_config" value="$(arg logging_config)" />
+    <param name="use_internal_logging" value="$(arg use_internal_logging)" />
+    <param name="name_prefix" value="$(arg name_prefix)" />
+    <param name="frequency"           type="int"      value="$(arg frequency)" />
+  </node>
+
+
+
+
+
+  <!-- Robot state publisher for the TFs -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher">
+  </node>
+
+
+
+  <!-- Load controller settings -->
+  <rosparam file="$(find schunk_svh_driver)/cfg/svh_controllers.yaml" command="load"/>
+
+  <!-- spawn controller manager -->
+  <node name="ros_control_controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
+    output="screen" args="$(arg trajectory_controller_name)" />
+
+  <!-- load publishing controller -->
+  <node name="ros_control_controller_manager" pkg="controller_manager" type="controller_manager" respawn="false"
+    output="screen" args="load joint_state_controller" />
+
+
+
+</launch>
