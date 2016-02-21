@@ -1,0 +1,19 @@
+<launch>
+  <arg name="trajectory_controller_name" />
+
+  <!-- Robot state publisher for the TFs -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher">
+  </node>
+
+  <!-- Load controller settings -->
+  <rosparam file="$(find schunk_svh_driver)/cfg/svh_controllers.yaml" command="load"/>
+
+  <!-- spawn controller manager -->
+  <node name="ros_control_controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
+    output="screen" args="$(arg trajectory_controller_name)" />
+
+  <!-- load publishing controller -->
+  <node name="ros_control_controller_manager" pkg="controller_manager" type="controller_manager" respawn="false"
+    output="screen" args="load joint_state_controller" />
+
+</launch>

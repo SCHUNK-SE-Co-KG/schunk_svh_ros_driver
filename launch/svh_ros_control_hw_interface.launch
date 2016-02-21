@@ -1,5 +1,4 @@
 <launch>
-  <env name="ROSCONSOLE_CONFIG_FILE" value="$(find schunk_svh_driver)/etc/logging.config" />
   <!-- global PARAMS Change here if needed -->
   <arg name="gui" default="False" />
   <arg name="autostart" default="true"/>
@@ -11,7 +10,7 @@
   <arg name="general_config" default="$(find schunk_svh_driver)/etc/svh.yaml" />
   <arg name="name_prefix" default="left_hand" />
   <arg name="frequency" default="30" />
-  <arg name="trajectory_controller_name" default="pos_based_pos_traj_controller" />
+  <arg name="trajectory_controller_name" />
 
   <!-- load basic configuration -->
   <rosparam file="$(arg general_config)" command="load" ns="svh_ros_control_node"/>
@@ -20,8 +19,6 @@
   <!-- Load the User Config file which will overwrite values from default -->
   <rosparam file="$(arg controller_config)" command="load" ns="svh_ros_control_node"/>
 
-  <!-- Robot description for State publishers -->
-  <param name="robot_description" command="$(find xacro)/xacro.py $(find schunk_svh_driver)/description/urdf/svh-standalone.urdf.xacro" />
 
   <!-- Launch actual driver node (if not in simulation)-->
   <node unless="$(arg simulation)" name="svh_ros_control_node" pkg="schunk_svh_driver" type="svh_ros_control_node" output="screen">
@@ -33,26 +30,7 @@
     <param name="name_prefix" value="$(arg name_prefix)" />
     <param name="frequency"           type="int"      value="$(arg frequency)" />
     <param name="use_ros_control" type="bool" value="True"/>
+    <param name="trajectory_controller_name" value="$(arg trajectory_controller_name)" />
   </node>
-
-
-  <!-- Robot state publisher for the TFs -->
-  <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher">
-  </node>
-
-
-
-  <!-- Load controller settings -->
-  <rosparam file="$(find schunk_svh_driver)/cfg/svh_controllers.yaml" command="load"/>
-
-  <!-- spawn controller manager -->
-  <node name="ros_control_controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
-    output="screen" args="$(arg trajectory_controller_name)" />
-
-  <!-- load publishing controller -->
-  <node name="ros_control_controller_manager" pkg="controller_manager" type="controller_manager" respawn="false"
-    output="screen" args="load joint_state_controller" />
-
-
 
 </launch>

@@ -60,6 +60,7 @@ SVHRosControlNode::SVHRosControlNode()
     m_priv_nh.getParam("logging_config",logging_config_file);
     m_priv_nh.param<std::string>("name_prefix",m_name_prefix,"left_hand");
     m_priv_nh.param<int>("connect_retry_count",m_connect_retry_count,3);
+    m_priv_nh.param<std::string>("traj_controller_name", m_traj_controller_name, "pos_based_pos_traj_controller");
   }
   catch (ros::InvalidNameException e)
   {
@@ -202,11 +203,21 @@ SVHRosControlNode::SVHRosControlNode()
   dim.stride = 0;
   m_channel_currents.layout.dim.push_back(dim);
 
+  // Bring up roscontrol:
+  if (m_use_ros_control)
+  {
+    m_hardware_interface.reset(
+      new SVHRosControlHWInterface(m_pub_nh, m_finger_manager, m_name_prefix));
+    m_controller_manager.reset(
+      new controller_manager::ControllerManager( m_hardware_interface.get(), m_pub_nh));
+  }
+
+
   // Connect and start the reset so that the hand is ready for use
   if (autostart && m_finger_manager->connect(m_serial_device_name, m_connect_retry_count))
   {
-    m_finger_manager->resetChannel(driver_svh::eSVH_ALL);
     initDevices();
+    m_finger_manager->resetChannel(driver_svh::eSVH_ALL);
     ROS_INFO("Driver was autostarted! Input can now be sent. Have a safe and productive day!");
   }
   else
@@ -262,15 +273,6 @@ void SVHRosControlNode::initDevices()
 
   // initialize all nodes, by default this will start ProfilePosition mode, so we're good to enable nodes
   m_finger_manager->enableChannel(driver_svh::eSVH_ALL);
-
-  if (m_use_ros_control)
-  {
-    m_hardware_interface.reset(
-      new SVHRosControlHWInterface(m_pub_nh, m_finger_manager, m_name_prefix));
-    m_controller_manager.reset(
-      new controller_manager::ControllerManager( m_hardware_interface.get(), m_pub_nh));
-
-  }
 
   // Start interface (either action server or ros_control)
 

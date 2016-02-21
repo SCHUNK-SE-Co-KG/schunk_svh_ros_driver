@@ -1,0 +1,31 @@
+<launch>
+  <env name="ROSCONSOLE_CONFIG_FILE" value="$(find schunk_svh_driver)/etc/logging.config" />
+  <!-- global PARAMS Change here if needed -->
+  <arg name="gui" default="False" />
+  <arg name="autostart" default="true"/>
+  <arg name="serial_device" default="/dev/ttyUSB0"/>
+  <arg name="simulation" default="False"/>
+  <arg name="logging_config" default="$(find schunk_svh_driver)/etc/logging.xml" />
+  <arg name="use_internal_logging" default="False"/>
+  <arg name="controller_config" default="$(find schunk_svh_driver)/etc/controller_user.yaml" />
+  <arg name="general_config" default="$(find schunk_svh_driver)/etc/svh.yaml" />
+  <arg name="name_prefix" default="left_hand" />
+  <arg name="frequency" default="30" />
+  <arg name="trajectory_controller_name" default="pos_based_pos_traj_controller" />
+
+
+  <!-- Robot description for State publishers -->
+  <param name="robot_description" command="$(find xacro)/xacro.py $(find schunk_svh_driver)/description/urdf/svh-standalone.urdf.xacro" />
+
+  <!-- Hardware interface -->
+  <include unless="$(arg simulation)"  file="$(find schunk_svh_driver)/launch/svh_ros_control_hw_interface.launch">
+        <arg name="serial_device" value="$(arg serial_device)" />
+        <arg name="trajectory_controller_name" value="$(arg trajectory_controller_name)" />
+  </include>
+
+  <!-- ROS_Control Controllers -->
+  <include file="$(find schunk_svh_driver)/launch/svh_ros_control_controllers.launch">
+        <arg name="trajectory_controller_name" value="$(arg trajectory_controller_name)" />
+  </include>
+
+</launch>
