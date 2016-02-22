@@ -22,7 +22,7 @@ joint_state_controller:
 
 # Joint Trajectory Controller - position based -------------------------------
 # For detailed explanations of parameter see http://wiki.ros.org/joint_trajectory_controller
-pos_based_pos_traj_controller:
+pos_based_pos_traj_controller_hand:
    type: position_controllers/JointTrajectoryController
    publish_rate: 50
    joints:

@@ -60,7 +60,7 @@ SVHRosControlNode::SVHRosControlNode()
     m_priv_nh.getParam("logging_config",logging_config_file);
     m_priv_nh.param<std::string>("name_prefix",m_name_prefix,"left_hand");
     m_priv_nh.param<int>("connect_retry_count",m_connect_retry_count,3);
-    m_priv_nh.param<std::string>("traj_controller_name", m_traj_controller_name, "pos_based_pos_traj_controller");
+    m_priv_nh.param<std::string>("traj_controller_name", m_traj_controller_name, "pos_based_pos_traj_controller_hand");
   }
   catch (ros::InvalidNameException e)
   {
@@ -225,6 +225,7 @@ SVHRosControlNode::SVHRosControlNode()
     ROS_INFO("SVH Driver Ready, you will need to connect and reset the fingers before you can use the hand.");
   }
 
+  m_controller_manager->getControllerByName(m_traj_controller_name)->startRequest(ros::Time::now());
 
   ros::Rate loop_rate(frequency);
 
@@ -565,6 +566,8 @@ void SVHRosControlNode::rosControlLoop()
 bool SVHRosControlNode::enableNodes(std_srvs::TriggerRequest& req, std_srvs::TriggerResponse& resp)
 {
   m_finger_manager->resetChannel(driver_svh::eSVH_ALL);
+
+  m_controller_manager->getControllerByName(m_traj_controller_name)->startRequest(ros::Time::now());
 
   m_was_disabled = true;
   m_is_enabled = true;

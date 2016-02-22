@@ -28,4 +28,8 @@
         <arg name="trajectory_controller_name" value="$(arg trajectory_controller_name)" />
   </include>
 
+  <!-- Robot state publisher for the TFs -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher">
+  </node>
+
 </launch>
