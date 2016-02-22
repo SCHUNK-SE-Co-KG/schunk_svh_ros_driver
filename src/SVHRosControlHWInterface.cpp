@@ -117,6 +117,7 @@ void SVHRosControlHWInterface::write(ros::Time time, ros::Duration period)
   }
   else
   {
+    //TODO: Send individual commands instead of all joints at once.
     ROS_ERROR ("Number of known joints and number of commanded joints do not match!");
   }
 }

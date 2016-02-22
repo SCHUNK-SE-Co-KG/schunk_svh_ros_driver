@@ -11,7 +11,7 @@
   <arg name="general_config" default="$(find schunk_svh_driver)/etc/svh.yaml" />
   <arg name="name_prefix" default="left_hand" />
   <arg name="frequency" default="30" />
-  <arg name="trajectory_controller_name" default="pos_based_pos_traj_controller" />
+  <arg name="trajectory_controller_name" default="pos_based_pos_traj_controller_hand" />
 
 
   <!-- Robot description for State publishers -->

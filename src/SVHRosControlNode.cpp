@@ -203,20 +203,10 @@ SVHRosControlNode::SVHRosControlNode()
   dim.stride = 0;
   m_channel_currents.layout.dim.push_back(dim);
 
-  // Bring up roscontrol:
-  if (m_use_ros_control)
-  {
-    m_hardware_interface.reset(
-      new SVHRosControlHWInterface(m_pub_nh, m_finger_manager, m_name_prefix));
-    m_controller_manager.reset(
-      new controller_manager::ControllerManager( m_hardware_interface.get(), m_pub_nh));
-  }
-
-
   // Connect and start the reset so that the hand is ready for use
   if (autostart && m_finger_manager->connect(m_serial_device_name, m_connect_retry_count))
   {
-    initDevices();
+
     m_finger_manager->resetChannel(driver_svh::eSVH_ALL);
     ROS_INFO("Driver was autostarted! Input can now be sent. Have a safe and productive day!");
   }
@@ -225,37 +215,54 @@ SVHRosControlNode::SVHRosControlNode()
     ROS_INFO("SVH Driver Ready, you will need to connect and reset the fingers before you can use the hand.");
   }
 
-  m_controller_manager->getControllerByName(m_traj_controller_name)->startRequest(ros::Time::now());
-
-  ros::Rate loop_rate(frequency);
-
-  std_msgs::Int16MultiArray currents;
-  while (ros::ok())
+  // Bring up roscontrol:
+  if (m_use_ros_control)
   {
-    ros::spinOnce();
+    m_hardware_interface.reset(
+      new SVHRosControlHWInterface(m_pub_nh, m_finger_manager, m_name_prefix));
+    m_controller_manager.reset(
+      new controller_manager::ControllerManager( m_hardware_interface.get(), m_pub_nh));
 
-    if (m_nodes_initialized)
+
+    initDevices();
+
+    //m_controller_manager->getControllerByName(m_traj_controller_name)->startRequest(ros::Time::now());
+
+    ros::spin();
+
+  }else{
+
+
+    ros::Rate loop_rate(frequency);
+
+    std_msgs::Int16MultiArray currents;
+    while (ros::ok())
     {
-      joint_msg.position.clear();
-      currents.data.clear();
-      for (std::map<std::string, uint8_t>::iterator it = m_joint_name_mapping.begin();
-           it != m_joint_name_mapping.end();
-           ++it)
+      ros::spinOnce();
+
+      if (m_nodes_initialized)
       {
-        double joint_value;
-        m_finger_manager->getPosition(driver_svh::SVHChannel(it->second), joint_value);
-        joint_msg.position.push_back(joint_value);
+        joint_msg.position.clear();
+        currents.data.clear();
+        for (std::map<std::string, uint8_t>::iterator it = m_joint_name_mapping.begin();
+             it != m_joint_name_mapping.end();
+             ++it)
+        {
+          double joint_value;
+          m_finger_manager->getPosition(driver_svh::SVHChannel(it->second), joint_value);
+          joint_msg.position.push_back(joint_value);
 
-        // Schunk nodes write currents into the torque_actual register
-        m_finger_manager->getCurrent(driver_svh::SVHChannel(it->second), joint_value);
-        currents.data.push_back(joint_value);
+          // Schunk nodes write currents into the torque_actual register
+          m_finger_manager->getCurrent(driver_svh::SVHChannel(it->second), joint_value);
+          currents.data.push_back(joint_value);
+        }
+        joint_msg.header.stamp = ros::Time::now();
+        m_joint_pub.publish(joint_msg);
+
+        m_current_pub.publish(currents);
       }
-      joint_msg.header.stamp = ros::Time::now();
-      m_joint_pub.publish(joint_msg);
-
-      m_current_pub.publish(currents);
+      loop_rate.sleep();
     }
-    loop_rate.sleep();
   }
 }
 
@@ -567,7 +574,7 @@ bool SVHRosControlNode::enableNodes(std_srvs::TriggerRequest& req, std_srvs::Tri
 {
   m_finger_manager->resetChannel(driver_svh::eSVH_ALL);
 
-  m_controller_manager->getControllerByName(m_traj_controller_name)->startRequest(ros::Time::now());
+  //m_controller_manager->getControllerByName(m_traj_controller_name)->startRequest(ros::Time::now());
 
   m_was_disabled = true;
   m_is_enabled = true;
