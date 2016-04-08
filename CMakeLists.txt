@@ -11,6 +11,7 @@ find_package(catkin REQUIRED COMPONENTS
     rqt_gui_py
     xacro
     hardware_interface
+    joint_limits_interface
     controller_manager
     urdf
 )
