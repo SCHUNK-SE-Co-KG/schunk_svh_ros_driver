@@ -14,6 +14,7 @@ find_package(catkin REQUIRED COMPONENTS
     joint_limits_interface
     controller_manager
     urdf
+    message_generation
 )
 
 ## System dependencies are found with CMake's conventions
@@ -28,6 +29,20 @@ generate_dynamic_reconfigure_options(
   cfg/svh.cfg
 )
 
+## Generate services in the 'srv' folder
+add_service_files(
+   FILES
+   HomeAll.srv
+   HomeWithChannels.srv
+   HomeWithJointNames.srv
+)
+
+## Generate added messages and services with any dependencies listed here
+generate_messages(
+   DEPENDENCIES
+   std_msgs
+)
+
 
 ###################################
 ## catkin specific configuration ##
@@ -38,11 +53,11 @@ generate_dynamic_reconfigure_options(
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
+  INCLUDE_DIRS include
   LIBRARIES
-  CATKIN_DEPENDS
-  DEPENDS roscpp icl_core icl_comm driver_svh
+  CATKIN_DEPENDS roscpp message_runtime
+  DEPENDS roscpp icl_core icl_comm driver_svh message_runtime
 )
-
 
 ###########
 ## Build ##
@@ -98,6 +113,7 @@ add_dependencies(svh_controller
   icl_core
   driver_svh
   ${PROJECT_NAME}_gencfg
+  ${PROJECT_NAME}_generate_messages_cpp
 )
 
 ## Specify libraries to link a library or executable target against
@@ -130,6 +146,7 @@ add_dependencies(svh_ros_control_hw_interface
   icl_core
   driver_svh
   ${PROJECT_NAME}_gencfg
+  ${PROJECT_NAME}_generate_messages_cpp
 )
 
 ## Specify libraries to link a library or executable target against
@@ -148,6 +165,7 @@ add_dependencies(svh_ros_control_node
   icl_core
   driver_svh
   ${PROJECT_NAME}_gencfg
+  ${PROJECT_NAME}_generate_messages_cpp
 )
 
 ## Specify libraries to link a library or executable target against
@@ -158,6 +176,7 @@ target_link_libraries(svh_ros_control_node
   ${icl_core_LIBRARIES}
   ${driver_svh_LIBRARIES}
 )
+
 
 
 #############

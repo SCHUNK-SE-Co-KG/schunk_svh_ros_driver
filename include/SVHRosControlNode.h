@@ -23,9 +23,9 @@
 #include "actionlib/server/action_server.h"
 #include "actionlib/server/server_goal_handle.h"
 #include "std_srvs/Trigger.h"
-#include "schunk_canopen_driver/HomeAll.h"
-#include "schunk_canopen_driver/HomeWithIDs.h"
-#include "schunk_canopen_driver/HomeWithJointNames.h"
+#include "schunk_svh_driver/HomeAll.h"
+#include "schunk_svh_driver/HomeWithChannels.h"
+#include "schunk_svh_driver/HomeWithJointNames.h"
 
 // Messages
 #include <std_msgs/Int8.h>
@@ -84,8 +84,8 @@ private:
    * \note: This service call exists for canopen IDs (usually 3-8 for a lwa4p) and
    * as an interface using the joint names from the URDF.
    */
-  bool homeNodesChannelIds(schunk_canopen_driver::HomeWithIDsRequest& req,
-                           schunk_canopen_driver::HomeWithIDsResponse& resp);
+  bool homeNodesChannelIds(schunk_svh_driver::HomeWithChannelsRequest& req,
+                           schunk_svh_driver::HomeWithChannelsResponse& resp);
 
   /*!
    * \brief Perform a reset offset for a given list of nodes. You should call this
@@ -96,15 +96,15 @@ private:
    * \note: This service call exists for canopen IDs (usually 3-8 for a lwa4p) and
    * as an interface using the joint names from the URDF.
    */
-//  bool homeNodesJointNames(schunk_canopen_driver::HomeWithJointNamesRequest& req,
-//                           schunk_canopen_driver::HomeWithJointNamesResponse& resp);
+//  bool homeNodesJointNames(schunk_svh_driver::HomeWithJointNamesRequest& req,
+//                           schunk_svh_driver::HomeWithJointNamesResponse& resp);
 
   /*!
    * \brief Perform a reset offset for all nodes. You should call this
    * service, after driving the devices to their zero position manually.
    */
-  bool homeAllNodes(schunk_canopen_driver::HomeAllRequest& req,
-                    schunk_canopen_driver::HomeAllResponse& resp);
+  bool homeAllNodes(schunk_svh_driver::HomeAllRequest& req,
+                    schunk_svh_driver::HomeAllResponse& resp);
 
 
   /*!

@@ -1,0 +1,4 @@
+# Service for homing (Resetting the offset) a finger joint
+string[] joint_names
+---
+bool success

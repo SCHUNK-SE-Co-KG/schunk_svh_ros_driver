@@ -318,7 +318,7 @@ void SVHRosControlNode::initDevices()
      &SVHRosControlNode::homeAllNodes, this);
   m_home_service_joint_names = m_priv_nh.advertiseService("home_reset_offset_by_id",
      &SVHRosControlNode::homeNodesChannelIds, this);
-//  m_home_service_canopen_ids = m_priv_nh.advertiseService("home_reset_offset_by_name",
+//  m_home_service_joint_names = m_priv_nh.advertiseService("home_reset_offset_by_name",
 //     &SVHRosControlNode::homeNodesJointNames, this);
 
   m_nodes_initialized = true;
@@ -610,19 +610,19 @@ bool SVHRosControlNode::enableNodes(std_srvs::TriggerRequest& req, std_srvs::Tri
 //  return true;
 //}
 
-bool SVHRosControlNode::homeAllNodes(schunk_canopen_driver::HomeAllRequest& req,
-                                     schunk_canopen_driver::HomeAllResponse& resp)
+bool SVHRosControlNode::homeAllNodes(schunk_svh_driver::HomeAllRequest& req,
+                                     schunk_svh_driver::HomeAllResponse& resp)
 {
   resp.success = m_finger_manager->resetChannel(driver_svh::eSVH_ALL);
   return resp.success;
 }
 
 
-//bool SVHRosControlNode::homeNodesJointNames(schunk_canopen_driver::HomeWithJointNamesRequest& req,
-//                                            schunk_canopen_driver::HomeWithJointNamesResponse& resp)
+//bool SVHRosControlNode::homeNodesJointNames(schunk_svh_driver::HomeWithJointNamesRequest& req,
+//                                            schunk_svh_driver::HomeWithJointNamesResponse& resp)
 //{
-//  schunk_canopen_driver::HomeWithIDsRequest req_fwd;
-//  schunk_canopen_driver::HomeWithIDsResponse resp_fwd;
+//  schunk_svh_driver::HomeWithIDsRequest req_fwd;
+//  schunk_svh_driver::HomeWithIDsResponse resp_fwd;
 //  for (std::vector<std::string>::iterator it = req.joint_names.begin();
 //       it != req.joint_names.end();
 //  ++it)
@@ -642,12 +642,12 @@ bool SVHRosControlNode::homeAllNodes(schunk_canopen_driver::HomeAllRequest& req,
 //}
 
 
-bool SVHRosControlNode::homeNodesChannelIds(schunk_canopen_driver::HomeWithIDsRequest& req,
-                                        schunk_canopen_driver::HomeWithIDsResponse& resp)
+bool SVHRosControlNode::homeNodesChannelIds(schunk_svh_driver::HomeWithChannelsRequest& req,
+                                            schunk_svh_driver::HomeWithChannelsResponse& resp)
 {
 
 
-  for (std::vector<uint8_t>::iterator it = req.node_ids.begin(); it != req.node_ids.end(); ++it)
+  for (std::vector<uint8_t>::iterator it = req.channel_ids.begin(); it != req.channel_ids.end(); ++it)
   {
     m_finger_manager->resetChannel(static_cast<driver_svh::SVHChannel>(*it));
   }
