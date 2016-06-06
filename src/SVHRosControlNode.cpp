@@ -668,7 +668,6 @@ bool SVHRosControlNode::homeNodesChannelIds(schunk_svh_driver::HomeWithChannelsR
 int main(int argc, char **argv)
 {
   ros::init(argc, argv, "schunk_chain");
-  icl_core::logging::initialize(argc, argv);
 
   SVHRosControlNode my_schunk_node;
 
