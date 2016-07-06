@@ -294,7 +294,7 @@ void SVHNode::jointStateCallback(const sensor_msgs::JointStateConstPtr& input )
       }
       else
       {
-        ROS_WARN_STREAM("Vector of input joint state is too small! Cannot acces elemnt nr " << index);
+        ROS_WARN_STREAM("Vector of input joint state is too small! Cannot access element nr " << index);
       }
     }
     else
