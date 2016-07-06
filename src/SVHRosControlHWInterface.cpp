@@ -122,9 +122,9 @@ void SVHRosControlHWInterface::write(ros::Time time, ros::Duration period)
   }
 }
 
-bool SVHRosControlHWInterface::canSwitch(const std::list< hardware_interface::ControllerInfo >& start_list, const std::list< hardware_interface::ControllerInfo >& stop_list) const
+bool SVHRosControlHWInterface::prepareSwitch(const std::list< hardware_interface::ControllerInfo >& start_list, const std::list< hardware_interface::ControllerInfo >& stop_list)
 {
-    return hardware_interface::RobotHW::canSwitch(start_list, stop_list);
+    return hardware_interface::RobotHW::prepareSwitch(start_list, stop_list);
 }
 
 void SVHRosControlHWInterface::doSwitch(const std::list< hardware_interface::ControllerInfo >& start_list, const std::list< hardware_interface::ControllerInfo >& stop_list)
