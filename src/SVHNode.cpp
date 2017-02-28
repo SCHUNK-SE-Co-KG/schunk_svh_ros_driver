@@ -35,6 +35,7 @@ SVHNode::SVHNode(const ros::NodeHandle& nh)
   bool autostart, use_internal_logging;
   int reset_timeout;
   std::vector<bool> disable_flags(driver_svh::eSVH_DIMENSION, false);
+  std::vector<bool> position_smoothing_flags(driver_svh::eSVH_DIMENSION, false);
   // Config that contains the log stream configuration without the file names
   std::string logging_config_file;
 
@@ -53,6 +54,7 @@ SVHNode::SVHNode(const ros::NodeHandle& nh)
     nh.param<std::string>("serial_device", serial_device_name_, "/dev/ttyUSB0");
     // Note : Wrong values (like numerics) in the launch file will lead to a "true" value here
     nh.getParam("disable_flags", disable_flags);
+    nh.getParam("position_smoothing_flags",position_smoothing_flags);
     nh.param<int>("reset_timeout", reset_timeout, 5);
     nh.getParam("logging_config", logging_config_file);
     nh.param<std::string>("name_prefix", name_prefix, "left_hand");
@@ -109,6 +111,7 @@ SVHNode::SVHNode(const ros::NodeHandle& nh)
 
   // Init the actual driver hook (after logging initialize)
   fm_.reset(new driver_svh::SVHFingerManager(disable_flags, reset_timeout));
+  fm_->setPositionSmoothingFlags(position_smoothing_flags);
 
   // Receives current Firmware Version
   // because some parameters depend on the version

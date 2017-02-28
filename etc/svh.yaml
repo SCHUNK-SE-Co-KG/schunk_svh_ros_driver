@@ -2,10 +2,22 @@
 # This file contains the general settings for the SVH Driver
 # disable_flags: if set to true the corresponding finger will NOT be activated in the real hardware. However all calls to it will be answered in the
 #                most positive way so it appears to be working. This is meant to be used if a specific finger has a hardware fault
+# position_smoothing_flags: if necessary, the position controller of some fingers can be smoothed by sending dynamic interpolation speeds to the hardware
 # finger_reset_speed: percent of the full finger speed to use during reset. Use values between 0.0 and 1.0
 # reset_timeout: seconds after which a reset of a finger is aborted if no values change.
 #                (Note if the current changes slighty even if a finger is stuck it will not be registered as a timeout)
 disable_flags : [
+false, # THUMB_FLEXION
+false, # THUMB_OPPOSITION
+false, # INDEX_FINGER_DISTAL
+false, # INDEX_FINGER_PROXIMAL
+false, # MIDDLE_FINGER_DISTAL
+false, # MIDDLE_FINGER_PROXIMAL
+false, # RING_FINGER
+false, # PINKY
+false  # FINGER_SPREAD
+]
+position_smoothing_flags : [
 false, # THUMB_FLEXION
 false, # THUMB_OPPOSITION
 false, # INDEX_FINGER_DISTAL
