@@ -156,6 +156,7 @@ add_dependencies(svh_ros_control_hw_interface
   ${PROJECT_NAME}_generate_messages_cpp
 )
 
+
 ## Specify libraries to link a library or executable target against
 target_link_libraries(svh_ros_control_hw_interface
   ${catkin_LIBRARIES}
@@ -187,6 +188,30 @@ target_link_libraries(svh_ros_control_node
   ${icl_hardware_LIBRARIES}
 )
 
+## DynamicParametersTest ##
+
+add_executable(svh_dynamic_version_parameter_test
+  src/DynamicVersionParameterTest.cpp
+)
+
+add_dependencies(svh_dynamic_version_parameter_test
+  icl_comm
+  icl_core
+  driver_svh
+  icl_hardware_canopen
+  ${PROJECT_NAME}_gencfg
+  ${PROJECT_NAME}_generate_messages_cpp
+)
+
+## Specify libraries to link a library or executable target against
+
+target_link_libraries(svh_dynamic_version_parameter_test
+ ${catkin_LIBRARIES}
+ ${catkin_LIBRARIES}
+ ${icl_comm_LIBRARIES}
+ ${icl_core_LIBRARIES}
+ ${driver_svh_LIBRARIES}
+)
 
 
 #############
