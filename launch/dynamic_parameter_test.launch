@@ -6,7 +6,7 @@
   <rosparam file="$(arg controller_config)" command="load" ns="svh_controller"/>
  
   <!-- Launch actual driver node (if not in simulation)-->
-  <node name="svh_controller" pkg="schunk_svh_driver" type="svh_dynamic_version_parameter_test" output="screen">
+  <node name="svh_controller" pkg="schunk_svh_driver" type="svh_dynamic_parameter_test" output="screen">
   </node>
 
 

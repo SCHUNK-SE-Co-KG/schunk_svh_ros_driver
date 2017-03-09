@@ -190,11 +190,12 @@ target_link_libraries(svh_ros_control_node
 
 ## DynamicParametersTest ##
 
-add_executable(svh_dynamic_version_parameter_test
-  src/DynamicVersionParameterTest.cpp
+add_executable(svh_dynamic_parameter_test
+  src/DynamicParameterTest.cpp
+  src/DynamicParameterClass.cpp
 )
 
-add_dependencies(svh_dynamic_version_parameter_test
+add_dependencies(svh_dynamic_parameter_test
   icl_comm
   icl_core
   driver_svh
@@ -205,7 +206,7 @@ add_dependencies(svh_dynamic_version_parameter_test
 
 ## Specify libraries to link a library or executable target against
 
-target_link_libraries(svh_dynamic_version_parameter_test
+target_link_libraries(svh_dynamic_parameter_test
  ${catkin_LIBRARIES}
  ${catkin_LIBRARIES}
  ${icl_comm_LIBRARIES}
