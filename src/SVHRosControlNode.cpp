@@ -111,6 +111,15 @@ SVHRosControlNode::SVHRosControlNode()
   // Init the actual driver hook (after logging initialize)
   m_finger_manager.reset(new driver_svh::SVHFingerManager(disable_flags,reset_timeout));
 
+
+  // Receives current Firmware Version
+  // because some parameters depend on the version
+  m_finger_manager->connect(m_serial_device_name, m_connect_retry_count);
+  driver_svh::SVHFirmwareInfo version_info = m_finger_manager->getFirmwareInfo();
+  ROS_INFO("current Handversion %d.%d",version_info.version_major,version_info.version_minor);
+  m_finger_manager->disconnect();
+
+
   // Rosparam can only fill plain vectors so we will have to go through them
   std::vector< std::vector<float> > position_settings(driver_svh::eSVH_DIMENSION);
   std::vector<bool> postion_settings_given(driver_svh::eSVH_DIMENSION,false);
@@ -161,6 +170,8 @@ SVHRosControlNode::SVHRosControlNode()
     postion_settings_given[driver_svh::eSVH_FINGER_SPREAD] = m_priv_nh.getParam("FINGER_SPREAD/position_controller",position_settings[driver_svh::eSVH_FINGER_SPREAD]);
     current_settings_given[driver_svh::eSVH_FINGER_SPREAD] = m_priv_nh.getParam("FINGER_SPREAD/current_controller",current_settings[driver_svh::eSVH_FINGER_SPREAD]);
     home_settings_given[driver_svh::eSVH_FINGER_SPREAD]    = m_priv_nh.getParam("FINGER_SPREAD/home_settings",home_settings[driver_svh::eSVH_FINGER_SPREAD]);
+
+
 
     for (size_t channel = 0; channel < driver_svh::eSVH_DIMENSION; ++channel)
     {
@@ -215,9 +226,10 @@ SVHRosControlNode::SVHRosControlNode()
     ROS_INFO("SVH Driver Ready, you will need to connect and reset the fingers before you can use the hand.");
   }
 
+
   // Bring up roscontrol:
   if (m_use_ros_control)
-  {
+  { 
     m_hardware_interface.reset(
       new SVHRosControlHWInterface(m_pub_nh, m_finger_manager, m_name_prefix));
     m_controller_manager.reset(
@@ -232,12 +244,13 @@ SVHRosControlNode::SVHRosControlNode()
 
   }else{
 
-
+  {  
     ros::Rate loop_rate(frequency);
 
     std_msgs::Int16MultiArray currents;
     while (ros::ok())
     {
+
       ros::spinOnce();
 
       if (m_nodes_initialized)
