@@ -51,13 +51,13 @@ DynamicParameter::DynamicParameter(int16_t major_version, int16_t minor_version,
 
 
 bool DynamicParameter::xml_rpc_value_to_vector(XmlRpc::XmlRpcValue my_array,std::vector<float>& my_vector){
+    my_vector.clear();
+
     for (int32_t i = 0; i < my_array.size(); ++i){
 
         ROS_ASSERT(my_array[i].getType() == XmlRpc::XmlRpcValue::TypeDouble || my_array[i].getType() == XmlRpc::XmlRpcValue::TypeInt);
-	if(my_array[i].getType() == XmlRpc::XmlRpcValue::TypeDouble){
 
-	  if( my_vector.empty() != 0)
-	    my_vector.clear();
+	if(my_array[i].getType() == XmlRpc::XmlRpcValue::TypeDouble){
 
 	  my_vector.push_back(static_cast<double>(my_array[i]));
         
@@ -107,8 +107,8 @@ int DynamicParameter::read_file(int16_t major_version_target,int16_t minor_versi
                    ROS_INFO("Parameter Name: %s",parameter_name.c_str());
 
                    m_position_settings_given[m_name_to_enum[parameter_name]] = xml_rpc_value_to_vector(parameter_yaml["position_controller"],m_position_settings[m_name_to_enum[parameter_name]]);
-		   m_current_settings_given[m_name_to_enum[parameter_name]] = xml_rpc_value_to_vector(parameter_yaml["current_controller"] ,m_current_settings[m_name_to_enum[parameter_name]]);
-		   m_home_settings_given[m_name_to_enum[parameter_name]]    = xml_rpc_value_to_vector(parameter_yaml["home_settings"]      ,m_home_settings[m_name_to_enum[parameter_name]]);
+		   m_current_settings_given[m_name_to_enum[parameter_name]]  = xml_rpc_value_to_vector(parameter_yaml["current_controller"] ,m_current_settings[m_name_to_enum[parameter_name]]);
+		   m_home_settings_given[m_name_to_enum[parameter_name]]     = xml_rpc_value_to_vector(parameter_yaml["home_settings"]      ,m_home_settings[m_name_to_enum[parameter_name]]);
                }
                if(default_state == true){
 		 
@@ -126,6 +126,6 @@ int DynamicParameter::read_file(int16_t major_version_target,int16_t minor_versi
       ROS_ERROR_STREAM("parsing error: " << e.getMessage() << "! Error code: " << e.getCode());
       return -1;
   }
-  ROS_DEBUG_STREAM("DID NOT FIND CORRECT VERSION: " << major_version_target << "." << minor_version_target << "switched to default!!!!!!!!!!!!!!!!");
+  ROS_DEBUG_STREAM("DID NOT FIND CORRECT VERSION: " << major_version_target << "." << minor_version_target << "switched to default!");
   return 0;
 }

@@ -20,17 +20,26 @@ int main(int argc, char **argv)
   
   ROS_INFO("DYN POSITION SETTINGS:");
   for( int i = 0; i < dyn_parameters.m_position_settings.size(); i++){
-    std::cout << dyn_parameters.m_position_settings[i] << std::endl;
-  }
-  /*
-  ROS_INFO("DYN CURRENT SETTINGS:");
-  for( int i = 0; i < dyn_parameters.m_current_settings.size(); i++){
-    ROS_INFO("%d",dyn_parameters.m_position_settings[i]);
+    for( int j = 0; j < dyn_parameters.m_position_settings[i].size(); j++){
+      std::cout << dyn_parameters.m_position_settings[i][j]<<" ,";
+    }
+  std::cout << std::endl;
   }
 
+  ROS_INFO("DYN CURRENT SETTINGS:");
+  for( int i = 0; i < dyn_parameters.m_current_settings.size(); i++){
+    for( int j = 0; j < dyn_parameters.m_current_settings[i].size(); j++){
+      std::cout << dyn_parameters.m_current_settings[i][j]<<" ,";
+    }
+  std::cout << std::endl;
+  }
+ 
   ROS_INFO("DYN HOME SETTINGS:");
   for( int i = 0; i < dyn_parameters.m_home_settings.size(); i++){
-    ROS_INFO("%d",dyn_parameters.m_position_settings[i]);
-  }*/
+    for( int j = 0; j < dyn_parameters.m_home_settings[i].size(); j++){
+        std::cout << dyn_parameters.m_current_settings[i][j]<<" ,";
+    }
+  std::cout << std::endl;
+  }
   return 0;
 }
