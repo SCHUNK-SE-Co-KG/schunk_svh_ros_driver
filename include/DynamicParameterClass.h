@@ -24,7 +24,7 @@ class DynamicParameter{
 
  private:
 
-  bool read_file(int16_t major_version,int16_t minor_version, XmlRpc::XmlRpcValue parameters );
+  int  read_file(int16_t major_version,int16_t minor_version, XmlRpc::XmlRpcValue parameters );
   bool xml_rpc_value_to_vector(XmlRpc::XmlRpcValue my_array,std::vector<float>& my_vector);
 
   std::vector<std::string> m_joint_names;
