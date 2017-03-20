@@ -101,6 +101,7 @@ add_definitions(
 # Declare a cpp executable
 add_executable(svh_controller
   src/SVHNode.cpp
+  src/DynamicParameterClass.cpp
 )
 
 # Simple test programs
@@ -143,7 +144,7 @@ target_link_libraries(svh_sin_test
   ${icl_hardware_LIBRARIES}
 )
 
-## ROS Control
+## ROSControl
 add_library(svh_ros_control_hw_interface
   src/SVHRosControlHWInterface.cpp
 )
@@ -168,6 +169,7 @@ target_link_libraries(svh_ros_control_hw_interface
 
 add_executable(svh_ros_control_node
   src/SVHRosControlNode.cpp
+  src/DynamicParameterClass.cpp
 )
 add_dependencies(svh_ros_control_node
   icl_comm

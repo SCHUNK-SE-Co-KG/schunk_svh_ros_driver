@@ -81,7 +81,9 @@ bool DynamicParameter::xml_rpc_value_to_vector(XmlRpc::XmlRpcValue my_array,std:
  */
 
 int DynamicParameter::read_file(int16_t major_version_target,int16_t minor_version_target, XmlRpc::XmlRpcValue parameters){
+
   bool default_state = true;
+  ROS_INFO("Trying to search Version: %d.%d", major_version_target,minor_version_target);
   try{
       if(parameters.size() > 0){
 	
@@ -97,14 +99,14 @@ int DynamicParameter::read_file(int16_t major_version_target,int16_t minor_versi
 	     //if the major_version fits to the target_version we succeed, first parameter set should be always the default set!!!
 	     if( (major_version_read == major_version_target && minor_version_read == minor_version_target) || (major_version_read == 0 && minor_version_read == 0) ){
 
-	       ROS_INFO("major version: %d minor version: %d",major_version_read,minor_version_read);
+	       ROS_DEBUG("major version: %d minor version: %d",major_version_read,minor_version_read);
 
 	       XmlRpc::XmlRpcValue parameters = parameter_set_yaml["PARAMETERS"];
 	       for(int32_t j = 0; j < parameters.size(); ++j){
                    XmlRpc::XmlRpcValue parameter_yaml = parameters[j]["parameter"];
 
                    std::string parameter_name = parameter_yaml["name"];
-                   ROS_INFO("Parameter Name: %s",parameter_name.c_str());
+                   ROS_DEBUG("Parameter Name: %s",parameter_name.c_str());
 
                    m_position_settings_given[m_name_to_enum[parameter_name]] = xml_rpc_value_to_vector(parameter_yaml["position_controller"],m_position_settings[m_name_to_enum[parameter_name]]);
 		   m_current_settings_given[m_name_to_enum[parameter_name]]  = xml_rpc_value_to_vector(parameter_yaml["current_controller"] ,m_current_settings[m_name_to_enum[parameter_name]]);

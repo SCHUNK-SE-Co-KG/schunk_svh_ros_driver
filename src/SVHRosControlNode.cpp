@@ -20,6 +20,7 @@
 #include <SVHRosControlNode.h>
 #include "icl_core_logging/Logging.h"
 
+#include "DynamicParameterClass.h"
 
 
 
@@ -48,6 +49,9 @@ SVHRosControlNode::SVHRosControlNode()
 
   sensor_msgs::JointState joint_msg;
 
+  //Parameters that depend on the hardware version of the hand
+  XmlRpc::XmlRpcValue dynamic_parameters;
+
   try
   {
     m_priv_nh.param<bool>("autostart",autostart,false);
@@ -61,6 +65,7 @@ SVHRosControlNode::SVHRosControlNode()
     m_priv_nh.param<std::string>("name_prefix",m_name_prefix,"left_hand");
     m_priv_nh.param<int>("connect_retry_count",m_connect_retry_count,3);
     m_priv_nh.param<std::string>("traj_controller_name", m_traj_controller_name, "pos_based_pos_traj_controller_hand");
+    m_priv_nh.getParam("VERSIONS_PARAMETERS", dynamic_parameters);
   }
   catch (ros::InvalidNameException e)
   {
@@ -120,73 +125,27 @@ SVHRosControlNode::SVHRosControlNode()
   m_finger_manager->disconnect();
 
 
-  // Rosparam can only fill plain vectors so we will have to go through them
-  std::vector< std::vector<float> > position_settings(driver_svh::eSVH_DIMENSION);
-  std::vector<bool> postion_settings_given(driver_svh::eSVH_DIMENSION,false);
 
-  std::vector< std::vector<float> > current_settings(driver_svh::eSVH_DIMENSION);
-  std::vector<bool> current_settings_given(driver_svh::eSVH_DIMENSION,false);
-
-  std::vector< std::vector<float> > home_settings(driver_svh::eSVH_DIMENSION);
-  std::vector<bool> home_settings_given(driver_svh::eSVH_DIMENSION,false);
-
-
-  // get the the indidividual finger params
-  // We will read out all of them, so that in case we fail half way we do not set anything
   try
   {
-    postion_settings_given[driver_svh::eSVH_THUMB_FLEXION] = m_priv_nh.getParam("THUMB_FLEXION/position_controller",position_settings[driver_svh::eSVH_THUMB_FLEXION]);
-    current_settings_given[driver_svh::eSVH_THUMB_FLEXION] = m_priv_nh.getParam("THUMB_FLEXION/current_controller",current_settings[driver_svh::eSVH_THUMB_FLEXION]);
-    home_settings_given[driver_svh::eSVH_THUMB_FLEXION]    = m_priv_nh.getParam("THUMB_FLEXION/home_settings",home_settings[driver_svh::eSVH_THUMB_FLEXION]);
-
-    postion_settings_given[driver_svh::eSVH_THUMB_OPPOSITION] = m_priv_nh.getParam("THUMB_OPPOSITION/position_controller",position_settings[driver_svh::eSVH_THUMB_OPPOSITION]);
-    current_settings_given[driver_svh::eSVH_THUMB_OPPOSITION] = m_priv_nh.getParam("THUMB_OPPOSITION/current_controller",current_settings[driver_svh::eSVH_THUMB_OPPOSITION]);
-    home_settings_given[driver_svh::eSVH_THUMB_OPPOSITION]    = m_priv_nh.getParam("THUMB_OPPOSITION/home_settings",home_settings[driver_svh::eSVH_THUMB_OPPOSITION]);
-
-    postion_settings_given[driver_svh::eSVH_INDEX_FINGER_DISTAL] = m_priv_nh.getParam("INDEX_FINGER_DISTAL/position_controller",position_settings[driver_svh::eSVH_INDEX_FINGER_DISTAL]);
-    current_settings_given[driver_svh::eSVH_INDEX_FINGER_DISTAL] = m_priv_nh.getParam("INDEX_FINGER_DISTAL/current_controller",current_settings[driver_svh::eSVH_INDEX_FINGER_DISTAL]);
-    home_settings_given[driver_svh::eSVH_INDEX_FINGER_DISTAL]    = m_priv_nh.getParam("INDEX_FINGER_DISTAL/home_settings",home_settings[driver_svh::eSVH_INDEX_FINGER_DISTAL]);
-
-    postion_settings_given[driver_svh::eSVH_INDEX_FINGER_PROXIMAL] = m_priv_nh.getParam("INDEX_FINGER_PROXIMAL/position_controller",position_settings[driver_svh::eSVH_INDEX_FINGER_PROXIMAL]);
-    current_settings_given[driver_svh::eSVH_INDEX_FINGER_PROXIMAL] = m_priv_nh.getParam("INDEX_FINGER_PROXIMAL/current_controller",current_settings[driver_svh::eSVH_INDEX_FINGER_PROXIMAL]);
-    home_settings_given[driver_svh::eSVH_INDEX_FINGER_PROXIMAL]    = m_priv_nh.getParam("INDEX_FINGER_PROXIMAL/home_settings",home_settings[driver_svh::eSVH_INDEX_FINGER_PROXIMAL]);
-
-    postion_settings_given[driver_svh::eSVH_MIDDLE_FINGER_DISTAL] = m_priv_nh.getParam("MIDDLE_FINGER_DISTAL/position_controller",position_settings[driver_svh::eSVH_MIDDLE_FINGER_DISTAL]);
-    current_settings_given[driver_svh::eSVH_MIDDLE_FINGER_DISTAL] = m_priv_nh.getParam("MIDDLE_FINGER_DISTAL/current_controller",current_settings[driver_svh::eSVH_MIDDLE_FINGER_DISTAL]);
-    home_settings_given[driver_svh::eSVH_MIDDLE_FINGER_DISTAL]    = m_priv_nh.getParam("MIDDLE_FINGER_DISTAL/home_settings",home_settings[driver_svh::eSVH_MIDDLE_FINGER_DISTAL]);
-
-    postion_settings_given[driver_svh::eSVH_MIDDLE_FINGER_PROXIMAL] = m_priv_nh.getParam("MIDDLE_FINGER_PROXIMAL/position_controller",position_settings[driver_svh::eSVH_MIDDLE_FINGER_PROXIMAL]);
-    current_settings_given[driver_svh::eSVH_MIDDLE_FINGER_PROXIMAL] = m_priv_nh.getParam("MIDDLE_FINGER_PROXIMAL/current_controller",current_settings[driver_svh::eSVH_MIDDLE_FINGER_PROXIMAL]);
-    home_settings_given[driver_svh::eSVH_MIDDLE_FINGER_PROXIMAL]    = m_priv_nh.getParam("MIDDLE_FINGER_PROXIMAL/home_settings",home_settings[driver_svh::eSVH_MIDDLE_FINGER_PROXIMAL]);
-
-    postion_settings_given[driver_svh::eSVH_RING_FINGER] = m_priv_nh.getParam("RING_FINGER/position_controller",position_settings[driver_svh::eSVH_RING_FINGER]);
-    current_settings_given[driver_svh::eSVH_RING_FINGER] = m_priv_nh.getParam("RING_FINGER/current_controller",current_settings[driver_svh::eSVH_RING_FINGER]);
-    home_settings_given[driver_svh::eSVH_RING_FINGER]    = m_priv_nh.getParam("RING_FINGER/home_settings",home_settings[driver_svh::eSVH_RING_FINGER]);
-
-    postion_settings_given[driver_svh::eSVH_PINKY] = m_priv_nh.getParam("PINKY/position_controller",position_settings[driver_svh::eSVH_PINKY]);
-    current_settings_given[driver_svh::eSVH_PINKY] = m_priv_nh.getParam("PINKY/current_controller",current_settings[driver_svh::eSVH_PINKY]);
-    home_settings_given[driver_svh::eSVH_PINKY]    = m_priv_nh.getParam("PINKY/home_settings",home_settings[driver_svh::eSVH_PINKY]);
-
-    postion_settings_given[driver_svh::eSVH_FINGER_SPREAD] = m_priv_nh.getParam("FINGER_SPREAD/position_controller",position_settings[driver_svh::eSVH_FINGER_SPREAD]);
-    current_settings_given[driver_svh::eSVH_FINGER_SPREAD] = m_priv_nh.getParam("FINGER_SPREAD/current_controller",current_settings[driver_svh::eSVH_FINGER_SPREAD]);
-    home_settings_given[driver_svh::eSVH_FINGER_SPREAD]    = m_priv_nh.getParam("FINGER_SPREAD/home_settings",home_settings[driver_svh::eSVH_FINGER_SPREAD]);
-
-
+    //Loading hand parameters
+    DynamicParameter dyn_parameters(version_info.version_major,version_info.version_minor,dynamic_parameters);
+ 
 
     for (size_t channel = 0; channel < driver_svh::eSVH_DIMENSION; ++channel)
     {
       // Only update the values in case actually have some. Otherwise the driver will use internal defaults. Overwriting them with zeros would be counter productive
-      if (current_settings_given[channel])
+      if (dyn_parameters.m_current_settings_given[channel])
       {
-        m_finger_manager->setCurrentSettings(static_cast<driver_svh::SVHChannel>(channel),driver_svh::SVHCurrentSettings(current_settings[channel]));
+         m_finger_manager->setCurrentSettings(static_cast<driver_svh::SVHChannel>(channel),driver_svh::SVHCurrentSettings(dyn_parameters.m_current_settings[channel]));
       }
-      if (postion_settings_given[channel])
+      if (dyn_parameters.m_position_settings_given[channel])
       {
-        m_finger_manager->setPositionSettings(static_cast<driver_svh::SVHChannel>(channel),driver_svh::SVHPositionSettings(position_settings[channel]));
+         m_finger_manager->setPositionSettings(static_cast<driver_svh::SVHChannel>(channel),driver_svh::SVHPositionSettings(dyn_parameters.m_position_settings[channel]));
       }
-      if (home_settings_given[channel])
+      if (dyn_parameters.m_home_settings_given[channel])
       {
-        m_finger_manager->setHomeSettings(static_cast<driver_svh::SVHChannel>(channel),driver_svh::SVHHomeSettings(home_settings[channel]));
+         m_finger_manager->setHomeSettings(static_cast<driver_svh::SVHChannel>(channel),driver_svh::SVHHomeSettings(dyn_parameters.m_home_settings[channel]));
       }
     }
   }

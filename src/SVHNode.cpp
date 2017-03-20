@@ -18,6 +18,7 @@
 
 // Custom includes
 #include "SVHNode.h"
+#include "DynamicParameterClass.h"
 #include <icl_core/EnumHelper.h>
 
 
@@ -38,7 +39,7 @@ SVHNode::SVHNode(const ros::NodeHandle & nh)
   std::vector<bool> disable_flags(driver_svh::eSVH_DIMENSION, false);
   // Config that contains the log stream configuration without the file names
   std::string logging_config_file;
-
+  XmlRpc::XmlRpcValue dynamic_parameters;
 
   try
   {
@@ -51,6 +52,7 @@ SVHNode::SVHNode(const ros::NodeHandle & nh)
     nh.getParam("logging_config",logging_config_file);
     nh.param<std::string>("name_prefix",name_prefix,"left_hand");
     nh.param<int>("connect_retry_count",connect_retry_count,3);
+    nh.getParam("VERSIONS_PARAMETERS", dynamic_parameters);
   }
   catch (ros::InvalidNameException e)
   {
@@ -87,9 +89,6 @@ SVHNode::SVHNode(const ros::NodeHandle & nh)
     icl_core::logging::initialize();
   }
 
-
-
-
   for (size_t i = 0; i < 9; ++i)
   {
     if(disable_flags[i])
@@ -101,71 +100,34 @@ SVHNode::SVHNode(const ros::NodeHandle & nh)
   // Init the actual driver hook (after logging initialize)
   fm_.reset(new driver_svh::SVHFingerManager(disable_flags,reset_timeout));
 
-  // Rosparam can only fill plain vectors so we will have to go through them
-  std::vector< std::vector<float> > position_settings(driver_svh::eSVH_DIMENSION);
-  std::vector<bool> postion_settings_given(driver_svh::eSVH_DIMENSION,false);
-
-  std::vector< std::vector<float> > current_settings(driver_svh::eSVH_DIMENSION);
-  std::vector<bool> current_settings_given(driver_svh::eSVH_DIMENSION,false);
-
-  std::vector< std::vector<float> > home_settings(driver_svh::eSVH_DIMENSION);
-  std::vector<bool> home_settings_given(driver_svh::eSVH_DIMENSION,false);
-
-
+  // Receives current Firmware Version
+  // because some parameters depend on the version
+  fm_->connect(serial_device_name_, connect_retry_count);
+  driver_svh::SVHFirmwareInfo version_info = fm_->getFirmwareInfo();
+  ROS_INFO("current Handversion %d.%d",version_info.version_major,version_info.version_minor);
+  fm_->disconnect();
   // get the the indidividual finger params
   // We will read out all of them, so that in case we fail half way we do not set anything
   try
   {
-    postion_settings_given[driver_svh::eSVH_THUMB_FLEXION] = nh.getParam("THUMB_FLEXION/position_controller",position_settings[driver_svh::eSVH_THUMB_FLEXION]);
-    current_settings_given[driver_svh::eSVH_THUMB_FLEXION] = nh.getParam("THUMB_FLEXION/current_controller",current_settings[driver_svh::eSVH_THUMB_FLEXION]);
-    home_settings_given[driver_svh::eSVH_THUMB_FLEXION]    = nh.getParam("THUMB_FLEXION/home_settings",home_settings[driver_svh::eSVH_THUMB_FLEXION]);
-
-    postion_settings_given[driver_svh::eSVH_THUMB_OPPOSITION] = nh.getParam("THUMB_OPPOSITION/position_controller",position_settings[driver_svh::eSVH_THUMB_OPPOSITION]);
-    current_settings_given[driver_svh::eSVH_THUMB_OPPOSITION] = nh.getParam("THUMB_OPPOSITION/current_controller",current_settings[driver_svh::eSVH_THUMB_OPPOSITION]);
-    home_settings_given[driver_svh::eSVH_THUMB_OPPOSITION]    = nh.getParam("THUMB_OPPOSITION/home_settings",home_settings[driver_svh::eSVH_THUMB_OPPOSITION]);
-
-    postion_settings_given[driver_svh::eSVH_INDEX_FINGER_DISTAL] = nh.getParam("INDEX_FINGER_DISTAL/position_controller",position_settings[driver_svh::eSVH_INDEX_FINGER_DISTAL]);
-    current_settings_given[driver_svh::eSVH_INDEX_FINGER_DISTAL] = nh.getParam("INDEX_FINGER_DISTAL/current_controller",current_settings[driver_svh::eSVH_INDEX_FINGER_DISTAL]);
-    home_settings_given[driver_svh::eSVH_INDEX_FINGER_DISTAL]    = nh.getParam("INDEX_FINGER_DISTAL/home_settings",home_settings[driver_svh::eSVH_INDEX_FINGER_DISTAL]);
-
-    postion_settings_given[driver_svh::eSVH_INDEX_FINGER_PROXIMAL] = nh.getParam("INDEX_FINGER_PROXIMAL/position_controller",position_settings[driver_svh::eSVH_INDEX_FINGER_PROXIMAL]);
-    current_settings_given[driver_svh::eSVH_INDEX_FINGER_PROXIMAL] = nh.getParam("INDEX_FINGER_PROXIMAL/current_controller",current_settings[driver_svh::eSVH_INDEX_FINGER_PROXIMAL]);
-    home_settings_given[driver_svh::eSVH_INDEX_FINGER_PROXIMAL]    = nh.getParam("INDEX_FINGER_PROXIMAL/home_settings",home_settings[driver_svh::eSVH_INDEX_FINGER_PROXIMAL]);
-
-    postion_settings_given[driver_svh::eSVH_MIDDLE_FINGER_DISTAL] = nh.getParam("MIDDLE_FINGER_DISTAL/position_controller",position_settings[driver_svh::eSVH_MIDDLE_FINGER_DISTAL]);
-    current_settings_given[driver_svh::eSVH_MIDDLE_FINGER_DISTAL] = nh.getParam("MIDDLE_FINGER_DISTAL/current_controller",current_settings[driver_svh::eSVH_MIDDLE_FINGER_DISTAL]);
-    home_settings_given[driver_svh::eSVH_MIDDLE_FINGER_DISTAL]    = nh.getParam("MIDDLE_FINGER_DISTAL/home_settings",home_settings[driver_svh::eSVH_MIDDLE_FINGER_DISTAL]);
-
-    postion_settings_given[driver_svh::eSVH_MIDDLE_FINGER_PROXIMAL] = nh.getParam("MIDDLE_FINGER_PROXIMAL/position_controller",position_settings[driver_svh::eSVH_MIDDLE_FINGER_PROXIMAL]);
-    current_settings_given[driver_svh::eSVH_MIDDLE_FINGER_PROXIMAL] = nh.getParam("MIDDLE_FINGER_PROXIMAL/current_controller",current_settings[driver_svh::eSVH_MIDDLE_FINGER_PROXIMAL]);
-    home_settings_given[driver_svh::eSVH_MIDDLE_FINGER_PROXIMAL]    = nh.getParam("MIDDLE_FINGER_PROXIMAL/home_settings",home_settings[driver_svh::eSVH_MIDDLE_FINGER_PROXIMAL]);
-
-    postion_settings_given[driver_svh::eSVH_RING_FINGER] = nh.getParam("RING_FINGER/position_controller",position_settings[driver_svh::eSVH_RING_FINGER]);
-    current_settings_given[driver_svh::eSVH_RING_FINGER] = nh.getParam("RING_FINGER/current_controller",current_settings[driver_svh::eSVH_RING_FINGER]);
-    home_settings_given[driver_svh::eSVH_RING_FINGER]    = nh.getParam("RING_FINGER/home_settings",home_settings[driver_svh::eSVH_RING_FINGER]);
-
-    postion_settings_given[driver_svh::eSVH_PINKY] = nh.getParam("PINKY/position_controller",position_settings[driver_svh::eSVH_PINKY]);
-    current_settings_given[driver_svh::eSVH_PINKY] = nh.getParam("PINKY/current_controller",current_settings[driver_svh::eSVH_PINKY]);
-    home_settings_given[driver_svh::eSVH_PINKY]    = nh.getParam("PINKY/home_settings",home_settings[driver_svh::eSVH_PINKY]);
-
-    postion_settings_given[driver_svh::eSVH_FINGER_SPREAD] = nh.getParam("FINGER_SPREAD/position_controller",position_settings[driver_svh::eSVH_FINGER_SPREAD]);
-    current_settings_given[driver_svh::eSVH_FINGER_SPREAD] = nh.getParam("FINGER_SPREAD/current_controller",current_settings[driver_svh::eSVH_FINGER_SPREAD]);
-    home_settings_given[driver_svh::eSVH_FINGER_SPREAD]    = nh.getParam("FINGER_SPREAD/home_settings",home_settings[driver_svh::eSVH_FINGER_SPREAD]);
+    //Loading hand parameters
+    DynamicParameter dyn_parameters(version_info.version_major,version_info.version_minor,dynamic_parameters);
+ 
 
     for (size_t channel = 0; channel < driver_svh::eSVH_DIMENSION; ++channel)
     {
       // Only update the values in case actually have some. Otherwise the driver will use internal defaults. Overwriting them with zeros would be counter productive
-      if (current_settings_given[channel])
+      if (dyn_parameters.m_current_settings_given[channel])
       {
-        fm_->setCurrentSettings(static_cast<driver_svh::SVHChannel>(channel),driver_svh::SVHCurrentSettings(current_settings[channel]));
+        fm_->setCurrentSettings(static_cast<driver_svh::SVHChannel>(channel),driver_svh::SVHCurrentSettings(dyn_parameters.m_current_settings[channel]));
       }
-      if (postion_settings_given[channel])
+      if (dyn_parameters.m_position_settings_given[channel])
       {
-        fm_->setPositionSettings(static_cast<driver_svh::SVHChannel>(channel),driver_svh::SVHPositionSettings(position_settings[channel]));
+        fm_->setPositionSettings(static_cast<driver_svh::SVHChannel>(channel),driver_svh::SVHPositionSettings(dyn_parameters.m_position_settings[channel]));
       }
-      if (home_settings_given[channel])
+      if (dyn_parameters.m_home_settings_given[channel])
       {
-        fm_->setHomeSettings(static_cast<driver_svh::SVHChannel>(channel),driver_svh::SVHHomeSettings(home_settings[channel]));
+        fm_->setHomeSettings(static_cast<driver_svh::SVHChannel>(channel),driver_svh::SVHHomeSettings(dyn_parameters.m_home_settings[channel]));
       }
     }
   }
