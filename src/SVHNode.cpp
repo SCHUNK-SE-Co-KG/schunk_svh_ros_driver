@@ -39,7 +39,12 @@ SVHNode::SVHNode(const ros::NodeHandle & nh)
   std::vector<bool> disable_flags(driver_svh::eSVH_DIMENSION, false);
   // Config that contains the log stream configuration without the file names
   std::string logging_config_file;
+
+  //Parameters that depend on the hardware version of the hand.
   XmlRpc::XmlRpcValue dynamic_parameters;
+
+  int manual_major_version;
+  int manual_minor_version;
 
   try
   {
@@ -53,6 +58,9 @@ SVHNode::SVHNode(const ros::NodeHandle & nh)
     nh.param<std::string>("name_prefix",name_prefix,"left_hand");
     nh.param<int>("connect_retry_count",connect_retry_count,3);
     nh.getParam("VERSIONS_PARAMETERS", dynamic_parameters);
+    nh.param<int>("use_major_version", manual_major_version,0);
+    nh.param<int>("use_minor_version", manual_minor_version,0);
+      
   }
   catch (ros::InvalidNameException e)
   {
@@ -102,16 +110,24 @@ SVHNode::SVHNode(const ros::NodeHandle & nh)
 
   // Receives current Firmware Version
   // because some parameters depend on the version
-  fm_->connect(serial_device_name_, connect_retry_count);
-  driver_svh::SVHFirmwareInfo version_info = fm_->getFirmwareInfo();
-  ROS_INFO("current Handversion %d.%d",version_info.version_major,version_info.version_minor);
-  fm_->disconnect();
+  if(manual_major_version == 0 && manual_minor_version == 0){
+   
+    fm_->connect(serial_device_name_, connect_retry_count);
+    driver_svh::SVHFirmwareInfo version_info = fm_->getFirmwareInfo();
+    ROS_INFO("current Handversion %d.%d",version_info.version_major,version_info.version_minor);
+
+    manual_major_version = version_info.version_major;
+    manual_minor_version = version_info.version_minor;
+
+    fm_->disconnect();
+  
+  }
   // get the the indidividual finger params
   // We will read out all of them, so that in case we fail half way we do not set anything
   try
   {
     //Loading hand parameters
-    DynamicParameter dyn_parameters(version_info.version_major,version_info.version_minor,dynamic_parameters);
+    DynamicParameter dyn_parameters( manual_major_version , manual_minor_version , dynamic_parameters );
  
 
     for (size_t channel = 0; channel < driver_svh::eSVH_DIMENSION; ++channel)
