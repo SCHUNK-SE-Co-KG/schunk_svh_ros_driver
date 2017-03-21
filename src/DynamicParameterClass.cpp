@@ -27,6 +27,7 @@ DynamicParameter::DynamicParameter(int16_t major_version, int16_t minor_version,
 
   ROS_ASSERT( static_cast<driver_svh::SVHChannel>( m_joint_names.size() ) == driver_svh::eSVH_DIMENSION);
 
+  //mapping from name to enum
   for (int32_t i = driver_svh::eSVH_THUMB_FLEXION; i < driver_svh::eSVH_DIMENSION; ++i){
 
     driver_svh::SVHChannel channel = static_cast<driver_svh::SVHChannel>(i);
@@ -112,6 +113,7 @@ int DynamicParameter::read_file(int16_t major_version_target,int16_t minor_versi
 		   m_current_settings_given[m_name_to_enum[parameter_name]]  = xml_rpc_value_to_vector(parameter_yaml["current_controller"] ,m_current_settings[m_name_to_enum[parameter_name]]);
 		   m_home_settings_given[m_name_to_enum[parameter_name]]     = xml_rpc_value_to_vector(parameter_yaml["home_settings"]      ,m_home_settings[m_name_to_enum[parameter_name]]);
                }
+	       //First Reading of parameters
                if(default_state == true){
 		 
 		  default_state = false;

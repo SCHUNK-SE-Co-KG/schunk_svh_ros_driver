@@ -120,17 +120,17 @@ SVHRosControlNode::SVHRosControlNode()
   // Receives current Firmware Version
   // because some parameters depend on the version
   m_finger_manager->connect(m_serial_device_name, m_connect_retry_count);
+
+  //reads out current Firmware Version
   driver_svh::SVHFirmwareInfo version_info = m_finger_manager->getFirmwareInfo();
   ROS_INFO("current Handversion %d.%d",version_info.version_major,version_info.version_minor);
   m_finger_manager->disconnect();
-
 
 
   try
   {
     //Loading hand parameters
     DynamicParameter dyn_parameters(version_info.version_major,version_info.version_minor,dynamic_parameters);
- 
 
     for (size_t channel = 0; channel < driver_svh::eSVH_DIMENSION; ++channel)
     {
@@ -153,7 +153,7 @@ SVHRosControlNode::SVHRosControlNode()
   {
     ROS_ERROR("Parameter Error! While reading the controller settings. Will use default settings");
   }
-
+  
   // prepare the channel position message for later sending
   m_channel_pos.name.resize(driver_svh::eSVH_DIMENSION);
   m_channel_pos.position.resize(driver_svh::eSVH_DIMENSION, 0.0);

@@ -15,7 +15,7 @@
   <!-- load basic configuration -->
   <rosparam file="$(arg general_config)" command="load" ns="svh_ros_control_node"/>
   <!-- Load Yaml Configuration file-->
-  <rosparam file="$(find schunk_svh_driver)/etc/controller_default.yaml" command="load" ns="svh_ros_control_node"/>
+  <rosparam file="$(find schunk_svh_driver)/etc/controller_all_versions.yaml" command="load" ns="svh_ros_control_node"/>
   <!-- Load the User Config file which will overwrite values from default -->
   <rosparam file="$(arg controller_config)" command="load" ns="svh_ros_control_node"/>
 
