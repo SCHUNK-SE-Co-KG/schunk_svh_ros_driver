@@ -16,7 +16,7 @@ int main(int argc, char **argv)
   XmlRpc::XmlRpcValue parameters;
   private_node.getParam("VERSIONS_PARAMETERS", parameters);
 
-  DynamicParameter dyn_parameters(2,0,parameters);
+  DynamicParameter dyn_parameters(2,3,parameters);
   
 
   for (size_t channel = 0; channel < driver_svh::eSVH_DIMENSION; ++channel)
