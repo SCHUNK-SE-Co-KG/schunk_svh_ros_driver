@@ -1,3 +1,19 @@
+// this is for emacs file handling -*- mode: c++; indent-tabs-mode: nil -*-
+
+// -- BEGIN LICENSE BLOCK ----------------------------------------------
+// -- END LICENSE BLOCK ------------------------------------------------
+
+//----------------------------------------------------------------------
+/*!\file
+ *
+ * \author  Felix Mauch <mauch@fzi.de>
+ * \date    2017-2-22
+ *
+ */
+//----------------------------------------------------------------------
+
+
+
 #include <XmlRpcException.h>
 #include <iostream>
 #include <ros/ros.h>

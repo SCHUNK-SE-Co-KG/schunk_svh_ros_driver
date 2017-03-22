@@ -1,3 +1,21 @@
+// this is for emacs file handling -*- mode: c++; indent-tabs-mode: nil -*-
+
+// -- BEGIN LICENSE BLOCK ----------------------------------------------
+// -- END LICENSE BLOCK ------------------------------------------------
+
+//----------------------------------------------------------------------
+/*!\file
+ *
+ * \author  Andreas Konle <konle@fzi.de>
+ * \author  Felix Mauch <mauch@fzi.de>
+ * \date    2017-2-22
+ *
+ */
+//----------------------------------------------------------------------
+
+#ifndef SCHUNK_SVH_DRIVER_DYNAMIC_PARAMETER_CLASS_H_INCLUDED
+#define SCHUNK_SVH_DRIVER_DYNAMIC_PARAMETER_CLASS_H_INCLUDED
+
 #include <XmlRpcException.h>
 #include <iostream>
 #include <ros/ros.h>
@@ -28,3 +46,5 @@ private:
   std::vector<std::string> m_joint_names;
   std::map<std::string, driver_svh::SVHChannel> m_name_to_enum;
 };
+
+#endif // #ifdef SCHUNK_SVH_DRIVER_DYNAMIC_PARAMETER_CLASS_H_INCLUDED
