@@ -41,8 +41,10 @@ SVHNode::SVHNode(const ros::NodeHandle& nh)
   // Parameters that depend on the hardware version of the hand.
   XmlRpc::XmlRpcValue dynamic_parameters;
 
-  int manual_major_version;
-  int manual_minor_version;
+  uint16_t manual_major_version;
+  int manual_major_version_int;
+  uint16_t manual_minor_version;
+  int manual_minor_version_int;
 
   try
   {
@@ -55,9 +57,11 @@ SVHNode::SVHNode(const ros::NodeHandle& nh)
     nh.getParam("logging_config", logging_config_file);
     nh.param<std::string>("name_prefix", name_prefix, "left_hand");
     nh.param<int>("connect_retry_count", connect_retry_count, 3);
-    nh.getParam("VERSIONS_PARAMETERS", dynamic_parameters);
-    nh.param<int>("use_major_version", manual_major_version, 0);
-    nh.param<int>("use_minor_version", manual_minor_version, 0);
+    nh.getParam("VERSIONS_PARAMETERS", dynamic_parameters); //TODO Check whether parameters exist
+    nh.param<int>("use_major_version", manual_major_version_int, 0);
+    manual_major_version = static_cast<uint16_t>(manual_major_version_int);
+    nh.param<int>("use_minor_version", manual_minor_version_int, 0);
+    manual_minor_version = static_cast<uint16_t>(manual_minor_version_int);
   }
   catch (ros::InvalidNameException e)
   {
@@ -112,14 +116,17 @@ SVHNode::SVHNode(const ros::NodeHandle& nh)
   {
     fm_->connect(serial_device_name_, connect_retry_count);
     driver_svh::SVHFirmwareInfo version_info = fm_->getFirmwareInfo();
-    ROS_INFO("current Handversion %d.%d", version_info.version_major, version_info.version_minor);
+    ROS_INFO("Hand hardware controller version:  %d.%d",
+             version_info.version_major,
+             version_info.version_minor);
 
     manual_major_version = version_info.version_major;
     manual_minor_version = version_info.version_minor;
 
+    // TODO: Is this correct to do here?
     fm_->disconnect();
   }
-  // get the the indidividual finger params
+  // get the the individual finger parameters
   // We will read out all of them, so that in case we fail half way we do not set anything
   try
   {
@@ -131,22 +138,22 @@ SVHNode::SVHNode(const ros::NodeHandle& nh)
     {
       // Only update the values in case actually have some. Otherwise the driver will use internal
       // defaults. Overwriting them with zeros would be counter productive
-      if (dyn_parameters.m_current_settings_given[channel])
+      if (dyn_parameters.getSettings().current_settings_given[channel])
       {
         fm_->setCurrentSettings(
           static_cast<driver_svh::SVHChannel>(channel),
-          driver_svh::SVHCurrentSettings(dyn_parameters.m_current_settings[channel]));
+          driver_svh::SVHCurrentSettings(dyn_parameters.getSettings().current_settings[channel]));
       }
-      if (dyn_parameters.m_position_settings_given[channel])
+      if (dyn_parameters.getSettings().position_settings_given[channel])
       {
         fm_->setPositionSettings(
           static_cast<driver_svh::SVHChannel>(channel),
-          driver_svh::SVHPositionSettings(dyn_parameters.m_position_settings[channel]));
+          driver_svh::SVHPositionSettings(dyn_parameters.getSettings().position_settings[channel]));
       }
-      if (dyn_parameters.m_home_settings_given[channel])
+      if (dyn_parameters.getSettings().home_settings_given[channel])
       {
         fm_->setHomeSettings(static_cast<driver_svh::SVHChannel>(channel),
-                             driver_svh::SVHHomeSettings(dyn_parameters.m_home_settings[channel]));
+                             driver_svh::SVHHomeSettings(dyn_parameters.getSettings().home_settings[channel]));
       }
     }
   }

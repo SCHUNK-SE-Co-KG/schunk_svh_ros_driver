@@ -137,23 +137,23 @@ SVHRosControlNode::SVHRosControlNode()
     {
       // Only update the values in case actually have some. Otherwise the driver will use internal
       // defaults. Overwriting them with zeros would be counter productive
-      if (dyn_parameters.m_current_settings_given[channel])
+      if (dyn_parameters.getSettings().current_settings_given[channel])
       {
         m_finger_manager->setCurrentSettings(
           static_cast<driver_svh::SVHChannel>(channel),
-          driver_svh::SVHCurrentSettings(dyn_parameters.m_current_settings[channel]));
+          driver_svh::SVHCurrentSettings(dyn_parameters.getSettings().current_settings[channel]));
       }
-      if (dyn_parameters.m_position_settings_given[channel])
+      if (dyn_parameters.getSettings().position_settings_given[channel])
       {
         m_finger_manager->setPositionSettings(
           static_cast<driver_svh::SVHChannel>(channel),
-          driver_svh::SVHPositionSettings(dyn_parameters.m_position_settings[channel]));
+          driver_svh::SVHPositionSettings(dyn_parameters.getSettings().position_settings[channel]));
       }
-      if (dyn_parameters.m_home_settings_given[channel])
+      if (dyn_parameters.getSettings().home_settings_given[channel])
       {
         m_finger_manager->setHomeSettings(
           static_cast<driver_svh::SVHChannel>(channel),
-          driver_svh::SVHHomeSettings(dyn_parameters.m_home_settings[channel]));
+          driver_svh::SVHHomeSettings(dyn_parameters.getSettings().home_settings[channel]));
       }
     }
   }
@@ -664,3 +664,4 @@ int main(int argc, char** argv)
 
   return 0;
 }
+

@@ -24,27 +24,48 @@
 #include <driver_svh/SVHFingerManager.h>
 #include <driver_svh/SVHPositionSettings.h>
 
+
 class DynamicParameter
 {
 public:
-  DynamicParameter(int16_t major_version, int16_t minor_version, XmlRpc::XmlRpcValue parameters);
+  DynamicParameter(const uint16_t major_version, const uint16_t minor_version, XmlRpc::XmlRpcValue& parameters);
 
-  // PARAMETERS
-  std::vector<std::vector<float> > m_position_settings;
-  std::vector<bool> m_position_settings_given;
+  struct Settings
+  {
+    Settings()
+    : position_settings(driver_svh::eSVH_DIMENSION)
+    , position_settings_given(driver_svh::eSVH_DIMENSION, false)
+    , current_settings(driver_svh::eSVH_DIMENSION)
+    , current_settings_given(driver_svh::eSVH_DIMENSION, false)
+    , home_settings(driver_svh::eSVH_DIMENSION)
+    , home_settings_given(driver_svh::eSVH_DIMENSION, false)
+    , major_version(0)
+    , minor_version(0)
+    {}
 
-  std::vector<std::vector<float> > m_current_settings;
-  std::vector<bool> m_current_settings_given;
+    std::vector<std::vector<float> > position_settings;
+    std::vector<bool> position_settings_given;
 
-  std::vector<std::vector<float> > m_home_settings;
-  std::vector<bool> m_home_settings_given;
+    std::vector<std::vector<float> > current_settings;
+    std::vector<bool> current_settings_given;
+
+    std::vector<std::vector<float> > home_settings;
+    std::vector<bool> home_settings_given;
+
+    uint16_t major_version;
+    uint16_t minor_version;
+  };
+
+  const Settings& getSettings() const {return m_settings;}
 
 private:
-  int read_file(int16_t major_version, int16_t minor_version, XmlRpc::XmlRpcValue parameters);
+  void read_file(const uint16_t major_version, const uint16_t minor_version, XmlRpc::XmlRpcValue& parameters);
   bool xml_rpc_value_to_vector(XmlRpc::XmlRpcValue my_array, std::vector<float>& my_vector);
 
-  std::vector<std::string> m_joint_names;
-  std::map<std::string, driver_svh::SVHChannel> m_name_to_enum;
+  Settings m_settings;
+
+  // Stores an enum-string matching map
+  std::map<driver_svh::SVHChannel, std::string> m_name_to_enum;
 };
 
 #endif // #ifdef SCHUNK_SVH_DRIVER_DYNAMIC_PARAMETER_CLASS_H_INCLUDED
