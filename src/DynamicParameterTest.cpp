@@ -37,7 +37,7 @@ int main(int argc, char** argv)
 
   for (size_t channel = 0; channel < driver_svh::eSVH_DIMENSION; ++channel)
   {
-    ROS_INFO("using channel %d", channel);
+    ROS_INFO_STREAM("using channel " << channel);
 
     if (dyn_parameters.m_position_settings_given[channel])
     {

@@ -31,8 +31,6 @@
 
 
 // Consts
-// Loop Rate (i.e Frequency) of the ROS node -> 50 = 50HZ
-const double loop_rate = 50;
 // Time of a half Sin. i.e. 10 = In 10 Seconds the selected fingers will perform a close and open
 // (Sin to 1PI)
 const double sin_duration = 10;
