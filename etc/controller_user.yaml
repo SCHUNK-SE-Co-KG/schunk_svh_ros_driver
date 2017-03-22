@@ -7,6 +7,14 @@
 # SAFETY CHECKS FOR THESE (as that would be rather pointless)
 # PLEASE CONSULT AVAILABLE DOCUMENTATION AND ONLY CHANGE THESE
 # VALUES IN SMALL INCREMENTS!!!
+#
+# There exist multiple hardware controller versions for the hand.
+# If you change any values here, make sure you change them for
+# the correct hardware version. The hardware controller version
+# is printed during startup with the line similar to
+#    [ INFO] [1490175467.120086310]: Hand hardware controller version:  1.2
+# In this case major_version 1 and minor_version 2
+#
 ############################################################
 ####################### WARNING!!!  ########################
 ############################################################
