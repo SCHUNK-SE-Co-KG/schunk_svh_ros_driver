@@ -167,7 +167,7 @@ void DynamicParameter::read_file(const uint16_t major_version_target,
       }
     }
   }
-  ROS_INFO_STREAM("DID NOT FIND EXACT VERSION: " << major_version_target << "."
+  ROS_WARN_STREAM("DID NOT FIND EXACT VERSION: " << major_version_target << "."
                                                  << minor_version_target
                                                  << " Falling back to: "
                                                  << m_settings.major_version
