@@ -157,12 +157,12 @@ void DynamicParameter::read_file(const uint16_t major_version_target,
         }
         else if (correct_version)
         {
-          ROS_INFO("DID FIND CORRECT VERSION");
+          ROS_INFO("Did find correct version");
           return;
         }
         else
         {
-          ROS_DEBUG("DID FIND SAME MAJOR VERSION");
+          ROS_DEBUG("Did find same major version");
         }
       }
     }
