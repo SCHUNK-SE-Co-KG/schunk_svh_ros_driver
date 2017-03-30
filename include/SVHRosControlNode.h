@@ -37,10 +37,10 @@
 
 #include "SVHRosControlHWInterface.h"
 
-#include <icl_hardware_canopen/CanOpenController.h>
+// #include <icl_hardware_canopen/CanOpenController.h>
 
-using namespace icl_hardware;
-using namespace canopen_schunk;
+// using namespace icl_hardware;
+// using namespace canopen_schunk;
 
 class SVHRosControlNode
 {

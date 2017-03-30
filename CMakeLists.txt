@@ -21,7 +21,6 @@ find_package(catkin REQUIRED COMPONENTS
 find_package(icl_comm)
 find_package(icl_core)
 find_package(driver_svh)
-find_package(icl_hardware REQUIRED COMPONENTS icl_hardware_canopen)
 
 catkin_python_setup()
 
@@ -71,7 +70,7 @@ catkin_package(
 
 
 foreach(dir description/meshes description/urdf)
-   install(DIRECTORY ${dir}/ 
+   install(DIRECTORY ${dir}/
       DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/${dir})
 endforeach(dir)
 
@@ -115,7 +114,6 @@ add_dependencies(svh_controller
   icl_comm
   icl_core
   driver_svh
-  icl_hardware_canopen
   ${PROJECT_NAME}_gencfg
   ${PROJECT_NAME}_generate_messages_cpp
 )
@@ -133,7 +131,6 @@ target_link_libraries(svh_controller
 add_dependencies(svh_sin_test
   icl_comm
   icl_core
-  icl_hardware_canopen
 )
 
 ## Specify libraries to link a library or executable target against
@@ -145,21 +142,22 @@ target_link_libraries(svh_sin_test
 )
 
 ## ROSControl
-add_library(svh_ros_control_hw_interface
-  src/SVHRosControlHWInterface.cpp
+add_library(svh_ros
+#   src/SVHRosControlHWInterface.cpp
+  src/SVHWrapper.cpp
+  src/DynamicParameterClass.cpp
 )
-add_dependencies(svh_ros_control_hw_interface
+add_dependencies(svh_ros
   icl_comm
   icl_core
   driver_svh
-  icl_
   ${PROJECT_NAME}_gencfg
   ${PROJECT_NAME}_generate_messages_cpp
 )
 
 
 ## Specify libraries to link a library or executable target against
-target_link_libraries(svh_ros_control_hw_interface
+target_link_libraries(svh_ros
   ${catkin_LIBRARIES}
   ${icl_comm_LIBRARIES}
   ${icl_core_LIBRARIES}
@@ -168,26 +166,19 @@ target_link_libraries(svh_ros_control_hw_interface
 )
 
 add_executable(svh_ros_control_node
-  src/SVHRosControlNode.cpp
-  src/DynamicParameterClass.cpp
+  src/SVHRosControlHWInterface.cpp
+  src/svh_ros_control_node.cpp
 )
 add_dependencies(svh_ros_control_node
-  icl_comm
-  icl_core
-  driver_svh
-  icl_hardware_canopen
+  svh_ros
   ${PROJECT_NAME}_gencfg
   ${PROJECT_NAME}_generate_messages_cpp
 )
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(svh_ros_control_node
-  svh_ros_control_hw_interface
+  svh_ros
   ${catkin_LIBRARIES}
-  ${icl_comm_LIBRARIES}
-  ${icl_core_LIBRARIES}
-  ${driver_svh_LIBRARIES}
-  ${icl_hardware_LIBRARIES}
 )
 
 ## DynamicParametersTest ##
@@ -201,7 +192,6 @@ add_dependencies(svh_dynamic_parameter_test
   icl_comm
   icl_core
   driver_svh
-  icl_hardware_canopen
   ${PROJECT_NAME}_gencfg
   ${PROJECT_NAME}_generate_messages_cpp
 )

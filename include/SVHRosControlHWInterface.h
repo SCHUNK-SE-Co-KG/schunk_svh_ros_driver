@@ -16,9 +16,7 @@
 #define SCHUNK_SVH_HARDWARE_INTERFACE_H_
 
 // Driver Specific things
-#include <driver_svh/SVHCurrentSettings.h>
-#include <driver_svh/SVHFingerManager.h>
-#include <driver_svh/SVHPositionSettings.h>
+#include "SVHWrapper.h"
 
 #include <controller_manager/controller_manager.h>
 #include <hardware_interface/joint_command_interface.h>
@@ -35,18 +33,20 @@
 class SVHRosControlHWInterface : public hardware_interface::RobotHW
 {
 public:
-  SVHRosControlHWInterface(ros::NodeHandle& nh,
-                           boost::shared_ptr<driver_svh::SVHFingerManager>& finger_manager,
-                           std::string& name_prefix);
+  SVHRosControlHWInterface ();
+  ~SVHRosControlHWInterface ();
+
+//   SVHRosControlHWInterface (ros::NodeHandle& nh, boost::shared_ptr<driver_svh::SVHFingerManager> &finger_manager, std::string &name_prefix);
 
   /// \brief Initialize the hardware interface
-  virtual void init();
+  virtual bool init(ros::NodeHandle& root_nh, ros::NodeHandle& robot_hw_nh);
+//   virtual void init();
 
   /// \brief Read the state from the robot hardware.
-  virtual void read();
+  virtual void read(const ros::Time& time, const ros::Duration& period);
 
   /// \brief write the command to the robot hardware.
-  virtual void write(ros::Time time, ros::Duration period);
+  virtual void write(const ros::Time& time, const ros::Duration& period);
 
   bool prepareSwitch(const std::list<hardware_interface::ControllerInfo>& start_list,
                      const std::list<hardware_interface::ControllerInfo>& stop_list);
@@ -60,12 +60,12 @@ public:
   /*!
    * \brief Creates a joint_state message from the current joint angles and returns it.
    */
-  sensor_msgs::JointState getJointMessage();
+//   sensor_msgs::JointState getJointMessage();
 
 protected:
   ros::NodeHandle m_node_handle;
   //! Handle to the SVH finger manager for library access
-  boost::shared_ptr<driver_svh::SVHFingerManager> m_finger_manager;
+  boost::shared_ptr<SVHWrapper> m_svh;
   std::string m_name_prefix;
 
   // Interfaces

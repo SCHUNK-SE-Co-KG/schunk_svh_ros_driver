@@ -198,8 +198,8 @@ SVHRosControlNode::SVHRosControlNode()
   // Bring up roscontrol:
   if (m_use_ros_control)
   {
-    m_hardware_interface.reset(
-      new SVHRosControlHWInterface(m_pub_nh, m_finger_manager, m_name_prefix));
+//     m_hardware_interface.reset(
+//       new SVHRosControlHWInterface(m_pub_nh, m_finger_manager, m_name_prefix));
     m_controller_manager.reset(
       new controller_manager::ControllerManager(m_hardware_interface.get(), m_pub_nh));
 
@@ -305,196 +305,6 @@ void SVHRosControlNode::initDevices()
 }
 
 
-// void SVHRosControlNode::goalCB (actionlib::ServerGoalHandle<
-// control_msgs::FollowJointTrajectoryAction > gh)
-//{
-//  ROS_INFO ("Executing Trajectory action");
-
-//  /* TODO: Catch errors:
-//   * - Joint not enabled
-//   * - EmergencyStopState
-//   * - Overwriting trajectory
-//   * - invalid positions
-//   */
-
-
-//  if (gh.getGoal()->trajectory.joint_names.size() !=
-//  gh.getGoal()->trajectory.points[0].positions.size())
-//  {
-//    ROS_ERROR_STREAM ("Number of given joint names (" <<
-//    gh.getGoal()->trajectory.joint_names.size() <<
-//      ") and joint states (" << gh.getGoal()->trajectory.points.size() << ") do not match!
-//      Aborting goal!");
-//    return;
-//  }
-
-//  if (m_has_goal)
-//  {
-//    ROS_WARN_STREAM ("Sent a new goal while another goal was still running. Depending on the " <<
-//      "device configuration this will either result in a queuing or the current trajectory " <<
-//      "will be overwritten."
-//    );
-//  }
-
-
-//  gh.setAccepted();
-//  m_has_goal = true;
-//  m_traj_thread = boost::thread(&SVHRosControlNode::trajThread, this, gh);
-
-//}
-
-// void SVHRosControlNode::trajThread(actionlib::ServerGoalHandle<
-// control_msgs::FollowJointTrajectoryAction >& gh)
-//{
-//  control_msgs::FollowJointTrajectoryActionResult result;
-//  control_msgs::FollowJointTrajectoryActionFeedback feedback;
-//  feedback.feedback.header = gh.getGoal()->trajectory.header;
-//  result.header = gh.getGoal()->trajectory.header;
-
-//  ros::Time start = ros::Time::now();
-//  bool targets_reached = true;
-
-//  for (size_t waypoint = 0; waypoint < gh.getGoal()->trajectory.points.size(); ++waypoint)
-//  {
-//    feedback.feedback.desired.positions.clear();
-//    feedback.feedback.joint_names.clear();
-//    feedback.feedback.actual.positions.clear();
-//    for (size_t i = 0; i < gh.getGoal()->trajectory.joint_names.size(); ++i)
-//    {
-
-//      uint8_t nr = m_joint_name_mapping[gh.getGoal()->trajectory.joint_names[i]];
-//      float pos =
-//      boost::lexical_cast<float>(gh.getGoal()->trajectory.points[waypoint].positions[i]);
-//      ROS_INFO_STREAM ("Joint " << static_cast<int>(nr) << ": " << pos);
-//      SchunkPowerBallNode::Ptr node;
-//      try
-//      {
-//        node = m_controller->getNode<SchunkPowerBallNode>(nr);
-//      }
-//      catch (const NotFoundException& e)
-//      {
-//        ROS_ERROR_STREAM ("One or more nodes could not be found in the controller. " << e.what());
-//        result.result.error_code = -2;
-//        result.result.error_string = e.what();
-//        gh.setAborted(result.result);
-//        return;
-//      }
-//      m_controller->getNode<SchunkPowerBallNode>(nr)->setTarget(pos);
-//      feedback.feedback.desired.positions.push_back(pos);
-//      feedback.feedback.joint_names.push_back(gh.getGoal()->trajectory.joint_names[i]);
-
-
-//      pos = node->getTargetFeedback();
-//      feedback.feedback.actual.positions.push_back(pos);
-//    }
-//    ros::Duration max_time = gh.getGoal()->goal_time_tolerance;
-
-//    ros::Duration spent_time = start - start;
-//    std::vector<bool> reached_vec;
-
-//    // Give the brakes time to open up
-//    sleep(1);
-
-//    while ( spent_time < max_time || max_time.isZero() )
-//    {
-//      try {
-//        m_controller->syncAll();
-//      }
-//      catch (const std::exception& e)
-//      {
-//        ROS_ERROR_STREAM (e.what());
-//        gh.setAborted();
-//        return;
-//      }
-//      usleep(10000);
-
-//      bool waypoint_reached = true;
-//      for (size_t i = 0; i < gh.getGoal()->trajectory.joint_names.size(); ++i)
-//      {
-//        uint8_t nr = m_joint_name_mapping[gh.getGoal()->trajectory.joint_names[i]];
-//        SchunkPowerBallNode::Ptr node = m_controller->getNode<SchunkPowerBallNode>(nr);
-//        waypoint_reached &= node->isTargetReached();
-//        float pos = node->getTargetFeedback();
-//  //       ROS_INFO_STREAM ("Node " << nr << " target reached: " << waypoint_reached <<
-//  //         ", position is: " << pos
-//  //       );
-//        feedback.feedback.actual.time_from_start = spent_time;
-//        feedback.feedback.actual.positions.at(i) = (pos);
-//      }
-
-
-//      gh.publishFeedback(feedback.feedback);
-//      targets_reached = waypoint_reached;
-
-
-//      if (waypoint_reached)
-//      {
-//        ROS_INFO_STREAM ("Waypoint " << waypoint <<" reached" );
-//        break;
-//      }
-//      spent_time = ros::Time::now() - start;
-//      if (spent_time > max_time && !max_time.isZero())
-//      {
-//        result.result.error_code = -5;
-//        result.result.error_string = "Did not reach targets in specified time";
-//        gh.setAborted();
-//        m_has_goal = false;
-//        return;
-//      }
-//      if (boost::this_thread::interruption_requested() )
-//      {
-//        ROS_ERROR ("Interruption requested");
-//        m_has_goal = false;
-//        return;
-//      }
-//    }
-//  }
-
-//  if (targets_reached)
-//  {
-//    ROS_INFO ("All targets reached" );
-//    result.result.error_code = 0;
-//    result.result.error_string = "All targets successfully reached";
-//    gh.setSucceeded(result.result);
-//  }
-//  else
-//  {
-//    ROS_INFO ("Not all targets reached" );
-//    result.result.error_code = -5;
-//    result.result.error_string = "Did not reach targets in specified time";
-//    gh.setAborted();
-//  }
-//  m_has_goal = false;
-//}
-
-
-// void SVHRosControlNode::cancelCB (actionlib::ServerGoalHandle<
-// control_msgs::FollowJointTrajectoryAction > gh)
-//{
-//  m_is_enabled = false;
-//  ROS_INFO ("Canceling Trajectory action");
-
-//  m_traj_thread.interrupt();
-//  ROS_INFO ("Stopped trajectory thread");
-
-//  for (size_t i = 0; i < m_chain_handles.size(); ++i)
-//  {
-//    m_chain_handles[i]->quickStop();
-//  }
-//  ROS_INFO ("Device stopped");
-//  sleep(1);
-//  for (size_t i = 0; i < m_chain_handles.size(); ++i)
-//  {
-//    m_chain_handles[i]->enableNodes();
-//    m_is_enabled = true;
-//  }
-
-//  control_msgs::FollowJointTrajectoryActionResult result;
-//  result.result.error_code = 0;
-//  result.result.error_string = "Trajectory preempted by user";
-
-//  gh.setCanceled(result.result);
-//}
 
 void SVHRosControlNode::rosControlLoop()
 {
@@ -514,7 +324,7 @@ void SVHRosControlNode::rosControlLoop()
     elapsed_time = current_time - last_time;
     last_time    = current_time;
     // Input
-    m_hardware_interface->read();
+    m_hardware_interface->read(current_time, elapsed_time);
     sensor_msgs::JointState joint_msg = m_hardware_interface->getJointMessage();
     if (m_joint_pub)
     {
@@ -572,66 +382,12 @@ bool SVHRosControlNode::enableNodes(std_srvs::TriggerRequest& req, std_srvs::Tri
 }
 
 
-// bool SVHRosControlNode::quickStopNodes(std_srvs::TriggerRequest& req, std_srvs::TriggerResponse&
-// resp)
-//{
-//  m_is_enabled = false;
-//  if (!m_use_ros_control)
-//  {
-//    m_traj_thread.interrupt();
-//    ROS_INFO ("Stopped trajectory thread");
-//  }
-
-//  try
-//  {
-//    for (size_t i = 0; i < m_chain_handles.size(); ++i)
-//    {
-//      m_chain_handles[i]->quickStop();
-//    }
-//  }
-//  catch (const ProtocolException& e)
-//  {
-//    ROS_ERROR_STREAM ( "Error while quick stopping nodes: " << e.what());
-//  }
-//  resp.success = true;
-//  m_was_disabled = false;
-//  m_controller_manager->getControllerByName(m_traj_controller_name)->stopRequest(ros::Time::now());
-//  ROS_INFO ("Quick stopped all nodes. For reenabling, please use the enable_nodes service. Thank
-//  you for your attention.");
-//  return true;
-//}
-
 bool SVHRosControlNode::homeAllNodes(schunk_svh_driver::HomeAllRequest& req,
                                      schunk_svh_driver::HomeAllResponse& resp)
 {
   resp.success = m_finger_manager->resetChannel(driver_svh::eSVH_ALL);
   return resp.success;
 }
-
-
-// bool SVHRosControlNode::homeNodesJointNames(schunk_svh_driver::HomeWithJointNamesRequest& req,
-//                                            schunk_svh_driver::HomeWithJointNamesResponse& resp)
-//{
-//  schunk_svh_driver::HomeWithIDsRequest req_fwd;
-//  schunk_svh_driver::HomeWithIDsResponse resp_fwd;
-//  for (std::vector<std::string>::iterator it = req.joint_names.begin();
-//       it != req.joint_names.end();
-//  ++it)
-//  {
-//    if (m_joint_name_mapping.find(*it) != m_joint_name_mapping.end())
-//    {
-//      req_fwd.node_ids.push_back(m_joint_name_mapping[*it]);
-//    }
-//    else
-//    {
-//      ROS_ERROR_STREAM ("Could not find joint " << *it << ". No homing will be performed for this
-//      joint.");
-//    }
-//  }
-//  homeNodesCanIds (req_fwd, resp_fwd);
-//  resp.success = resp_fwd.success;
-//  return resp.success;
-//}
 
 
 bool SVHRosControlNode::homeNodesChannelIds(schunk_svh_driver::HomeWithChannelsRequest& req,
