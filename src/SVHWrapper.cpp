@@ -54,17 +54,21 @@ SVHWrapper::SVHWrapper(const ros::NodeHandle& nh)
 //   manual_minor_version = static_cast<uint16_t>(manual_minor_version_int);
 
   // Tell the user what we are using
-  ROS_INFO("Name prefix for this Hand was set to :%s", m_name_prefix.c_str());
+  ROS_INFO("Name prefix for this Hand was set to: %s", m_name_prefix.c_str());
 
   std::string parameters_name = "VERSIONS_PARAMETERS";
   try
   {
-    nh.getParam("VERSIONS_PARAMETERS", dynamic_parameters);
+    if (!nh.getParam("VERSIONS_PARAMETERS", dynamic_parameters))
+    {
+      ROS_FATAL_STREAM("Could not find controller_parameters under " << nh.resolveName(parameters_name));
+      exit(-1);
+    }
   }
   catch (ros::InvalidNameException e)
   {
-    ROS_ERROR_STREAM("Could not find controller_parameters under"
-                     << /*TODO: resolve*/ parameters_name);
+    ROS_FATAL_STREAM("Illegal parameter name: " << parameters_name);
+    exit(-1);
   }
 
   initLogging(use_internal_logging, logging_config_file);

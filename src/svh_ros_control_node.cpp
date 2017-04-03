@@ -28,7 +28,7 @@ int main (int argc, char** argv)
   ros::AsyncSpinner spinner(1);
   spinner.start();
 
-  ros::NodeHandle nh;
+  ros::NodeHandle nh("~");
 
   // Create the hardware interface
   SVHRosControlHWInterface svh_hw;
@@ -39,6 +39,8 @@ int main (int argc, char** argv)
   ros::Time timestamp_now = ros::Time::now();
   ros::Time timestamp_last = ros::Time::now();
   ros::Duration period;
+
+  ros::Rate rate(125);
   while (ros::ok())
   {
     // Get current time and elapsed time since last read
@@ -46,10 +48,10 @@ int main (int argc, char** argv)
     period = timestamp_now - timestamp_last;
     timestamp_last = timestamp_now;
 
-    svh_hw.read(ros::Time::now(), period);
-    cm.update(ros::Time::now(), period); // TODO: Check if hardware is enabled?
-    svh_hw.write(ros::Time::now(), period);
-    period.sleep();
+    svh_hw.read(timestamp_now, period);
+    cm.update(timestamp_now, period); // TODO: Check if hardware is enabled?
+    svh_hw.write(timestamp_now, period);
+    rate.sleep();
   }
 
   return 0;

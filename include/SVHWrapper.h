@@ -34,6 +34,8 @@ public:
 
   boost::shared_ptr<driver_svh::SVHFingerManager> getFingerManager () const { return m_finger_manager; }
 
+  std::string getNamePrefix () const { return m_name_prefix; }
+
 private:
     /**
      * @brief Initialize the icl_logging framework

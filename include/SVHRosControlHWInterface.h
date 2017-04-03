@@ -66,7 +66,6 @@ protected:
   ros::NodeHandle m_node_handle;
   //! Handle to the SVH finger manager for library access
   boost::shared_ptr<SVHWrapper> m_svh;
-  std::string m_name_prefix;
 
   // Interfaces
   hardware_interface::JointStateInterface m_joint_state_interface;

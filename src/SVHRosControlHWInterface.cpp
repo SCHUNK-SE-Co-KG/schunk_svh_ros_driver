@@ -26,7 +26,6 @@
 using namespace hardware_interface;
 
 SVHRosControlHWInterface::SVHRosControlHWInterface ()
-  : m_name_prefix("left")
 {
 }
 
@@ -51,7 +50,7 @@ bool SVHRosControlHWInterface::init(ros::NodeHandle& root_nh, ros::NodeHandle& r
   for (std::size_t channel = 0; channel < driver_svh::eSVH_DIMENSION; ++channel)
   {
     m_channel_names[channel] =
-      m_name_prefix + "_" + driver_svh::SVHController::m_channel_description[channel];
+      m_svh->getNamePrefix() + "_" + driver_svh::SVHController::m_channel_description[channel];
 
     ROS_DEBUG_STREAM(
       "Controller Hardware interface: Loading joint with id " << channel << " named "

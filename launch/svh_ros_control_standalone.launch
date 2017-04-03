@@ -24,8 +24,7 @@
   </include>
 
   <!-- ROS_Control Controllers -->
-  <include file="$(find schunk_svh_driver)/launch/svh_ros_control_controllers.launch">
-        <arg name="trajectory_controller_name" value="$(arg trajectory_controller_name)" />
+  <include ns="svh_ros_control_node" file="$(find schunk_svh_driver)/launch/svh_ros_control_controllers.launch">
   </include>
 
   <!-- Robot state publisher for the TFs -->
