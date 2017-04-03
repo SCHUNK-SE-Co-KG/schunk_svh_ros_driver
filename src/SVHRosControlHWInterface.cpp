@@ -23,6 +23,10 @@
 #include <driver_svh/SVHFingerManager.h>
 #include <driver_svh/SVHPositionSettings.h>
 
+#include <pluginlib/class_list_macros.h>
+
+PLUGINLIB_EXPORT_CLASS(SVHRosControlHWInterface, hardware_interface::RobotHW)
+
 using namespace hardware_interface;
 
 SVHRosControlHWInterface::SVHRosControlHWInterface ()
@@ -43,7 +47,6 @@ bool SVHRosControlHWInterface::init(ros::NodeHandle& root_nh, ros::NodeHandle& r
   m_joint_positions.resize(driver_svh::eSVH_DIMENSION);
   m_joint_velocity.resize(driver_svh::eSVH_DIMENSION);
   m_joint_effort.resize(driver_svh::eSVH_DIMENSION);
-  m_nodes_in_fault.resize(driver_svh::eSVH_DIMENSION, false);
   m_channel_names.resize(driver_svh::eSVH_DIMENSION);
 
   // Initialize controller
@@ -99,18 +102,13 @@ void SVHRosControlHWInterface::read(const ros::Time& time, const ros::Duration& 
       double cur_cur = 0.0;
       if (m_svh->getFingerManager()->isHomed(static_cast<driver_svh::SVHChannel>(channel)))
       {
-        m_nodes_in_fault[channel] = false;
         m_svh->getFingerManager()->getPosition(static_cast<driver_svh::SVHChannel>(channel), cur_pos);
         m_svh->getFingerManager()->getCurrent(static_cast<driver_svh::SVHChannel>(channel), cur_cur);
       }
       else
       {
-        if (!m_nodes_in_fault[channel])
-        {
-          ROS_ERROR_STREAM("Node " << driver_svh::SVHController::m_channel_description[channel]
-                                   << " is in FAULT state");
-        }
-        m_nodes_in_fault[channel] = true;
+        ROS_ERROR_STREAM("Node " << driver_svh::SVHController::m_channel_description[channel]
+                                  << " is in FAULT state");
       }
       m_joint_positions[channel] = cur_pos;
       m_joint_effort[channel] =
@@ -123,7 +121,7 @@ void SVHRosControlHWInterface::write(const ros::Time& time, const ros::Duration&
 {
   if (driver_svh::eSVH_DIMENSION == m_joint_position_commands.size())
   {
-    if (!m_svh->getFingerManager()->setAllTargetPositions(m_joint_position_commands))
+    if (!m_svh->getFingerManager()->setAllTargetPositions(m_joint_position_commands, false))
     {
       ROS_WARN_ONCE("Set target position command rejected!");
     }

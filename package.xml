@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <package>
-  
+
   <name>schunk_svh_driver</name>
   <version>0.0.1</version>
   <description>SVH Driver wrapper to enable control of the Schunk five finger hand</description>
-  
+
   <maintainer email="heppner@fzi.de">Georg Heppner</maintainer>
 
   <license>LGPL</license>
@@ -13,18 +13,21 @@
    <url>http://www.ros.org/wiki/schunk_svh_driver</url>
 
   <buildtool_depend>catkin</buildtool_depend>
-  
+
   <build_depend>roscpp</build_depend>
   <build_depend>std_msgs</build_depend>
   <build_depend>sensor_msgs</build_depend>
   <build_depend>rospy</build_depend>
   <build_depend>rqt_gui</build_depend>
-  <build_depend>rqt_gui_py</build_depend> 
+  <build_depend>rqt_gui_py</build_depend>
   <build_depend>urdf</build_depend>
   <build_depend>xacro</build_depend>
   <build_depend>dynamic_reconfigure</build_depend>
   <build_depend>joint_limits_interface</build_depend>
   <build_depend>message_generation</build_depend>
+  <build_depend>hardware_interface</build_depend>
+  <build_depend>combined_robot_hw</build_depend>
+  <build_depend>pluginlib</build_depend>
 
 
   <run_depend>roscpp</run_depend>
@@ -37,10 +40,14 @@
   <run_depend>xacro</run_depend>
   <run_depend>dynamic_reconfigure</run_depend>
   <run_depend>message_runtime</run_depend>
-  
+  <run_depend>hardware_interface</run_depend>
+  <run_depend>combined_robot_hw</run_depend>
+  <run_depend>pluginlib</run_depend>
+
   <export>
- 	<rqt_gui plugin="${prefix}/plugin.xml" />
+    <rqt_gui plugin="${prefix}/plugin.xml" />
         <!--rosdoc config="etc/rosdoc.yaml" /-->
+    <hardware_interface plugin="${prefix}/robot_hw_plugin.xml"/>
   </export>
-  
+
 </package>
