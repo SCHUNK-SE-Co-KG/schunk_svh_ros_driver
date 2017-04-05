@@ -116,10 +116,12 @@ void DynamicParameter::read_file(const uint16_t major_version_target,
         continue;
       }
 
-      bool correct_version =
-        major_version_read == major_version_target && minor_version_read == minor_version_target;
-      bool same_major_version = major_version_read == major_version_target && minor_version_read <= minor_version_target;
-      bool default_state      = major_version_read == 0 && minor_version_read == 0;
+      bool correct_version    = major_version_read == major_version_target
+                             && minor_version_read == minor_version_target;
+      bool same_major_version = major_version_read == major_version_target
+                             && minor_version_read <= minor_version_target;
+      bool default_state      = major_version_read == 0
+                             && minor_version_read == 0;
 
       if (correct_version || same_major_version || default_state)
       {
