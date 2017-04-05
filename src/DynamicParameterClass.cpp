@@ -97,6 +97,12 @@ void DynamicParameter::read_file(const uint16_t major_version_target,
   m_settings.major_version = 0;
   m_settings.minor_version = 0;
 
+  if ( 0 == major_version_target || 5 < major_version_target )
+  {
+    ROS_ERROR("Could not establish connection to Schunk SVH. Please check connections and power source!");
+    return;
+  }
+
   if (parameters.size() > 0)
   {
     ROS_DEBUG("There exist %d different parameter versions", parameters.size());
