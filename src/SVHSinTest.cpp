@@ -131,6 +131,9 @@ int main(int argc, char** argv)
       channel_pos.position[8] = 0.5;
       // Calculate a halfe sin for the fingers
       double cur_pos = sin(normalized_time * 3.14);
+
+      channel_pos.position[0] = 1 - cur_pos; // Thumb_Flexion
+
       // Set the 2 Test fingers to the sin value
       channel_pos.position[7] = cur_pos; // Pinky
       channel_pos.position[2] = cur_pos; // Index Distal
