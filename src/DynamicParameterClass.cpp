@@ -68,7 +68,7 @@ bool DynamicParameter::xml_rpc_value_to_vector(XmlRpc::XmlRpcValue my_array,
 {
   my_vector.clear();
 
-  for (size_t i = 0; i < my_array.size(); ++i)
+  for (size_t i = 0; i < (unsigned) my_array.size(); ++i)
   {
     ROS_ASSERT(my_array[i].getType() == XmlRpc::XmlRpcValue::TypeDouble ||
                my_array[i].getType() == XmlRpc::XmlRpcValue::TypeInt);
@@ -106,7 +106,7 @@ void DynamicParameter::read_file(const uint16_t major_version_target,
   if (parameters.size() > 0)
   {
     ROS_DEBUG("There exist %d different parameter versions", parameters.size());
-    for (size_t i = 0; i < parameters.size(); ++i)
+    for (size_t i = 0; i < (unsigned) parameters.size(); ++i)
     {
       XmlRpc::XmlRpcValue parameter_set_yaml = parameters[i]["parameter_set"];
 
