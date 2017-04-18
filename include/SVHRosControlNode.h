@@ -13,27 +13,26 @@
 //----------------------------------------------------------------------
 
 
-
 #ifndef SCHUNK_SVN_NODE_H_
 #define SCHUNK_SVH_NODE_H_
 
 #include <ros/ros.h>
 
-#include "control_msgs/FollowJointTrajectoryAction.h"
 #include "actionlib/server/action_server.h"
 #include "actionlib/server/server_goal_handle.h"
-#include "std_srvs/Trigger.h"
+#include "control_msgs/FollowJointTrajectoryAction.h"
 #include "schunk_svh_driver/HomeAll.h"
 #include "schunk_svh_driver/HomeWithChannels.h"
 #include "schunk_svh_driver/HomeWithJointNames.h"
+#include "std_srvs/Trigger.h"
 
 // Messages
-#include <std_msgs/Int8.h>
-#include <std_msgs/Empty.h>
-#include <sensor_msgs/JointState.h>
-#include "std_msgs/MultiArrayLayout.h"
-#include "std_msgs/MultiArrayDimension.h"
 #include "std_msgs/Float64MultiArray.h"
+#include "std_msgs/MultiArrayDimension.h"
+#include "std_msgs/MultiArrayLayout.h"
+#include <sensor_msgs/JointState.h>
+#include <std_msgs/Empty.h>
+#include <std_msgs/Int8.h>
 
 
 #include "SVHRosControlHWInterface.h"
@@ -54,12 +53,12 @@ private:
   ros::NodeHandle m_pub_nh;
 
   // Action interfaces for standalone mode (without ros_control)
-//  void goalCB(actionlib::ServerGoalHandle<control_msgs::FollowJointTrajectoryAction> gh);
-//  void cancelCB(actionlib::ServerGoalHandle<control_msgs::FollowJointTrajectoryAction> gh);
+  //  void goalCB(actionlib::ServerGoalHandle<control_msgs::FollowJointTrajectoryAction> gh);
+  //  void cancelCB(actionlib::ServerGoalHandle<control_msgs::FollowJointTrajectoryAction> gh);
   /*!
    * \brief Control loop thread when not using ros_control
    */
-  void trajThread(actionlib::ServerGoalHandle< control_msgs::FollowJointTrajectoryAction >& gh);
+  void trajThread(actionlib::ServerGoalHandle<control_msgs::FollowJointTrajectoryAction>& gh);
 
 
   /*!
@@ -96,8 +95,8 @@ private:
    * \note: This service call exists for canopen IDs (usually 3-8 for a lwa4p) and
    * as an interface using the joint names from the URDF.
    */
-//  bool homeNodesJointNames(schunk_svh_driver::HomeWithJointNamesRequest& req,
-//                           schunk_svh_driver::HomeWithJointNamesResponse& resp);
+  //  bool homeNodesJointNames(schunk_svh_driver::HomeWithJointNamesRequest& req,
+  //                           schunk_svh_driver::HomeWithJointNamesResponse& resp);
 
   /*!
    * \brief Perform a reset offset for all nodes. You should call this
@@ -113,7 +112,7 @@ private:
    * This service will only be advertised when the autostart parameter is set to
    * false. Otherwise initialization will be triggered automatically at startup.
    */
-  bool initDevicesCb (std_srvs::TriggerRequest& req, std_srvs::TriggerResponse& resp);
+  bool initDevicesCb(std_srvs::TriggerRequest& req, std_srvs::TriggerResponse& resp);
 
   /*!
    * \brief Function that actually initializes the devices. Will get called either on
@@ -124,10 +123,10 @@ private:
   /*!
    * \brief When using ros_control this will perform the control loop in a separate thread.
    */
-  void rosControlLoop ();
+  void rosControlLoop();
 
 
-  //actionlib::ActionServer<control_msgs::FollowJointTrajectoryAction> m_action_server;
+  // actionlib::ActionServer<control_msgs::FollowJointTrajectoryAction> m_action_server;
   ros::ServiceServer m_enable_service;
   ros::ServiceServer m_close_brakes_service;
   ros::ServiceServer m_quick_stop_service;
@@ -146,10 +145,12 @@ private:
   //! Serial device to use for communication with hardware
   std::string m_serial_device_name;
 
-  //! Number of times the connect routine tries to connect in case that we receive at least one package
+  //! Number of times the connect routine tries to connect in case that we receive at least one
+  //! package
   int m_connect_retry_count;
 
-  //! Prefix for the driver to identify joint names if the Driver should expext "left_hand_Pinky" than the prefix is left_hand
+  //! Prefix for the driver to identify joint names if the Driver should expext "left_hand_Pinky"
+  //! than the prefix is left_hand
   std::string m_name_prefix;
 
   //! joint state message template
@@ -157,7 +158,6 @@ private:
 
   //! Current Value message template
   std_msgs::Float64MultiArray m_channel_currents;
-
 
 
   std::vector<DS402Group::Ptr> m_chain_handles;
@@ -178,7 +178,6 @@ private:
   bool m_nodes_initialized;
 
   std::string m_traj_controller_name;
-
 };
 
 #endif /* SCHUNK_CANOPEN_NODE_H_ */

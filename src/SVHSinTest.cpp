@@ -34,7 +34,8 @@
 // Consts
 // Loop Rate (i.e Frequency) of the ROS node -> 50 = 50HZ
 double loop_rate = 50;
-// Time of a half Sin. i.e. 10 = In 10 Seconds the selected fingers will perform a close and open (Sin to 1PI)
+// Time of a half Sin. i.e. 10 = In 10 Seconds the selected fingers will perform a close and open
+// (Sin to 1PI)
 double sin_duration = 10;
 
 
@@ -61,9 +62,10 @@ void loopCallback(const std_msgs::Float32ConstPtr &msg){
  * Main function to set up ROS node.
  *------------------------------------------------------------------*/
 
-int main(int argc, char **argv)
+int main(int argc, char** argv)
 {
-  //! Prefix for the driver to identify joint names if the Driver should expext "left_hand_Pinky" than the prefix is left_hand
+  //! Prefix for the driver to identify joint names if the Driver should expext "left_hand_Pinky"
+  //! than the prefix is left_hand
   std::string name_prefix;
 
   // Set up ROS.
@@ -72,7 +74,7 @@ int main(int argc, char **argv)
 
   try
   {
-    nh.param<std::string>("name_prefix",name_prefix,"left_hand");
+    nh.param<std::string>("name_prefix", name_prefix, "left_hand");
   }
   catch (ros::InvalidNameException e)
   {
@@ -104,11 +106,11 @@ int main(int argc, char **argv)
   channel_pos.name[8] = name_prefix + "_" + "Finger_Spread";
 
   // Set up the normalized time
-  ros::Time counter = ros::Time::now();
+  ros::Time counter      = ros::Time::now();
   double normalized_time = 0;
 
   // Init the Random
-  srand (time(NULL));
+  srand(time(NULL));
 
   // Tell ROS how fast to run this node. (100 = 100 Hz = 10 ms)
 
@@ -134,7 +136,6 @@ int main(int argc, char **argv)
       // Everything is 0 by default
       for (size_t channel = 0; channel < 9; ++channel)
       {
-
         double cur_pos = 0.0;
 
         channel_pos.position[channel] = cur_pos;
@@ -145,8 +146,11 @@ int main(int argc, char **argv)
       // Set the Spread to 0.5 (to avoid any collisions)
       channel_pos.position[8] = 0.3;
       // Calculate a halfe sin for the fingers
-      //double cur_pos = 0.8 * sin(normalized_time * 3.14);
-      double cur_pos = 0.4 + 0.3 * sin(normalized_time * 2 * 3.14);
+
+      double cur_pos = sin(normalized_time * 3.14);
+
+      channel_pos.position[0] = 1 - cur_pos; // Thumb_Flexion
+
       // Set the 2 Test fingers to the sin value
       channel_pos.position[7] = cur_pos; // Pinky
       channel_pos.position[2] = cur_pos; // Index Distal
