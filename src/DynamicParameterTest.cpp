@@ -42,7 +42,7 @@ int main(int argc, char** argv)
     if (dyn_parameters.getSettings().position_settings_given[channel])
     {
       ROS_INFO("DYN POSITION SETTINGS...");
-      for (int j = 0; j < dyn_parameters.getSettings().position_settings[channel].size(); j++)
+      for (size_t j = 0; j < dyn_parameters.getSettings().position_settings[channel].size(); j++)
       {
         std::cout << dyn_parameters.getSettings().position_settings[channel][j] << " ";
       }
@@ -52,7 +52,7 @@ int main(int argc, char** argv)
     if (dyn_parameters.getSettings().position_settings_given[channel])
     {
       ROS_INFO("DYN CURRENT SETTINGS:");
-      for (int j = 0; j < dyn_parameters.getSettings().current_settings[channel].size(); j++)
+      for (size_t j = 0; j < dyn_parameters.getSettings().current_settings[channel].size(); j++)
       {
         std::cout << dyn_parameters.getSettings().current_settings[channel][j] << " ";
       }
@@ -62,7 +62,7 @@ int main(int argc, char** argv)
     if (dyn_parameters.getSettings().home_settings_given[channel])
     {
       ROS_INFO("DYN HOME SETTINGS:");
-      for (int j = 0; j < dyn_parameters.getSettings().home_settings[channel].size(); j++)
+      for (size_t j = 0; j < dyn_parameters.getSettings().home_settings[channel].size(); j++)
       {
         std::cout << dyn_parameters.getSettings().home_settings[channel][j] << " ";
       }
