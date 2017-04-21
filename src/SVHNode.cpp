@@ -41,10 +41,10 @@ SVHNode::SVHNode(const ros::NodeHandle& nh)
   // Parameters that depend on the hardware version of the hand.
   XmlRpc::XmlRpcValue dynamic_parameters;
 
-  uint16_t manual_major_version;
-  int manual_major_version_int;
-  uint16_t manual_minor_version;
-  int manual_minor_version_int;
+  uint16_t manual_major_version = 0;
+  int manual_major_version_int = 0;
+  uint16_t manual_minor_version = 0;
+  int manual_minor_version_int = 0;
 
   try
   {
