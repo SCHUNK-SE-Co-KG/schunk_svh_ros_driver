@@ -117,7 +117,6 @@ int main(int argc, char** argv)
   // Main loop.
   while (nh.ok())
   {
-    ros::Rate rate(loop_rate);
     // Only when toggled on (std empty message)
     if (running)
     {
@@ -143,11 +142,12 @@ int main(int argc, char** argv)
 
       channel_pos.header.stamp = ros::Time::now();
 
-      // Set the Spread to 0.5 (to avoid any collisions)
-      channel_pos.position[8] = 0.3;
-      // Calculate a halfe sin for the fingers
 
-      double cur_pos = sin(normalized_time * 3.14);
+      // Calculate a halfe sin for the fingers
+      double cur_pos = 0.4 + 0.3 * sin(normalized_time * 2 * 3.14);
+
+      // Set the Spread to 0.3 (to avoid any collisions)
+      channel_pos.position[8] = 0.3;
 
       channel_pos.position[0] = 1 - cur_pos; // Thumb_Flexion
 
@@ -162,6 +162,8 @@ int main(int argc, char** argv)
       // Publish
       channel_pos_pub.publish(channel_pos);
     }
+
+    ros::Rate rate(loop_rate);
     rate.sleep();
     ros::spinOnce();
 
