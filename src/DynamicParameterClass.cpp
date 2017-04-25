@@ -111,7 +111,7 @@ void DynamicParameter::parse_parameters(const uint16_t major_version_target,
     return;
   }
 
-  if (parameters.size() > 0)
+  if (0 < parameters.size())
   {
     ROS_DEBUG("There exist %d different parameter versions", parameters.size());
     for (size_t i = 0; i < (unsigned) parameters.size(); ++i)
