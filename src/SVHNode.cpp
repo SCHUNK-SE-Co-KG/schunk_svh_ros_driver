@@ -57,7 +57,7 @@ SVHNode::SVHNode(const ros::NodeHandle& nh)
     nh.getParam("logging_config", logging_config_file);
     nh.param<std::string>("name_prefix", name_prefix, "left_hand");
     nh.param<int>("connect_retry_count", connect_retry_count, 3);
-    nh.getParam("VERSIONS_PARAMETERS", dynamic_parameters); //TODO Check whether parameters exist
+    nh.getParam("VERSIONS_PARAMETERS", dynamic_parameters);
     nh.param<int>("use_major_version", manual_major_version_int, 0);
     manual_major_version = static_cast<uint16_t>(manual_major_version_int);
     nh.param<int>("use_minor_version", manual_minor_version_int, 0);
