@@ -63,7 +63,6 @@ DynamicParameter::DynamicParameter(const uint16_t major_version,
  *  This function converts a RpcValue Vector to a std::vector
  */
 
-
 bool DynamicParameter::xml_rpc_value_to_vector(XmlRpc::XmlRpcValue my_array,
                                                std::vector<float>& my_vector)
 {
@@ -88,6 +87,9 @@ bool DynamicParameter::xml_rpc_value_to_vector(XmlRpc::XmlRpcValue my_array,
   return true;
 }
 
+/*
+ * This function parses the parameter file and set the corresponding major and minor version
+ */
 
 void DynamicParameter::parse_parameters(const uint16_t major_version_target,
                                 const uint16_t minor_version_target,
