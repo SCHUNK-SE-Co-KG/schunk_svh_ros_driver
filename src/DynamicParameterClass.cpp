@@ -37,6 +37,7 @@ DynamicParameter::DynamicParameter(const uint16_t major_version,
   m_name_to_enum[driver_svh::eSVH_PINKY]                  = "PINKY";
   m_name_to_enum[driver_svh::eSVH_FINGER_SPREAD]          = "FINGER_SPREAD";
 
+  // Assertion to test whether the vector sizes are the same. Otherwise fail
   ROS_ASSERT(static_cast<driver_svh::SVHChannel>(m_name_to_enum.size()) ==
              driver_svh::eSVH_DIMENSION);
 
