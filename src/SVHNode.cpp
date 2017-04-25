@@ -153,7 +153,9 @@ SVHNode::SVHNode(const ros::NodeHandle& nh)
       if (dyn_parameters.getSettings().home_settings_given[channel])
       {
         fm_->setHomeSettings(static_cast<driver_svh::SVHChannel>(channel),
-                             driver_svh::SVHHomeSettings(dyn_parameters.getSettings().home_settings[channel]));
+                             driver_svh::SVHHomeSettings(
+                               dyn_parameters.getSettings().home_settings[channel]
+                             ));
       }
     }
   }
