@@ -52,11 +52,6 @@ DynamicParameter::DynamicParameter(const uint16_t major_version,
     exit(0);
   }
 
-//   else if (result == 0)
-//   {
-//     ROS_ERROR("DID NOT FIND THE CORRECT PARAMETER FILE FOR THE PROPOSED VERSION! "
-//               "FALLBACK ON THE DEFAULT PARAMETERS");
-//   }
 }
 
 /*
