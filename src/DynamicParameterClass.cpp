@@ -130,14 +130,14 @@ void DynamicParameter::parse_parameters(const uint16_t major_version_target,
         continue;
       }
 
-      bool correct_version    = major_version_read == major_version_target
-                             && minor_version_read == minor_version_target;
-      bool same_major_version = major_version_read == major_version_target
-                             && minor_version_read <= minor_version_target;
-      bool default_state      = major_version_read == 0
-                             && minor_version_read == 0;
+      bool is_correct_version    = major_version_read == major_version_target
+                                && minor_version_read == minor_version_target;
+      bool is_same_major_version = major_version_read == major_version_target
+                                && minor_version_read <= minor_version_target;
+      bool is_default_state      = major_version_read == 0
+                                && minor_version_read == 0;
 
-      if (correct_version || same_major_version || default_state)
+      if (is_correct_version || is_same_major_version || is_default_state)
       {
         ROS_DEBUG("major version: %d minor version: %d", major_version_read, minor_version_read);
 
@@ -167,11 +167,11 @@ void DynamicParameter::parse_parameters(const uint16_t major_version_target,
         }
 
         // First Reading of parameters
-        if (default_state == true)
+        if (is_default_state)
         {
-          default_state = false;
+          is_default_state = false;
         }
-        else if (correct_version)
+        else if (is_correct_version)
         {
           ROS_INFO("Did find correct version");
           return;
