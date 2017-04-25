@@ -43,7 +43,7 @@ DynamicParameter::DynamicParameter(const uint16_t major_version,
 
   try
   {
-    read_file(major_version, minor_version, parameters);
+    parse_parameters(major_version, minor_version, parameters);
   }
   catch (XmlRpc::XmlRpcException& e)
   {
@@ -89,7 +89,7 @@ bool DynamicParameter::xml_rpc_value_to_vector(XmlRpc::XmlRpcValue my_array,
 }
 
 
-void DynamicParameter::read_file(const uint16_t major_version_target,
+void DynamicParameter::parse_parameters(const uint16_t major_version_target,
                                 const uint16_t minor_version_target,
                                 XmlRpc::XmlRpcValue& parameters)
 {

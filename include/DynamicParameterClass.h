@@ -59,7 +59,9 @@ public:
   const Settings& getSettings() const {return m_settings;}
 
 private:
-  void read_file(const uint16_t major_version, const uint16_t minor_version, XmlRpc::XmlRpcValue& parameters);
+  void parse_parameters(const uint16_t major_version,
+                        const uint16_t minor_version,
+                        XmlRpc::XmlRpcValue& parameters);
   bool xml_rpc_value_to_vector(XmlRpc::XmlRpcValue my_array, std::vector<float>& my_vector);
 
   Settings m_settings;
