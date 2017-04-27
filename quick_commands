@@ -1,40 +1,40 @@
 #Make a Fist with Some Channels:
-rostopic pub /svh_controller/channel_targets sensor_msgs/JointState "header:
+rostopic pub -1 /svh_controller/channel_targets sensor_msgs/JointState "header:
   seq: 0
   stamp: {secs: 0, nsecs: 0}
   frame_id: ''
-name: ['Index_Finger_Proximal','Index_Finger_Distal','Middle_Finger_Proximal','Middle_Finger_Distal','Ring_Finger','Pinky','Finger_Spread','Thumb_Flexion']
-position: [0.8,1.3,0.8,1.3,0.9,0.9,0.5,0.3]
+name: ['left_hand_Index_Finger_Proximal','left_hand_Index_Finger_Distal','left_hand_Middle_Finger_Proximal','left_hand_Middle_Finger_Distal','left_hand_Ring_Finger','left_hand_Pinky','left_hand_Finger_Spread','left_hand_Thumb_Flexion']
+position: [0.8,1.3,0.8,1.3,0.9,0.9,0.3,0.3]
 velocity: [0,0,0,0,0,0,0,0]
 effort: [0,0,0,0,0,0,0,0]" 
 
-# Open The fist aggain with some channels:
-rostopic pub /svh_controller/channel_targets sensor_msgs/JointState "header:
+# Open The fist again with some channels:
+rostopic pub -1 /svh_controller/channel_targets sensor_msgs/JointState "header:
   seq: 0
   stamp: {secs: 0, nsecs: 0}
   frame_id: ''
-name: ['Index_Finger_Proximal','Index_Finger_Distal','Middle_Finger_Proximal','Middle_Finger_Distal','Ring_Finger','Pinky','Finger_Spread','Thumb_Flexion']
-position: [0.0,0.0,0.0,0.0,0.0,0.0,0.5,0.0]
+name: ['left_hand_Index_Finger_Proximal','left_hand_Index_Finger_Distal','left_hand_Middle_Finger_Proximal','left_hand_Middle_Finger_Distal','left_hand_Ring_Finger','left_hand_Pinky','left_hand_Finger_Spread','left_hand_Thumb_Flexion']
+position: [0.0,0.0,0.0,0.0,0.0,0.0,0.3,0.0]
 velocity: [0,0,0,0,0,0,0,0]
 effort: [0,0,0,0,0,0,0,0]"
 
 # Make a Fist with ALL Channels:
-rostopic pub /svh_controller/channel_targets sensor_msgs/JointState "header:
+rostopic pub -1 /svh_controller/channel_targets sensor_msgs/JointState "header:
   seq: 0
   stamp: {secs: 0, nsecs: 0}
   frame_id: ''
-name: ['Index_Finger_Proximal','Index_Finger_Distal','Middle_Finger_Proximal','Middle_Finger_Distal','Ring_Finger','Pinky','Finger_Spread','Thumb_Flexion','Thumb_Opposition']
-position: [0.8,1.3,0.8,1.3,0.9,0.9,0.5,0.3,0.1]
+name: ['left_hand_Index_Finger_Proximal','left_hand_Index_Finger_Distal','left_hand_Middle_Finger_Proximal','left_hand_Middle_Finger_Distal','left_hand_Ring_Finger','left_hand_Pinky','left_hand_Finger_Spread','left_hand_Thumb_Flexion','left_hand_Thumb_Opposition']
+position: [0.8,1.3,0.8,1.3,0.9,0.9,0.3,0.3,0.1]
 velocity: [0,0,0,0,0,0,0,0,0]
 effort: [0,0,0,0,0,0,0,0,0]"
 
-#Open The fist aggain with ALL channels:
-rostopic pub /svh_controller/channel_targets sensor_msgs/JointState "header:
+#Open The fist again with ALL channels:
+rostopic pub -1 /svh_controller/channel_targets sensor_msgs/JointState "header:
   seq: 0
   stamp: {secs: 0, nsecs: 0}
   frame_id: ''
-name: ['Index_Finger_Proximal','Index_Finger_Distal','Middle_Finger_Proximal','Middle_Finger_Distal','Ring_Finger','Pinky','Finger_Spread','Thumb_Flexion','Thumb_Opposition']
-position: [0.0,0.0,0.0,0.0,0.0,0.0,0.5,0.0,0.0]
+name: ['left_hand_Index_Finger_Proximal','left_hand_Index_Finger_Distal','left_hand_Middle_Finger_Proximal','left_hand_Middle_Finger_Distal','left_hand_Ring_Finger','left_hand_Pinky','left_hand_Finger_Spread','left_hand_Thumb_Flexion','left_hand_Thumb_Opposition']
+position: [0.0,0.0,0.0,0.0,0.0,0.0,0.3,0.0,0.0]
 velocity: [0,0,0,0,0,0,0,0,0]
 effort: [0,0,0,0,0,0,0,0,0]"
 
