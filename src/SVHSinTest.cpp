@@ -83,7 +83,7 @@ int main(int argc, char** argv)
 
   // Subscribe connect topic (Empty)
   ros::Subscriber run_sub = nh.subscribe("toggle_run", 1, runCallback);
-  ros::Subscriber speed_sub = nh.subscribe("speed", 1, speedCallback);
+  ros::Subscriber speed_sub = nh.subscribe("secs_per_run", 1, speedCallback);
   ros::Subscriber loop_sub = nh.subscribe("loop", 1, loopCallback);
 
   // Publish current target positions
