@@ -21,7 +21,6 @@ find_package(catkin REQUIRED COMPONENTS
 find_package(icl_comm)
 find_package(icl_core)
 find_package(driver_svh)
-find_package(icl_hardware REQUIRED COMPONENTS icl_hardware_canopen)
 
 catkin_python_setup()
 
@@ -57,7 +56,7 @@ catkin_package(
   INCLUDE_DIRS include
   LIBRARIES
   CATKIN_DEPENDS roscpp message_runtime
-  DEPENDS roscpp icl_core icl_comm icl_hardware driver_svh message_runtime
+  DEPENDS roscpp icl_core icl_comm driver_svh message_runtime
 )
 
 ###########
@@ -71,7 +70,7 @@ catkin_package(
 
 
 foreach(dir description/meshes description/urdf)
-   install(DIRECTORY ${dir}/ 
+   install(DIRECTORY ${dir}/
       DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/${dir})
 endforeach(dir)
 
@@ -89,7 +88,6 @@ include_directories(
   ${icl_comm_INCLUDE_DIRS}
   ${icl_core_INCLUDE_DIRS}
   ${driver_svh_INCLUDE_DIRS}
-  ${icl_hardware_INCLUDE_DIRS}
 )
 
 # Additional compiler definitions
@@ -126,14 +124,12 @@ target_link_libraries(svh_controller
   ${icl_comm_LIBRARIES}
   ${icl_core_LIBRARIES}
   ${driver_svh_LIBRARIES}
-  ${icl_hardware_LIBRARIES}
 )
 
 
 add_dependencies(svh_sin_test
   icl_comm
   icl_core
-  icl_hardware_canopen
 )
 
 ## Specify libraries to link a library or executable target against
@@ -141,7 +137,6 @@ target_link_libraries(svh_sin_test
   ${catkin_LIBRARIES}
   ${icl_comm_LIBRARIES}
   ${icl_core_LIBRARIES}
-  ${icl_hardware_LIBRARIES}
 )
 
 ## ROSControl
@@ -164,7 +159,6 @@ target_link_libraries(svh_ros_control_hw_interface
   ${icl_comm_LIBRARIES}
   ${icl_core_LIBRARIES}
   ${driver_svh_LIBRARIES}
-  ${icl_hardware_LIBRARIES}
 )
 
 add_executable(svh_ros_control_node
@@ -175,7 +169,6 @@ add_dependencies(svh_ros_control_node
   icl_comm
   icl_core
   driver_svh
-  icl_hardware_canopen
   ${PROJECT_NAME}_gencfg
   ${PROJECT_NAME}_generate_messages_cpp
 )
@@ -187,7 +180,6 @@ target_link_libraries(svh_ros_control_node
   ${icl_comm_LIBRARIES}
   ${icl_core_LIBRARIES}
   ${driver_svh_LIBRARIES}
-  ${icl_hardware_LIBRARIES}
 )
 
 ## DynamicParametersTest ##
@@ -201,7 +193,6 @@ add_dependencies(svh_dynamic_parameter_test
   icl_comm
   icl_core
   driver_svh
-  icl_hardware_canopen
   ${PROJECT_NAME}_gencfg
   ${PROJECT_NAME}_generate_messages_cpp
 )
@@ -259,4 +250,3 @@ DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 install(PROGRAMS udev/create_udev_rules
     DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
-
