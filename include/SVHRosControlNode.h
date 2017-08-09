@@ -37,11 +37,6 @@
 
 #include "SVHRosControlHWInterface.h"
 
-#include <icl_hardware_canopen/CanOpenController.h>
-
-using namespace icl_hardware;
-using namespace canopen_schunk;
-
 class SVHRosControlNode
 {
 public:
@@ -160,7 +155,6 @@ private:
   std_msgs::Float64MultiArray m_channel_currents;
 
 
-  std::vector<DS402Group::Ptr> m_chain_handles;
   std::map<std::string, uint8_t> m_joint_name_mapping;
   bool m_has_goal;
   boost::thread m_traj_thread;

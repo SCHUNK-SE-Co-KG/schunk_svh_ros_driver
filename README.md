@@ -15,4 +15,3 @@ Install all by calling
 
 - icl_comm
 - icl_core
-- icl_hardware

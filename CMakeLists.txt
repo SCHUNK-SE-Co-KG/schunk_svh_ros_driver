@@ -113,7 +113,6 @@ add_dependencies(svh_controller
   icl_comm
   icl_core
   driver_svh
-  icl_hardware_canopen
   ${PROJECT_NAME}_gencfg
   ${PROJECT_NAME}_generate_messages_cpp
 )
