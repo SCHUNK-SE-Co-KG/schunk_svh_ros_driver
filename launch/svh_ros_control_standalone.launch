@@ -15,7 +15,7 @@
 
 
   <!-- Robot description for State publishers -->
-  <param name="robot_description" command="$(find xacro)/xacro.py $(find schunk_svh_driver)/description/urdf/svh-standalone.urdf.xacro" />
+  <param name="robot_description" command="$(find xacro)/xacro --inorder $(find schunk_svh_driver)/description/urdf/svh-standalone.urdf.xacro" />
 
   <!-- Hardware interface -->
   <include unless="$(arg simulation)"  file="$(find schunk_svh_driver)/launch/svh_ros_control_hw_interface.launch">
