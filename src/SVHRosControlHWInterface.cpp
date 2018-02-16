@@ -121,7 +121,7 @@ void SVHRosControlHWInterface::write(const ros::Time& time, const ros::Duration&
 {
   if (driver_svh::eSVH_DIMENSION == m_joint_position_commands.size())
   {
-    if (!m_svh->getFingerManager()->setAllTargetPositions(m_joint_position_commands, false))
+    if (!m_svh->getFingerManager()->setAllTargetPositions(m_joint_position_commands))
     {
       ROS_WARN_ONCE("Set target position command rejected!");
     }
