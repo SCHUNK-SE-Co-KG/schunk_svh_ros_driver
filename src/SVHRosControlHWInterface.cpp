@@ -23,34 +23,37 @@
 #include <driver_svh/SVHFingerManager.h>
 #include <driver_svh/SVHPositionSettings.h>
 
+#include <pluginlib/class_list_macros.h>
+
+PLUGINLIB_EXPORT_CLASS(SVHRosControlHWInterface, hardware_interface::RobotHW)
+
 using namespace hardware_interface;
 
-SVHRosControlHWInterface::SVHRosControlHWInterface(
-  ros::NodeHandle& nh,
-  boost::shared_ptr<driver_svh::SVHFingerManager>& finger_manager,
-  std::string& name_prefix)
-  : m_node_handle(nh)
-  , m_finger_manager(finger_manager)
-  , m_name_prefix(name_prefix)
+SVHRosControlHWInterface::SVHRosControlHWInterface ()
 {
-  init();
 }
 
-void SVHRosControlHWInterface::init()
+SVHRosControlHWInterface::~SVHRosControlHWInterface()
 {
+}
+
+
+bool SVHRosControlHWInterface::init(ros::NodeHandle& root_nh, ros::NodeHandle& robot_hw_nh)
+{
+  m_svh.reset(new SVHWrapper(robot_hw_nh));
+
   m_joint_position_commands.resize(driver_svh::eSVH_DIMENSION);
   m_joint_position_commands_last.resize(driver_svh::eSVH_DIMENSION);
   m_joint_positions.resize(driver_svh::eSVH_DIMENSION);
   m_joint_velocity.resize(driver_svh::eSVH_DIMENSION);
   m_joint_effort.resize(driver_svh::eSVH_DIMENSION);
-  m_nodes_in_fault.resize(driver_svh::eSVH_DIMENSION, false);
   m_channel_names.resize(driver_svh::eSVH_DIMENSION);
 
   // Initialize controller
   for (std::size_t channel = 0; channel < driver_svh::eSVH_DIMENSION; ++channel)
   {
     m_channel_names[channel] =
-      m_name_prefix + "_" + driver_svh::SVHController::m_channel_description[channel];
+      m_svh->getNamePrefix() + "_" + driver_svh::SVHController::m_channel_description[channel];
 
     ROS_DEBUG_STREAM(
       "Controller Hardware interface: Loading joint with id " << channel << " named "
@@ -81,34 +84,31 @@ void SVHRosControlHWInterface::init()
 
   registerInterface(&m_joint_state_interface);    // From RobotHW base class.
   registerInterface(&m_position_joint_interface); // From RobotHW base class.
+
+  return true;
 }
 
-void SVHRosControlHWInterface::read()
+void SVHRosControlHWInterface::read(const ros::Time& time, const ros::Duration& period)
 {
   m_joint_positions.resize(driver_svh::eSVH_DIMENSION);
   m_joint_effort.resize(driver_svh::eSVH_DIMENSION);
 
-  if (m_finger_manager->isConnected())
+  if (m_svh->getFingerManager()->isConnected())
   {
     // Get positions in rad
     for (size_t channel = 0; channel < driver_svh::eSVH_DIMENSION; ++channel)
     {
       double cur_pos = 0.0;
       double cur_cur = 0.0;
-      if (m_finger_manager->isHomed(static_cast<driver_svh::SVHChannel>(channel)))
+      if (m_svh->getFingerManager()->isHomed(static_cast<driver_svh::SVHChannel>(channel)))
       {
-        m_nodes_in_fault[channel] = false;
-        m_finger_manager->getPosition(static_cast<driver_svh::SVHChannel>(channel), cur_pos);
-        m_finger_manager->getCurrent(static_cast<driver_svh::SVHChannel>(channel), cur_cur);
+        m_svh->getFingerManager()->getPosition(static_cast<driver_svh::SVHChannel>(channel), cur_pos);
+        m_svh->getFingerManager()->getCurrent(static_cast<driver_svh::SVHChannel>(channel), cur_cur);
       }
       else
       {
-        if (!m_nodes_in_fault[channel])
-        {
-          ROS_ERROR_STREAM("Node " << driver_svh::SVHController::m_channel_description[channel]
-                                   << " is in FAULT state");
-        }
-        m_nodes_in_fault[channel] = true;
+        ROS_ERROR_STREAM("Node " << driver_svh::SVHController::m_channel_description[channel]
+                                  << " is in FAULT state");
       }
       m_joint_positions[channel] = cur_pos;
       m_joint_effort[channel] =
@@ -117,11 +117,11 @@ void SVHRosControlHWInterface::read()
   }
 }
 
-void SVHRosControlHWInterface::write(ros::Time time, ros::Duration period)
+void SVHRosControlHWInterface::write(const ros::Time& time, const ros::Duration& period)
 {
   if (driver_svh::eSVH_DIMENSION == m_joint_position_commands.size())
   {
-    if (!m_finger_manager->setAllTargetPositions(m_joint_position_commands))
+    if (!m_svh->getFingerManager()->setAllTargetPositions(m_joint_position_commands))
     {
       ROS_WARN_ONCE("Set target position command rejected!");
     }
@@ -147,14 +147,14 @@ void SVHRosControlHWInterface::doSwitch(
   hardware_interface::RobotHW::doSwitch(start_list, stop_list);
 }
 
-sensor_msgs::JointState SVHRosControlHWInterface::getJointMessage()
-{
-  sensor_msgs::JointState joint_msg;
-  joint_msg.name         = m_channel_names;
-  joint_msg.header.stamp = ros::Time::now();
-  joint_msg.position     = m_joint_positions;
-  joint_msg.velocity     = m_joint_velocity;
-  joint_msg.effort       = m_joint_effort;
-
-  return joint_msg;
-}
+// sensor_msgs::JointState SVHRosControlHWInterface::getJointMessage()
+// {
+//   sensor_msgs::JointState joint_msg;
+//   joint_msg.name         = m_channel_names;
+//   joint_msg.header.stamp = ros::Time::now();
+//   joint_msg.position     = m_joint_positions;
+//   joint_msg.velocity     = m_joint_velocity;
+//   joint_msg.effort       = m_joint_effort;
+//
+//   return joint_msg;
+// }

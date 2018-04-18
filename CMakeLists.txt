@@ -15,6 +15,9 @@ find_package(catkin REQUIRED COMPONENTS
     controller_manager
     urdf
     message_generation
+    hardware_interface
+    combined_robot_hw
+    pluginlib
 )
 
 ## System dependencies are found with CMake's conventions
@@ -54,8 +57,13 @@ generate_messages(
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
   INCLUDE_DIRS include
-  LIBRARIES
-  CATKIN_DEPENDS roscpp message_runtime
+  LIBRARIES svh_robot_hw svh_ros
+  CATKIN_DEPENDS
+    roscpp
+    message_runtime
+    pluginlib
+    hardware_interface
+    combined_robot_hw
   DEPENDS roscpp icl_core icl_comm driver_svh message_runtime
 )
 
@@ -139,46 +147,55 @@ target_link_libraries(svh_sin_test
 )
 
 ## ROSControl
-add_library(svh_ros_control_hw_interface
-  src/SVHRosControlHWInterface.cpp
+add_library(svh_ros
+  src/SVHWrapper.cpp
+  src/DynamicParameterClass.cpp
 )
-add_dependencies(svh_ros_control_hw_interface
+add_dependencies(svh_ros
   icl_comm
   icl_core
   driver_svh
-  icl_
   ${PROJECT_NAME}_gencfg
   ${PROJECT_NAME}_generate_messages_cpp
 )
 
 
 ## Specify libraries to link a library or executable target against
-target_link_libraries(svh_ros_control_hw_interface
+target_link_libraries(svh_ros
   ${catkin_LIBRARIES}
   ${icl_comm_LIBRARIES}
   ${icl_core_LIBRARIES}
   ${driver_svh_LIBRARIES}
 )
 
+add_library(svh_robot_hw
+  src/SVHRosControlHWInterface.cpp
+)
+add_dependencies( svh_robot_hw
+  svh_ros
+  ${catkin_EXPORTED_TARGETS}
+)
+target_link_libraries(svh_robot_hw
+  svh_ros
+  ${catkin_LIBRARIES}
+  ${Boost_LIBRARIES}
+)
+
 add_executable(svh_ros_control_node
-  src/SVHRosControlNode.cpp
-  src/DynamicParameterClass.cpp
+  src/svh_ros_control_node.cpp
 )
 add_dependencies(svh_ros_control_node
-  icl_comm
-  icl_core
-  driver_svh
+  svh_ros
+  svh_robot_hw
   ${PROJECT_NAME}_gencfg
   ${PROJECT_NAME}_generate_messages_cpp
 )
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(svh_ros_control_node
-  svh_ros_control_hw_interface
+  svh_ros
+  svh_robot_hw
   ${catkin_LIBRARIES}
-  ${icl_comm_LIBRARIES}
-  ${icl_core_LIBRARIES}
-  ${driver_svh_LIBRARIES}
 )
 
 ## DynamicParametersTest ##
@@ -217,7 +234,7 @@ install(PROGRAMS
 )
 
 # Install targets of libs and executables
-install(TARGETS svh_controller svh_sin_test
+install(TARGETS svh_controller svh_sin_test svh_ros svh_robot_hw
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
@@ -240,6 +257,9 @@ install(FILES quick_commands plugin.xml
 DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 )
 
+install(FILES robot_hw_plugin.xml
+DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
+
 # Install resources
 install(DIRECTORY resource
 DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
@@ -249,3 +269,4 @@ DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 install(PROGRAMS udev/create_udev_rules
     DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
+
