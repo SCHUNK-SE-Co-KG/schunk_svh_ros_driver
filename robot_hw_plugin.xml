@@ -1,0 +1,5 @@
+<library path="lib/libsvh_robot_hw">
+  <class name="schunk_svh_driver/SVHRosControlHWInterface"
+         type="SVHRosControlHWInterface"
+         base_class_type="hardware_interface::RobotHW" />
+</library>
