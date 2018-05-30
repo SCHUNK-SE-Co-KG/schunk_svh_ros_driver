@@ -214,7 +214,6 @@ add_dependencies(svh_dynamic_parameter_test
 )
 
 ## Specify libraries to link a library or executable target against
-
 target_link_libraries(svh_dynamic_parameter_test
  ${catkin_LIBRARIES}
  ${catkin_LIBRARIES}
@@ -223,6 +222,24 @@ target_link_libraries(svh_dynamic_parameter_test
  ${driver_svh_LIBRARIES}
 )
 
+## SVHDiagnostics ##
+
+# Declare a cpp executable
+add_executable(svh_diagnostics
+  src/SVHDiagnostics.cpp
+)
+
+add_dependencies(svh_diagnostics
+  svh_ros
+  ${catkin_EXPORTED_TARGETS}
+)
+
+## Specify libraries to link a library or executable target against
+target_link_libraries(svh_diagnostics
+  svh_ros
+  ${catkin_LIBRARIES}
+  ${Boost_LIBRARIES}
+)
 
 #############
 ## Install ##
@@ -269,4 +286,3 @@ DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 install(PROGRAMS udev/create_udev_rules
     DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
-
