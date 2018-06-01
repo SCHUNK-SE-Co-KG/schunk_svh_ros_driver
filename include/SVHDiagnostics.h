@@ -94,13 +94,13 @@ private:
   //! \brief evaluateBasicTest evaluates the diagnostics status of the basic test to send the hint informations to the webside
   //! \return std_msgs::UInt8MultiArray mesg with the test results
   //!
-  fzi_manipulation_msgs::SVHDiagnosticsResult evaluateBasicTest();
+  schunk_web_gui::SVHDiagnosticsResult evaluateBasicTest();
 
   //!
   //! \brief getFingerFeedback returns the finger vector with the diagnostic data
   //! \return finger vector with diagnostic data
   //!
-  fzi_manipulation_msgs::SVHDiagnosticsFingerVector getFingerFeedback();
+  schunk_web_gui::SVHDiagnosticsFingerVector getFingerFeedback();
 
   //!
   //! \brief set the latex variables
@@ -147,11 +147,10 @@ private:
   bool m_basic_test_running;
 
   //! Finger messages for the diagnostic tab
-  fzi_manipulation_msgs::SVHDiagnosticsFingerVector m_finger_vector;
+  schunk_web_gui::SVHDiagnosticsFingerVector m_finger_vector;
 
   //! Message for the latex variable
-  fzi_manipulation_msgs::SVHDiagnosticsToLatex m_msg_latex_variable;
-
+  schunk_web_gui::SVHDiagnosticsToLatex m_msg_latex_variable;
 
 
   enum diag_information{

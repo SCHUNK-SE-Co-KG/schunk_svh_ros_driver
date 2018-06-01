@@ -40,7 +40,7 @@ SVHDiagnostics::SVHDiagnostics(const ros::NodeHandle& nh)
   // init the indidividual finger params
   for (size_t channel = 0; channel < driver_svh::eSVH_DIMENSION; ++channel)
   {
-    fzi_manipulation_msgs::SVHDiagnosticsFinger finger;
+    schunk_web_gui::SVHDiagnosticsFinger finger;
     finger.channel               = channel;
     finger.current_max_actual    = 10;
     finger.current_min_actual    = 100;
@@ -77,7 +77,7 @@ SVHDiagnostics::~SVHDiagnostics()
   m_svh->getFingerManager()->disconnect();
 }
 
-void SVHDiagnostics::basicTestCallback(const fzi_manipulation_msgs::SVHDiagnosticsMsgForPdf& msg)
+void SVHDiagnostics::basicTestCallback(const schunk_web_gui::SVHDiagnosticsMsgForPdf& msg)
 {
   if (m_basic_test_running == false)
   {
@@ -136,7 +136,7 @@ void SVHDiagnostics::basicTestCallback(const fzi_manipulation_msgs::SVHDiagnosti
 
     for (size_t channel = 0; channel < driver_svh::eSVH_DIMENSION; ++channel)
     {
-      fzi_manipulation_msgs::SVHDiagnosticsFinger finger = m_finger_vector.fingers[channel];
+      schunk_web_gui::SVHDiagnosticsFinger finger = m_finger_vector.fingers[channel];
 
       for (int i = 0; i <= 1; i++) // for both hardware constraints (pos/neg)
       {
@@ -192,11 +192,11 @@ void SVHDiagnostics::basicTestCallback(const fzi_manipulation_msgs::SVHDiagnosti
   }
 }
 
-fzi_manipulation_msgs::SVHDiagnosticsResult SVHDiagnostics::evaluateBasicTest()
+schunk_web_gui::SVHDiagnosticsResult SVHDiagnostics::evaluateBasicTest()
 {
   ROS_INFO_STREAM("SVHDiagnostics - Evaluate the Basic Test");
 
-  fzi_manipulation_msgs::SVHDiagnosticsResult mesg;
+  schunk_web_gui::SVHDiagnosticsResult mesg;
 
   // failure of :
   // 1st controller board both encoder and motor
@@ -335,7 +335,7 @@ fzi_manipulation_msgs::SVHDiagnosticsResult SVHDiagnostics::evaluateBasicTest()
   return mesg;
 }
 
-fzi_manipulation_msgs::SVHDiagnosticsFingerVector SVHDiagnostics::getFingerFeedback()
+schunk_web_gui::SVHDiagnosticsFingerVector SVHDiagnostics::getFingerFeedback()
 {
   return m_finger_vector;
 }
@@ -344,7 +344,7 @@ void SVHDiagnostics::resetDiagnosticStatus()
 {
   for (size_t channel = 0; channel < driver_svh::eSVH_DIMENSION; ++channel)
   {
-    fzi_manipulation_msgs::SVHDiagnosticsFinger finger = m_finger_vector.fingers[channel];
+    schunk_web_gui::SVHDiagnosticsFinger finger = m_finger_vector.fingers[channel];
     finger.current_max_actual                          = 0;
     finger.current_min_actual                          = 0;
     finger.position_range_actual                       = 0;
@@ -508,20 +508,20 @@ int main(int argc, char** argv)
   //! \brief pub_diagnosic_status pubished the diagnostic data to the homepage
   //!
   pub_diagnosic_status =
-    nh.advertise<fzi_manipulation_msgs::SVHDiagnosticsFingerVector>("diagnostic_status", 1);
+    nh.advertise<schunk_web_gui::SVHDiagnosticsFingerVector>("diagnostic_status", 1);
 
   //!
   //! \brief pub_diagnosic_results pubished the diagnostic results to the homepage
   //!
   pub_diagnosic_results =
-    nh.advertise<fzi_manipulation_msgs::SVHDiagnosticsResult>("diagnostic_result", 1);
+    nh.advertise<schunk_web_gui::SVHDiagnosticsResult>("diagnostic_result", 1);
 
   //!
   //! \brief pub_latex_variables pubished the diagnostic results to the SVHLatex Note to print the
   //! Test-Protocol
   //!
   pub_latex_variables =
-    nh.advertise<fzi_manipulation_msgs::SVHDiagnosticsToLatex>("diagnosics_to_latex", 1);
+    nh.advertise<schunk_web_gui::SVHDiagnosticsToLatex>("diagnostics_to_latex", 1);
 
   //==========
   // Messaging
