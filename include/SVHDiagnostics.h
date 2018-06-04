@@ -41,11 +41,11 @@
 // FZI includes
 #include "SVHWrapper.h"
 
-#include "fzi_manipulation_msgs/SVHDiagnosticsFinger.h"
-#include "fzi_manipulation_msgs/SVHDiagnosticsFingerVector.h"
-#include "fzi_manipulation_msgs/SVHDiagnosticsResult.h"
-#include "fzi_manipulation_msgs/SVHDiagnosticsToLatex.h"
-#include "fzi_manipulation_msgs/SVHDiagnosticsMsgForPdf.h"
+#include "schunk_web_gui/SVHDiagnosticsFinger.h"
+#include "schunk_web_gui/SVHDiagnosticsFingerVector.h"
+#include "schunk_web_gui/SVHDiagnosticsMsgForPdf.h"
+#include "schunk_web_gui/SVHDiagnosticsResult.h"
+#include "schunk_web_gui/SVHDiagnosticsToLatex.h"
 
 // Driver Specific things
 #include <driver_svh/SVHFingerManager.h>
@@ -66,8 +66,9 @@ public:
   //! Default DTOR
   ~SVHDiagnostics();
 
-  //! Callback function to conduct the basic test for the SCHUNK five finger hand (msg defined in src/fzi_manipulation_msgs/msg/DiagnosticsMsg.msg)
-  void basicTestCallback(const fzi_manipulation_msgs::SVHDiagnosticsMsgForPdf& msg);
+  //! Callback function to conduct the basic test for the SCHUNK five finger hand (msg defined in
+  //! schunk_web_gui/msg/DiagnosticsMsg.msg)
+  void basicTestCallback(const schunk_web_gui::SVHDiagnosticsMsgForPdf& msg);
 
   //! Callback function to test the subfunctions of SVHDiagnostics
   void testCallback(const std_msgs::String&);
