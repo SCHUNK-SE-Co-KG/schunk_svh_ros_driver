@@ -46,15 +46,21 @@ private:
   void initLogging(const bool use_internal_logging,
                    const std::string& logging_config_file);
 
-  void initControllerParameters(const uint16_t manual_major_version,
+  driver_svh::SVHFirmwareInfo initControllerParameters(const uint16_t manual_major_version,
                                 const uint16_t manual_minor_version,
                                 XmlRpc::XmlRpcValue& dynamic_parameters
                                );
+
+  //! load parameters and try connecting
+  bool connect();
 
   //! Callback function for connecting to SCHUNK five finger hand
   void connectCallback(const std_msgs::Empty&);
 
   ros::NodeHandle m_priv_nh;
+  ros::Subscriber connect_sub;
+  ros::Subscriber reset_sub;
+  ros::Subscriber enable_sub;
 
   //! Handle to the SVH finger manager for library access
   boost::shared_ptr<driver_svh::SVHFingerManager> m_finger_manager;
