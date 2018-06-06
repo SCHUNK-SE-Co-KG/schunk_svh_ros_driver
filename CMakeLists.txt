@@ -19,6 +19,7 @@ find_package(catkin REQUIRED COMPONENTS
     combined_robot_hw
     pluginlib
 )
+find_package(schunk_web_gui)
 
 ## System dependencies are found with CMake's conventions
 find_package(icl_comm)
@@ -222,8 +223,8 @@ target_link_libraries(svh_dynamic_parameter_test
  ${driver_svh_LIBRARIES}
 )
 
-## SVHDiagnostics ##
-
+## SVHDiagnostics, optional##
+if(schunk_web_gui_FOUND)
 # Declare a cpp executable
 add_executable(svh_diagnostics
   src/SVHDiagnostics.cpp
@@ -231,6 +232,7 @@ add_executable(svh_diagnostics
 
 add_dependencies(svh_diagnostics
   svh_ros
+  schunk_web_gui
   ${catkin_EXPORTED_TARGETS}
 )
 
@@ -240,6 +242,7 @@ target_link_libraries(svh_diagnostics
   ${catkin_LIBRARIES}
   ${Boost_LIBRARIES}
 )
+endif()
 
 #############
 ## Install ##
