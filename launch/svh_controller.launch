@@ -56,10 +56,6 @@
         <remap from="joint_states" to="svh_controller/channel_targets" />
         <!-- if this node is used we always want to see its output -->
         <param name="use_gui" value="true"/>
-        <param name="rate" value="50"/>
-        <rosparam param="zeros">
-          left_hand_Finger_Spread: 0.2
-        </rosparam>
   </node>
 
 
