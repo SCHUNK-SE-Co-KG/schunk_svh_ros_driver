@@ -22,10 +22,13 @@
 #include <std_msgs/Empty.h>
 #include <std_msgs/Int8.h>
 
+#include <schunk_svh_driver/HomeAll.h>
+#include <schunk_svh_driver/HomeWithChannels.h>
+#include <schunk_svh_driver/SetAllChannelForceLimits.h>
+#include <schunk_svh_driver/SetChannelForceLimit.h>
+
 // Driver Specific things
 #include <driver_svh/SVHFingerManager.h>
-// #include <driver_svh/SVHPositionSettings.h>
-// #include <driver_svh/SVHCurrentSettings.h>
 
 class SVHWrapper{
 public:
@@ -35,6 +38,8 @@ public:
   boost::shared_ptr<driver_svh::SVHFingerManager> getFingerManager () const { return m_finger_manager; }
 
   std::string getNamePrefix () const { return m_name_prefix; }
+
+  bool channelsEnabled() { return m_channels_enabled; };
 
 private:
     /**
@@ -68,6 +73,19 @@ private:
   //! Callback function to enable channels of SCHUNK five finger hand
   void enableChannelCallback(const std_msgs::Int8ConstPtr& channel);
 
+  bool homeAllNodes(schunk_svh_driver::HomeAllRequest& req,
+                    schunk_svh_driver::HomeAllResponse& resp);
+
+  bool homeNodesChannelIds(schunk_svh_driver::HomeWithChannelsRequest& req,
+                           schunk_svh_driver::HomeWithChannelsResponse& resp);
+
+  bool setAllForceLimits(schunk_svh_driver::SetAllChannelForceLimits::Request &req,
+                         schunk_svh_driver::SetAllChannelForceLimits::Response &res);
+  bool setForceLimitById(schunk_svh_driver::SetChannelForceLimit::Request &req,
+                         schunk_svh_driver::SetChannelForceLimit::Response &res);
+
+  float setChannelForceLimit(size_t channel, float force_limit);
+
   //! Callback function for setting channel target positions to SCHUNK five finger hand
 //   void jointStateCallback(const sensor_msgs::JointStateConstPtr& input);
 
@@ -77,11 +95,19 @@ private:
   //! Prefix for the driver to identify joint names if the Driver should expext "left_hand_Pinky" than the prefix is left_hand
   std::string m_name_prefix;
 
-  //! joint state message template
-  sensor_msgs::JointState m_channel_pos;
 
-  //! Current Value message template
-  std_msgs::Float64MultiArray m_channel_currents;
+  bool m_channels_enabled;
+
+  // // default load parameter set
+  DynamicParameter *m_dyn_parameters;
+
+  ros::Subscriber connect_sub;
+  ros::Subscriber enable_sub;
+
+  ros::ServiceServer m_home_service_all;
+  ros::ServiceServer m_home_service_joint_names;
+  ros::ServiceServer m_setAllForceLimits_srv;
+  ros::ServiceServer m_setForceLimitById_srv;
 };
 
 #endif // #ifdef S5FH_WRAPPER_H_INCLUDED

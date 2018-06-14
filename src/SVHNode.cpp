@@ -341,8 +341,7 @@ sensor_msgs::JointState SVHNode::getChannelFeedback()
         fm_->getCurrent(static_cast<driver_svh::SVHChannel>(channel), cur_cur);
       }
       channel_pos_.position[channel] = cur_pos;
-      channel_pos_.effort[channel] =
-        cur_cur * driver_svh::SVHController::channel_effort_constants[channel];
+      channel_pos_.effort[channel] = fm_->convertmAtoN(static_cast<driver_svh::SVHChannel>(channel), cur_cur);
     }
   }
 

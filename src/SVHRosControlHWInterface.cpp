@@ -93,7 +93,7 @@ void SVHRosControlHWInterface::read(const ros::Time& time, const ros::Duration& 
   m_joint_positions.resize(driver_svh::eSVH_DIMENSION);
   m_joint_effort.resize(driver_svh::eSVH_DIMENSION);
 
-  if (m_svh->getFingerManager()->isConnected())
+  if (m_svh->getFingerManager()->isConnected() && m_svh->channelsEnabled())
   {
     // Get positions in rad
     for (size_t channel = 0; channel < driver_svh::eSVH_DIMENSION; ++channel)
@@ -111,14 +111,18 @@ void SVHRosControlHWInterface::read(const ros::Time& time, const ros::Duration& 
                                   << " is in FAULT state");
       }
       m_joint_positions[channel] = cur_pos;
-      m_joint_effort[channel] =
-        cur_cur * driver_svh::SVHController::channel_effort_constants[channel];
+      m_joint_effort[channel] = m_svh->getFingerManager()->convertmAtoN(static_cast<driver_svh::SVHChannel>(channel), cur_cur);
     }
   }
 }
 
 void SVHRosControlHWInterface::write(const ros::Time& time, const ros::Duration& period)
 {
+  if (!m_svh->channelsEnabled())
+  {
+    return;
+  }
+
   if (driver_svh::eSVH_DIMENSION == m_joint_position_commands.size())
   {
     if (!m_svh->getFingerManager()->setAllTargetPositions(m_joint_position_commands))

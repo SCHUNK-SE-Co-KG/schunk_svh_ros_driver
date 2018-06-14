@@ -38,7 +38,8 @@ add_service_files(
    FILES
    HomeAll.srv
    HomeWithChannels.srv
-   HomeWithJointNames.srv
+   SetAllChannelForceLimits.srv
+   SetChannelForceLimit.srv
 )
 
 ## Generate added messages and services with any dependencies listed here

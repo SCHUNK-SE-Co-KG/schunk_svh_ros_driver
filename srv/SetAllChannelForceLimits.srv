@@ -1,0 +1,4 @@
+# Service for setting Force Limits for all (9) finger joints
+float32[9] force_limit
+----
+float32[9] force_limit
