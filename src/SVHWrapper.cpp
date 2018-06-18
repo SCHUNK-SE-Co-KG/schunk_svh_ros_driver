@@ -7,7 +7,7 @@
 /*!\file
  *
  * \author  Felix Mauch <mauch@fzi.de>
- * \date    2017-2-23
+ * \date    2017-02-23
  *
  */
 //----------------------------------------------------------------------
@@ -147,9 +147,8 @@ void SVHWrapper::initLogging(const bool use_internal_logging,
     int argc     = 3; // number of elements above
 
     // In case the file is not present (event though the parameter is) the logging will just put out
-    // a
-    // warning so we dont need to check it further. However the log level will only be Info (out of
-    // the available Error, Warning, Info, Debug, Trace)
+    // a warning so we dont need to check it further. However the log level will only be Info
+    // (out of the available Error, Warning, Info, Debug, Trace)
     // in that case also the log files will be disregarded
     if (icl_core::logging::initialize(argc, argv))
       ROS_INFO("Internal logging was activated, output will be written as configured in "
