@@ -10,6 +10,7 @@
   <arg name="general_config" default="$(find schunk_svh_driver)/etc/svh.yaml" />
   <arg name="name_prefix" default="left_hand" />
   <arg name="frequency" default="30" />
+  <arg name="maximal_force" default="0.9" />
   <arg name="trajectory_controller_name" />
 
   <!-- load basic configuration -->
@@ -30,6 +31,7 @@
     <param name="name_prefix" value="$(arg name_prefix)" />
     <param name="frequency"           type="int"      value="$(arg frequency)" />
     <param name="use_ros_control" type="bool" value="True"/>
+    <param name="maximal_force" value="$(arg maximal_force)" />
     <param name="trajectory_controller_name" value="$(arg trajectory_controller_name)" />
   </node>
 

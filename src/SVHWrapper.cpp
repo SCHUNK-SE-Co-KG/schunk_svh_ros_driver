@@ -52,7 +52,7 @@ SVHWrapper::SVHWrapper(const ros::NodeHandle& nh)
   m_priv_nh.getParam("logging_config", logging_config_file);
   m_priv_nh.param<std::string>("name_prefix", m_name_prefix, "left_hand");
   m_priv_nh.param<int>("connect_retry_count", m_connect_retry_count, 3);
-  m_priv_nh.param<float>("max_force", max_force, 0.8);
+  m_priv_nh.param<float>("maximal_force", max_force, 0.8);
   nh.param<int>("use_major_version", manual_major_version_int, 0);
 //   manual_major_version = static_cast<uint16_t>(manual_major_version_int);
   nh.param<int>("use_minor_version", manual_minor_version_int, 0);

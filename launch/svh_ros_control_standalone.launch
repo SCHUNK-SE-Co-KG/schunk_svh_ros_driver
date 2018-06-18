@@ -11,6 +11,7 @@
   <arg name="general_config" default="$(find schunk_svh_driver)/etc/svh.yaml" />
   <arg name="name_prefix" default="left_hand" />
   <arg name="frequency" default="30" />
+  <arg name="maximal_force" default="0.9" />
   <arg name="trajectory_controller_name" default="pos_based_pos_traj_controller_hand" />
 
 
@@ -20,6 +21,7 @@
   <!-- Hardware interface -->
   <include unless="$(arg simulation)"  file="$(find schunk_svh_driver)/launch/svh_ros_control_hw_interface.launch">
         <arg name="serial_device" value="$(arg serial_device)" />
+        <arg name="maximal_force" value="$(arg maximal_force)" />
         <arg name="trajectory_controller_name" value="$(arg trajectory_controller_name)" />
   </include>
 
