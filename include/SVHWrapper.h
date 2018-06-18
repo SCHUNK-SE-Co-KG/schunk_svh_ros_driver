@@ -98,9 +98,6 @@ private:
 
   bool m_channels_enabled;
 
-  // // default load parameter set
-  DynamicParameter *m_dyn_parameters;
-
   ros::Subscriber connect_sub;
   ros::Subscriber enable_sub;
 
