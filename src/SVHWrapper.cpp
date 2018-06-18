@@ -43,10 +43,6 @@ SVHWrapper::SVHWrapper(const ros::NodeHandle& nh)
 
   float max_force;
 
-  // init the current_settings vector
-  m_current_settings.clear();
-  m_current_settings.resize(driver_svh::eSVH_DIMENSION);
-
   m_priv_nh.param<bool>("autostart", autostart, false);
   m_priv_nh.param<bool>("use_internal_logging", use_internal_logging, false);
   m_priv_nh.param<std::string>("serial_device", m_serial_device_name, "/dev/ttyUSB0");
