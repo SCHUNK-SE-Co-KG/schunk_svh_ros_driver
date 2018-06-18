@@ -120,9 +120,7 @@ add_executable(svh_sin_test
 # Add cmake target dependencies of the executable/library
 # as an example, message headers may need to be generated before nodes
 add_dependencies(svh_controller
-  icl_comm
-  icl_core
-  driver_svh
+
   ${PROJECT_NAME}_gencfg
   ${PROJECT_NAME}_generate_messages_cpp
 )
@@ -135,11 +133,6 @@ target_link_libraries(svh_controller
   ${driver_svh_LIBRARIES}
 )
 
-
-add_dependencies(svh_sin_test
-  icl_comm
-  icl_core
-)
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(svh_sin_test
@@ -154,9 +147,6 @@ add_library(svh_ros
   src/DynamicParameterClass.cpp
 )
 add_dependencies(svh_ros
-  icl_comm
-  icl_core
-  driver_svh
   ${PROJECT_NAME}_gencfg
   ${PROJECT_NAME}_generate_messages_cpp
 )
@@ -208,9 +198,6 @@ add_executable(svh_dynamic_parameter_test
 )
 
 add_dependencies(svh_dynamic_parameter_test
-  icl_comm
-  icl_core
-  driver_svh
   ${PROJECT_NAME}_gencfg
   ${PROJECT_NAME}_generate_messages_cpp
 )
