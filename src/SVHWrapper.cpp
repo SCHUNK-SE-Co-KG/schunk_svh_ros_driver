@@ -99,26 +99,6 @@ SVHWrapper::SVHWrapper(const ros::NodeHandle& nh)
                            dynamic_parameters
   );
 
-  // prepare the channel position message for later sending
-  m_channel_pos.name.resize(driver_svh::eSVH_DIMENSION);
-  m_channel_pos.position.resize(driver_svh::eSVH_DIMENSION, 0.0);
-  m_channel_pos.effort.resize(driver_svh::eSVH_DIMENSION, 0.0);
-  for (size_t channel = 0; channel < driver_svh::eSVH_DIMENSION; ++channel)
-  {
-    m_channel_pos.name[channel] =
-      m_name_prefix + "_" + driver_svh::SVHController::m_channel_description[channel];
-  }
-
-  // Prepare the channel current message for later sending
-  m_channel_currents.data.clear();
-  m_channel_currents.data.resize(driver_svh::eSVH_DIMENSION, 0.0);
-  m_channel_currents.layout.data_offset = 0;
-  std_msgs::MultiArrayDimension dim;
-  dim.label  = "channel currents";
-  dim.size   = 9;
-  dim.stride = 0;
-  m_channel_currents.layout.dim.push_back(dim);
-
   // Connect and start the reset so that the hand is ready for use
   if (autostart && m_finger_manager->connect(m_serial_device_name, m_connect_retry_count))
   {
