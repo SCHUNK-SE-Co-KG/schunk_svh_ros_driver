@@ -183,6 +183,7 @@ driver_svh::SVHFirmwareInfo SVHWrapper::initControllerParameters(const uint16_t 
           driver_svh::SVHHomeSettings(dyn_parameters.getSettings().home_settings[channel]));
       }
     }
+    return version_info;
   }
   catch (ros::InvalidNameException e)
   {
@@ -255,6 +256,10 @@ bool SVHWrapper::connect()
       m_connect_retry_count);
     return false;
   }
+  else
+  {
+    m_channels_enabled = true;
+  }
 }
 
 // Callback function for connecting to SCHUNK five finger hand
@@ -278,8 +283,12 @@ bool SVHWrapper::homeAllNodes(schunk_svh_driver::HomeAll::Request& req,
 
   resp.success = m_finger_manager->resetChannel(driver_svh::eSVH_ALL);
 
-  // enable flag to stop ros-control-loop
-  m_channels_enabled = true;
+  // enable flag to start ros-control-loop if successfully resetted
+  if (resp.success == true)
+  {
+    ROS_INFO("successfully resetted");
+    m_channels_enabled = true;
+  }
 
   return resp.success;
 }
