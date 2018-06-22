@@ -51,10 +51,13 @@ private:
   void initLogging(const bool use_internal_logging,
                    const std::string& logging_config_file);
 
-  void initControllerParameters(const uint16_t manual_major_version,
+  driver_svh::SVHFirmwareInfo initControllerParameters(const uint16_t manual_major_version,
                                 const uint16_t manual_minor_version,
                                 XmlRpc::XmlRpcValue& dynamic_parameters
                                );
+
+  //! load parameters and try connecting
+  bool connect();
 
   //! Callback function for connecting to SCHUNK five finger hand
   void connectCallback(const std_msgs::Empty&);
