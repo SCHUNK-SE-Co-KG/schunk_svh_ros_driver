@@ -45,9 +45,14 @@ SVHWrapper::SVHWrapper(const ros::NodeHandle& nh)
   m_priv_nh.param<std::string>("name_prefix", m_name_prefix, "left_hand");
   m_priv_nh.param<int>("connect_retry_count", m_connect_retry_count, 3);
   m_priv_nh.param<float>("maximal_force", max_force, 0.8);
+  m_priv_nh.param<int>("use_major_version", m_firmware_major_version, 0);
+  m_priv_nh.param<int>("use_minor_version", m_firmware_minor_version, 0);
 
   // Tell the user what we are using
   ROS_INFO("Name prefix for this Hand was set to: %s", m_name_prefix.c_str());
+
+  if (m_firmware_major_version != 0 || m_firmware_minor_version != 0)
+    ROS_INFO("Forced Handversion %d.%d", m_firmware_major_version, m_firmware_minor_version);
 
 
   initLogging(use_internal_logging, logging_config_file);
@@ -131,33 +136,34 @@ void SVHWrapper::initLogging(const bool use_internal_logging,
   }
 }
 
-driver_svh::SVHFirmwareInfo SVHWrapper::initControllerParameters(const uint16_t manual_major_version,
-                                          const uint16_t manual_minor_version,
-                                          XmlRpc::XmlRpcValue& dynamic_parameters
+void SVHWrapper::initControllerParameters(const uint16_t firmware_major_version,
+                                          const uint16_t firmware_minor_version
                                          )
 {
-  driver_svh::SVHFirmwareInfo version_info;
+  // Parameters that depend on the hardware version of the hand
+  XmlRpc::XmlRpcValue dynamic_parameters;
 
-  // Receives current Firmware Version
-  // because some parameters depend on the version
-  if (manual_major_version == 0 && manual_minor_version == 0)
+  // read hand parameter (operation data) from parameter server
+  std::string parameters_name = "VERSIONS_PARAMETERS";
+  try
   {
-    // reads out current Firmware Version
-    version_info = m_finger_manager->getFirmwareInfo(m_serial_device_name, m_connect_retry_count);
-    ROS_INFO("Current Handversion %d.%d", version_info.version_major, version_info.version_minor);
+    if (!m_priv_nh.getParam(parameters_name, dynamic_parameters))
+    {
+      ROS_FATAL_STREAM("Could not find controller_parameters under " << m_priv_nh.resolveName(parameters_name));
+      exit(-1);
+    }
   }
-  else
+  catch (ros::InvalidNameException e)
   {
-    version_info.version_major = manual_major_version;
-    version_info.version_minor = manual_minor_version;
-    ROS_INFO("Forced Handversion %d.%d", version_info.version_major, version_info.version_minor);
+    ROS_FATAL_STREAM("Illegal parameter name: " << parameters_name);
+    exit(-1);
   }
 
   try
   {
     // Loading hand parameters
     DynamicParameter dyn_parameters(
-      version_info.version_major, version_info.version_minor, dynamic_parameters);
+      firmware_major_version, firmware_minor_version, dynamic_parameters);
 
     for (size_t channel = 0; channel < driver_svh::eSVH_DIMENSION; ++channel)
     {
@@ -183,7 +189,6 @@ driver_svh::SVHFirmwareInfo SVHWrapper::initControllerParameters(const uint16_t 
           driver_svh::SVHHomeSettings(dyn_parameters.getSettings().home_settings[channel]));
       }
     }
-    return version_info;
   }
   catch (ros::InvalidNameException e)
   {
@@ -205,39 +210,19 @@ bool SVHWrapper::connect()
     m_finger_manager->disconnect();
   }
 
-  // Parameters that depend on the hardware version of the hand
-  XmlRpc::XmlRpcValue dynamic_parameters;
-
-  int manual_major_version_int;
-  int manual_minor_version_int;
-
-  // read hand version from parameter server
-  m_priv_nh.param<int>("use_major_version", manual_major_version_int, 0);
-  m_priv_nh.param<int>("use_minor_version", manual_minor_version_int, 0);
-
-  // read hand parameter (operation data) from parameter server
-  std::string parameters_name = "VERSIONS_PARAMETERS";
-  try
+  // Receives current Firmware Version
+  // because some parameters depend on the version
+  if (m_firmware_major_version == 0 && m_firmware_minor_version == 0)
   {
-    if (!m_priv_nh.getParam(parameters_name, dynamic_parameters))
-    {
-      ROS_FATAL_STREAM("Could not find controller_parameters under " << m_priv_nh.resolveName(parameters_name));
-      exit(-1);
-    }
+    // reads out current Firmware Version
+    driver_svh::SVHFirmwareInfo version_info = m_finger_manager->getFirmwareInfo(m_serial_device_name, m_connect_retry_count);
+    ROS_INFO("Current Handversion %d.%d", version_info.version_major, version_info.version_minor);
+    m_firmware_major_version = version_info.version_major;
+    m_firmware_minor_version = version_info.version_minor;
   }
-  catch (ros::InvalidNameException e)
-  {
-    ROS_FATAL_STREAM("Illegal parameter name: " << parameters_name);
-    exit(-1);
-  }
-
-  // read out the operation data with the connected hand version
-  driver_svh::SVHFirmwareInfo version_info = initControllerParameters(static_cast<uint16_t>(manual_major_version_int),
-                                                                      static_cast<uint16_t>(manual_minor_version_int),
-                                                                      dynamic_parameters);
 
   // Was firmware info given by the hand?
-  if (version_info.version_major == 0 && version_info.version_major == 0)
+  if (m_firmware_major_version == 0 && m_firmware_minor_version == 0)
   {
     ROS_ERROR(
       "Could not get Version Info from SCHUNK five finger hand with serial device %s, and retry count %i",
@@ -245,6 +230,10 @@ bool SVHWrapper::connect()
       m_connect_retry_count);
     return false;
   }
+  
+  // read out the operation data with the connected hand version
+  initControllerParameters( static_cast<uint16_t>(m_firmware_major_version),
+                            static_cast<uint16_t>(m_firmware_minor_version));
 
   // try connect and enable or disable the ros_control loop
   if (!m_finger_manager->connect(m_serial_device_name, m_connect_retry_count))
@@ -259,6 +248,7 @@ bool SVHWrapper::connect()
   else
   {
     m_channels_enabled = true;
+    return true;
   }
 }
 
