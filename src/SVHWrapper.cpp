@@ -205,6 +205,8 @@ SVHWrapper::~SVHWrapper()
 
 bool SVHWrapper::connect()
 {
+  m_channels_enabled = false;
+
   if (m_finger_manager->isConnected())
   {
     m_finger_manager->disconnect();
@@ -230,26 +232,23 @@ bool SVHWrapper::connect()
       m_connect_retry_count);
     return false;
   }
-  
+
   // read out the operation data with the connected hand version
   initControllerParameters( static_cast<uint16_t>(m_firmware_major_version),
                             static_cast<uint16_t>(m_firmware_minor_version));
 
-  // try connect and enable or disable the ros_control loop
+  // try connect, channels are not enabled -> have to be resetted/homed
   if (!m_finger_manager->connect(m_serial_device_name, m_connect_retry_count))
   {
-    m_channels_enabled = false;
     ROS_ERROR(
       "Could not connect to SCHUNK five finger hand with serial device %s, and retry count %i",
       m_serial_device_name.c_str(),
       m_connect_retry_count);
     return false;
   }
-  else
-  {
-    m_channels_enabled = true;
-    return true;
-  }
+
+  return true;
+
 }
 
 // Callback function for connecting to SCHUNK five finger hand
@@ -288,7 +287,7 @@ bool SVHWrapper::homeNodesChannelIds(schunk_svh_driver::HomeWithChannels::Reques
 {
   // disable flag to stop ros-control-loop
   m_channels_enabled = false;
-  
+
   for (std::vector<uint8_t>::iterator it = req.channel_ids.begin(); it != req.channel_ids.end(); ++it)
   {
     m_finger_manager->resetChannel(static_cast<driver_svh::SVHChannel>(*it));
