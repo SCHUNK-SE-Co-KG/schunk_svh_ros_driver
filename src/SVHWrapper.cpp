@@ -69,9 +69,10 @@ SVHWrapper::SVHWrapper(const ros::NodeHandle& nh)
   // Init the actual driver hook (after logging initialize)
   m_finger_manager.reset(new driver_svh::SVHFingerManager(disable_flags, reset_timeout));
 
-
   // Connect and start the reset so that the hand is ready for use
-  if (autostart && connect())
+  // try if SVH is connected
+  connect();
+  if (autostart)
   {
     m_finger_manager->resetChannel(driver_svh::eSVH_ALL);
     ROS_INFO("Driver was autostarted! Input can now be sent. Have a safe and productive day!");
@@ -102,6 +103,8 @@ SVHWrapper::SVHWrapper(const ros::NodeHandle& nh)
     m_priv_nh.advertiseService("set_all_force_limits", &SVHWrapper::setAllForceLimits, this);
   m_setForceLimitById_srv =
     m_priv_nh.advertiseService("set_force_limit_by_id", &SVHWrapper::setForceLimitById, this);
+
+  m_svh_diagnostics.reset(new SVHDiagnostics(m_priv_nh, m_finger_manager, "diagnostics_to_protocol"));
 }
 
 
@@ -201,6 +204,7 @@ void SVHWrapper::initControllerParameters(const uint16_t firmware_major_version,
 SVHWrapper::~SVHWrapper()
 {
   m_finger_manager->disconnect();
+  m_svh_diagnostics.reset();
 }
 
 bool SVHWrapper::connect()

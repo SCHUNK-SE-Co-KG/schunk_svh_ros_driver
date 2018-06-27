@@ -5,6 +5,8 @@ find_package(catkin REQUIRED COMPONENTS
     roscpp
     std_msgs
     sensor_msgs
+    actionlib
+    actionlib_msgs
     dynamic_reconfigure
     rospy
     rqt_gui
@@ -19,7 +21,6 @@ find_package(catkin REQUIRED COMPONENTS
     combined_robot_hw
     pluginlib
 )
-find_package(schunk_web_gui)
 
 ## System dependencies are found with CMake's conventions
 find_package(icl_comm)
@@ -33,6 +34,13 @@ generate_dynamic_reconfigure_options(
   cfg/svh.cfg
 )
 
+## Generate messages in the 'msg' folder
+add_message_files(
+  FILES
+  SVHDiagnosticsFinger.msg
+  SVHDiagnosticsToProtocol.msg
+)
+
 ## Generate services in the 'srv' folder
 add_service_files(
    FILES
@@ -42,9 +50,16 @@ add_service_files(
    SetChannelForceLimit.srv
 )
 
+## Generate actions in the 'action' folder
+add_action_files(
+  FILES
+  SVHDiagnostics.action
+)
+
 ## Generate added messages and services with any dependencies listed here
 generate_messages(
    DEPENDENCIES
+   actionlib_msgs
    std_msgs
 )
 
@@ -145,6 +160,7 @@ target_link_libraries(svh_sin_test
 add_library(svh_ros
   src/SVHWrapper.cpp
   src/DynamicParameterClass.cpp
+  src/SVHDiagnostics.cpp
 )
 add_dependencies(svh_ros
   ${PROJECT_NAME}_gencfg
@@ -211,26 +227,6 @@ target_link_libraries(svh_dynamic_parameter_test
  ${driver_svh_LIBRARIES}
 )
 
-## SVHDiagnostics, optional##
-if(schunk_web_gui_FOUND)
-# Declare a cpp executable
-add_executable(svh_diagnostics
-  src/SVHDiagnostics.cpp
-)
-
-add_dependencies(svh_diagnostics
-  svh_ros
-  schunk_web_gui
-  ${catkin_EXPORTED_TARGETS}
-)
-
-## Specify libraries to link a library or executable target against
-target_link_libraries(svh_diagnostics
-  svh_ros
-  ${catkin_LIBRARIES}
-  ${Boost_LIBRARIES}
-)
-endif()
 
 #############
 ## Install ##

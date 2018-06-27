@@ -22,6 +22,7 @@
   <include unless="$(arg simulation)"  file="$(find schunk_svh_driver)/launch/svh_ros_control_hw_interface.launch">
         <arg name="serial_device" value="$(arg serial_device)" />
         <arg name="maximal_force" value="$(arg maximal_force)" />
+        <arg name="autostart" value="$(arg autostart)"/>
         <arg name="trajectory_controller_name" value="$(arg trajectory_controller_name)" />
   </include>
 

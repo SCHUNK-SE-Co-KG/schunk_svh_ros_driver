@@ -30,6 +30,8 @@
 // Driver Specific things
 #include <driver_svh/SVHFingerManager.h>
 
+#include <SVHDiagnostics.h>
+
 class SVHWrapper{
 public:
   SVHWrapper(const ros::NodeHandle& nh);
@@ -66,6 +68,9 @@ private:
   //! Handle to the SVH finger manager for library access
   boost::shared_ptr<driver_svh::SVHFingerManager> m_finger_manager;
 
+  //!
+  boost::shared_ptr<SVHDiagnostics> m_svh_diagnostics;
+
   //! Serial device to use for communication with hardware
   std::string m_serial_device_name;
 
@@ -88,8 +93,6 @@ private:
 
   float setChannelForceLimit(size_t channel, float force_limit);
 
-  //! Callback function for setting channel target positions to SCHUNK five finger hand
-//   void jointStateCallback(const sensor_msgs::JointStateConstPtr& input);
 
   //! Number of times the connect routine tries to connect in case that we receive at least one package
   int m_connect_retry_count;
