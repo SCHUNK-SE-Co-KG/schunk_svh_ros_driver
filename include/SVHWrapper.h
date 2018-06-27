@@ -52,9 +52,11 @@ private:
                    const std::string& logging_config_file);
 
   void initControllerParameters(const uint16_t manual_major_version,
-                                const uint16_t manual_minor_version,
-                                XmlRpc::XmlRpcValue& dynamic_parameters
+                                const uint16_t manual_minor_version
                                );
+
+  //! load parameters and try connecting
+  bool connect();
 
   //! Callback function for connecting to SCHUNK five finger hand
   void connectCallback(const std_msgs::Empty&);
@@ -95,6 +97,9 @@ private:
   //! Prefix for the driver to identify joint names if the Driver should expext "left_hand_Pinky" than the prefix is left_hand
   std::string m_name_prefix;
 
+  //! firmware version, as read from the firmware or set by config. If version is 0, it hasn't been read yet.
+  int m_firmware_major_version;
+  int m_firmware_minor_version;
 
   bool m_channels_enabled;
 
