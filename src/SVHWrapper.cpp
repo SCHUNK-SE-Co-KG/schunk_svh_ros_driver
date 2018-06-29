@@ -356,6 +356,13 @@ bool SVHWrapper::setForceLimitById(schunk_svh_driver::SetChannelForceLimit::Requ
 
 float SVHWrapper::setChannelForceLimit(size_t channel, float force_limit)
 {
-  return m_finger_manager->setForceLimit(static_cast<driver_svh::SVHChannel>(channel), force_limit);
-
+  // no force
+  if (m_channels_enabled)
+  {
+    return m_finger_manager->setForceLimit(static_cast<driver_svh::SVHChannel>(channel), force_limit);
+  }
+  else
+  {
+    return false;
+  }
 }

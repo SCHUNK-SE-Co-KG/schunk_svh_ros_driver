@@ -50,6 +50,17 @@ SVHDiagnostics::~SVHDiagnostics()
 
 void SVHDiagnostics::initTest()
 {
+  // First: read out the actual hand version again, not manual set possible
+  // firmware of the mounted SVH
+  driver_svh::SVHFirmwareInfo firmware_info = m_finger_manager->getFirmwareInfo();
+  std::stringstream firmware;
+  firmware << (int)firmware_info.version_major << "." << (int)firmware_info.version_minor;
+  m_msg_protocol_variable.firmware = firmware.str();
+
+  // Second: set the parameter values for the actual hand to the finger manager,
+  // manipulatet preferences like max_force have to be set again, after diagnostics test
+  m_init_controller_parameters(firmware_info.version_major, firmware_info.version_minor);
+
   // usefull variables from the driver_svh
   driver_svh::SVHHomeSettings home_settings;
   driver_svh::SVHCurrentSettings current_settings;
@@ -414,12 +425,6 @@ void SVHDiagnostics::qualityProtocolWritting()
   m_msg_protocol_variable.execution_R   = m_execution_R;
   m_msg_protocol_variable.execution_L   = m_execution_L;
   m_msg_protocol_variable.communication = m_communication;
-
-  // firmware of the mounted SVH
-  driver_svh::SVHFirmwareInfo firmware_info = m_finger_manager->getFirmwareInfo();
-  std::stringstream firmware;
-  firmware << (int)firmware_info.version_major << "." << (int)firmware_info.version_minor;
-  m_msg_protocol_variable.firmware = firmware.str();
 
   m_msg_protocol_variable.ppnr = " ";
 
