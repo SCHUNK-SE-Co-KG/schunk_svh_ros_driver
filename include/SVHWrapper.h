@@ -30,6 +30,8 @@
 // Driver Specific things
 #include <driver_svh/SVHFingerManager.h>
 
+#include <SVHDiagnostics.h>
+
 class SVHWrapper{
 public:
   SVHWrapper(const ros::NodeHandle& nh);
@@ -61,10 +63,17 @@ private:
   //! Callback function for connecting to SCHUNK five finger hand
   void connectCallback(const std_msgs::Empty&);
 
+  //! function to set the ros-control-loop enabling flag from the diagnostics class
+  void setRosControlEnable(bool enable);
+
+  //! private node handle
   ros::NodeHandle m_priv_nh;
 
   //! Handle to the SVH finger manager for library access
   boost::shared_ptr<driver_svh::SVHFingerManager> m_finger_manager;
+
+  //! Handle to the diagnostics test class creating a test protocol with the web gui package
+  boost::shared_ptr<SVHDiagnostics> m_svh_diagnostics;
 
   //! Serial device to use for communication with hardware
   std::string m_serial_device_name;
@@ -88,8 +97,6 @@ private:
 
   float setChannelForceLimit(size_t channel, float force_limit);
 
-  //! Callback function for setting channel target positions to SCHUNK five finger hand
-//   void jointStateCallback(const sensor_msgs::JointStateConstPtr& input);
 
   //! Number of times the connect routine tries to connect in case that we receive at least one package
   int m_connect_retry_count;
@@ -101,6 +108,7 @@ private:
   int m_firmware_major_version;
   int m_firmware_minor_version;
 
+  //! m_channels_enabled enables the ros-control-loop in the hw interface
   bool m_channels_enabled;
 
   ros::Subscriber connect_sub;

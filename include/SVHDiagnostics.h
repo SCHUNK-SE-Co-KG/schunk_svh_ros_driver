@@ -19,6 +19,7 @@
 
 // ROS includes.
 #include <ros/ros.h>
+#include <actionlib/server/simple_action_server.h>
 
 #include <stdint.h>
 #include <string>
@@ -39,13 +40,8 @@
 #include <std_msgs/String.h>
 
 // FZI includes
-#include "SVHWrapper.h"
-
-#include "schunk_web_gui/SVHDiagnosticsFinger.h"
-#include "schunk_web_gui/SVHDiagnosticsFingerVector.h"
-#include "schunk_web_gui/SVHDiagnosticsMsgForPdf.h"
-#include "schunk_web_gui/SVHDiagnosticsResult.h"
-#include "schunk_web_gui/SVHDiagnosticsToLatex.h"
+#include "schunk_svh_driver/SVHDiagnosticsAction.h"
+#include "schunk_svh_driver/SVHDiagnosticsToProtocol.h"
 
 // Driver Specific things
 #include <driver_svh/SVHFingerManager.h>
@@ -61,26 +57,36 @@ public:
   //!
   //! \brief SVHDiagnostics constructs a new node object that handles most of the functionality
   //! \param nh ROS Nodehandle
+  //! \param finger_manager Handle to the SVH finger manager for library access
+  //! \param enable_ros_contol_loop function handle to set the ros-control-loop enabling flag
+  //! \param init_controller_parameters function handle to get the hand parameters
+  //! \param name action server name
   //!
-  SVHDiagnostics(const ros::NodeHandle &nh);
+  SVHDiagnostics(
+    const ros::NodeHandle &nh,
+    boost::shared_ptr<driver_svh::SVHFingerManager>& finger_manager,
+    boost::function<void(bool)> enable_ros_contol_loop,
+    boost::function<void(uint16_t, uint16_t)> init_controller_parameters,
+    std::string name);
+
   //! Default DTOR
   ~SVHDiagnostics();
 
   //! Callback function to conduct the basic test for the SCHUNK five finger hand (msg defined in
   //! schunk_web_gui/msg/DiagnosticsMsg.msg)
-  void basicTestCallback(const schunk_web_gui::SVHDiagnosticsMsgForPdf& msg);
+  void basicTestCallback(const schunk_svh_driver::SVHDiagnosticsGoalConstPtr & goal);
 
   //! Callback function to test the subfunctions of SVHDiagnostics
   void testCallback(const std_msgs::String&);
 
-protected:
-  //!
-  //! \brief m_svh shared pointer of SVHWrapper
-  //!
-  boost::shared_ptr<SVHWrapper> m_svh;
-
 
 private:
+
+  //!
+  //! \brief private node handle
+  //!
+  ros::NodeHandle m_priv_nh;
+
   //!
   //! \brief resetDiagnosticStatus resets the finger vector with the diagnostic data
   //!
@@ -95,23 +101,36 @@ private:
   //! \brief evaluateBasicTest evaluates the diagnostics status of the basic test to send the hint informations to the webside
   //! \return std_msgs::UInt8MultiArray mesg with the test results
   //!
-  schunk_web_gui::SVHDiagnosticsResult evaluateBasicTest();
+  schunk_svh_driver::SVHDiagnosticsResult evaluateBasicTest();
 
   //!
-  //! \brief getFingerFeedback returns the finger vector with the diagnostic data
-  //! \return finger vector with diagnostic data
-  //!
-  schunk_web_gui::SVHDiagnosticsFingerVector getFingerFeedback();
-
-  //!
-  //! \brief set the latex variables
+  //! \brief set the protocol variables
   //!
   void qualityProtocolWritting();
 
   //!
-  //! \brief initialize the latex variables
+  //! \brief initialize the protocol variables
   //!
-  void initializeLatexMessage();
+  void initializeProtocolMessage();
+
+  //!
+  //! \brief initialize the protocol variables
+  //!
+  void initTest();
+
+  //! Handle to the SVH finger manager for library access
+  boost::shared_ptr<driver_svh::SVHFingerManager> m_finger_manager;
+
+  //!
+  //! function handle to set the ros-control-loop enabling flag in the SVHWrapper
+  //!
+  boost::function<void(bool)> m_enable_ros_contol_loop;
+
+  //!
+  //! function handle to get the hand parameters from ros-param-server
+  //! and set them to the finger_manager to have cleared parameter set
+  //!
+  boost::function<void(uint16_t, uint16_t)> m_init_controller_parameters;
 
   //! Serial device to use for communication with hardware
   std::string m_serial_device_name;
@@ -137,7 +156,7 @@ private:
   //! Name of the testing person
   std::string m_assembly_of;
 
-  //! Type of the Hand
+  //! Type of the Hand, No/ L / R
   bool m_execution_R;
   bool m_execution_L;
 
@@ -147,12 +166,23 @@ private:
   //! To catch multiple bastic test starts
   bool m_basic_test_running;
 
-  //! Finger messages for the diagnostic tab
-  schunk_web_gui::SVHDiagnosticsFingerVector m_finger_vector;
+  //! publisher to the protocol variables
+  ros::Publisher m_pub_protocol_variables;
 
-  //! Message for the latex variable
-  schunk_web_gui::SVHDiagnosticsToLatex m_msg_latex_variable;
+  //! Message for the Protocol variable
+  schunk_svh_driver::SVHDiagnosticsToProtocol m_msg_protocol_variable;
 
+  //! Action Server
+  actionlib::SimpleActionServer<schunk_svh_driver::SVHDiagnosticsAction> m_diagnostics_action_server;
+
+  // Action Feedback
+  schunk_svh_driver::SVHDiagnosticsFeedback m_action_feedback;
+
+  //! Action result
+  schunk_svh_driver::SVHDiagnosticsResult m_action_result;
+
+  // Action server name
+  std::string m_action_name;
 
   enum diag_information{
     zero_defect,

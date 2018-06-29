@@ -69,12 +69,20 @@ SVHWrapper::SVHWrapper(const ros::NodeHandle& nh)
   // Init the actual driver hook (after logging initialize)
   m_finger_manager.reset(new driver_svh::SVHFingerManager(disable_flags, reset_timeout));
 
-
   // Connect and start the reset so that the hand is ready for use
-  if (autostart && connect())
+  // try if SVH is connected
+  connect();
+  if (autostart)
   {
-    m_finger_manager->resetChannel(driver_svh::eSVH_ALL);
-    ROS_INFO("Driver was autostarted! Input can now be sent. Have a safe and productive day!");
+    if (m_finger_manager->resetChannel(driver_svh::eSVH_ALL))
+    {
+      ROS_INFO("Driver was autostarted! Input can now be sent. Have a safe and productive day!");
+      m_channels_enabled = true;
+    }
+    else
+    {
+      ROS_ERROR("Tried to reset the fingers by autostart: Not succeeded!");
+    }
   }
   else
   {
@@ -102,6 +110,17 @@ SVHWrapper::SVHWrapper(const ros::NodeHandle& nh)
     m_priv_nh.advertiseService("set_all_force_limits", &SVHWrapper::setAllForceLimits, this);
   m_setForceLimitById_srv =
     m_priv_nh.advertiseService("set_force_limit_by_id", &SVHWrapper::setForceLimitById, this);
+
+  m_svh_diagnostics.reset(new SVHDiagnostics(
+                                m_priv_nh, m_finger_manager,
+                                boost::bind( &SVHWrapper::setRosControlEnable, this, _1),
+                                boost::bind( &SVHWrapper::initControllerParameters, this, _1, _2),
+                                "diagnostics_to_protocol"));
+}
+
+void SVHWrapper::setRosControlEnable(bool enable)
+{
+  m_channels_enabled = enable;
 }
 
 
@@ -201,6 +220,7 @@ void SVHWrapper::initControllerParameters(const uint16_t firmware_major_version,
 SVHWrapper::~SVHWrapper()
 {
   m_finger_manager->disconnect();
+  m_svh_diagnostics.reset();
 }
 
 bool SVHWrapper::connect()
@@ -285,16 +305,31 @@ bool SVHWrapper::homeAllNodes(schunk_svh_driver::HomeAll::Request& req,
 bool SVHWrapper::homeNodesChannelIds(schunk_svh_driver::HomeWithChannels::Request& req,
                                      schunk_svh_driver::HomeWithChannels::Response& resp)
 {
-  // disable flag to stop ros-control-loop
-  m_channels_enabled = false;
+  // is ros-control-loop enabled ?
+  bool channels_enabled_before;
+  if(m_channels_enabled)
+  {
+    // disable flag to stop ros-control-loop
+    m_channels_enabled = false;
+    channels_enabled_before = true;
+  }
+  {
+    // not all channels resetted before, so ros-control-loop won't be enabled after
+    channels_enabled_before = false;
+    ROS_WARN_STREAM("After resetting asked channel the ros controll loop will not be enabled");
+  }
+
 
   for (std::vector<uint8_t>::iterator it = req.channel_ids.begin(); it != req.channel_ids.end(); ++it)
   {
     m_finger_manager->resetChannel(static_cast<driver_svh::SVHChannel>(*it));
   }
 
-  // enable flag to stop ros-control-loop
-  m_channels_enabled = true;
+  if(channels_enabled_before)
+  {
+    // enable flag to stop ros-control-loop
+    m_channels_enabled = true;
+  }
 
   resp.success = true;
   return resp.success;
@@ -321,6 +356,13 @@ bool SVHWrapper::setForceLimitById(schunk_svh_driver::SetChannelForceLimit::Requ
 
 float SVHWrapper::setChannelForceLimit(size_t channel, float force_limit)
 {
-  return m_finger_manager->setForceLimit(static_cast<driver_svh::SVHChannel>(channel), force_limit);
-
+  // no force
+  if (m_channels_enabled)
+  {
+    return m_finger_manager->setForceLimit(static_cast<driver_svh::SVHChannel>(channel), force_limit);
+  }
+  else
+  {
+    return false;
+  }
 }
