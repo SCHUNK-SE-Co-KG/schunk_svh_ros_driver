@@ -57,10 +57,16 @@ public:
   //!
   //! \brief SVHDiagnostics constructs a new node object that handles most of the functionality
   //! \param nh ROS Nodehandle
+  //! \param finger_manager Handle to the SVH finger manager for library access
+  //! \param enable_ros_contol_loop function handle to set the ros-control-loop enabling flag
+  //! \param init_controller_parameters function handle to get the hand parameters
+  //! \param name action server name
   //!
   SVHDiagnostics(
     const ros::NodeHandle &nh,
-    boost::shared_ptr<driver_svh::SVHFingerManager>& m_finger_manager,
+    boost::shared_ptr<driver_svh::SVHFingerManager>& finger_manager,
+    boost::function<void(bool)> enable_ros_contol_loop,
+    boost::function<void(uint16_t, uint16_t)> init_controller_parameters,
     std::string name);
 
   //! Default DTOR
@@ -114,6 +120,17 @@ private:
 
   //! Handle to the SVH finger manager for library access
   boost::shared_ptr<driver_svh::SVHFingerManager> m_finger_manager;
+
+  //!
+  //! function handle to set the ros-control-loop enabling flag in the SVHWrapper
+  //!
+  boost::function<void(bool)> m_enable_ros_contol_loop;
+
+  //!
+  //! function handle to get the hand parameters from ros-param-server
+  //! and set them to the finger_manager to have cleared parameter set
+  //!
+  boost::function<void(uint16_t, uint16_t)> m_init_controller_parameters;
 
   //! Serial device to use for communication with hardware
   std::string m_serial_device_name;

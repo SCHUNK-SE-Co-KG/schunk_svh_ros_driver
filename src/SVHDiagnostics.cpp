@@ -21,11 +21,15 @@
 SVHDiagnostics::SVHDiagnostics(
   const ros::NodeHandle& nh,
   boost::shared_ptr<driver_svh::SVHFingerManager>& finger_manager,
+  boost::function<void(bool)> enable_ros_contol_loop,
+  boost::function<void(uint16_t, uint16_t)> init_controller_parameters,
   std::string name)
   : m_priv_nh(nh)
   , m_diagnostics_action_server(m_priv_nh, name, boost::bind(&SVHDiagnostics::basicTestCallback, this, _1), false)
   , m_action_name(name)
   , m_finger_manager(finger_manager)
+  , m_enable_ros_contol_loop(enable_ros_contol_loop)
+  , m_init_controller_parameters(init_controller_parameters)
 {
 
   //!
@@ -87,6 +91,9 @@ void SVHDiagnostics::initTest()
 void SVHDiagnostics::basicTestCallback(const schunk_svh_driver::SVHDiagnosticsGoalConstPtr & goal)
 {
   m_msg_protocol_variable.date_as_string = goal->date_as_string;
+
+  m_enable_ros_contol_loop(false);
+
   if (m_basic_test_running == false && m_finger_manager->isConnected())
   {
     initTest();
@@ -188,6 +195,9 @@ void SVHDiagnostics::basicTestCallback(const schunk_svh_driver::SVHDiagnosticsGo
 
     ROS_ERROR("No hand connected!");
   }
+
+  m_enable_ros_contol_loop(true);
+
 }
 
 schunk_svh_driver::SVHDiagnosticsResult SVHDiagnostics::evaluateBasicTest()

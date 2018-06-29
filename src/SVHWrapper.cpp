@@ -104,7 +104,16 @@ SVHWrapper::SVHWrapper(const ros::NodeHandle& nh)
   m_setForceLimitById_srv =
     m_priv_nh.advertiseService("set_force_limit_by_id", &SVHWrapper::setForceLimitById, this);
 
-  m_svh_diagnostics.reset(new SVHDiagnostics(m_priv_nh, m_finger_manager, "diagnostics_to_protocol"));
+  m_svh_diagnostics.reset(new SVHDiagnostics(
+                                m_priv_nh, m_finger_manager,
+                                boost::bind( &SVHWrapper::setRosControlEnable, this, _1),
+                                boost::bind( &SVHWrapper::initControllerParameters, this, _1, _2),
+                                "diagnostics_to_protocol"));
+}
+
+void SVHWrapper::setRosControlEnable(bool enable)
+{
+  m_channels_enabled = enable;
 }
 
 
