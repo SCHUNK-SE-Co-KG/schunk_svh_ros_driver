@@ -19,3 +19,4 @@ bool short_description
 string remarks_one
 string remarks_two
 string remarks_three
+string date_as_string

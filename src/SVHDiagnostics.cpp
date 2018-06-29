@@ -86,6 +86,7 @@ void SVHDiagnostics::initTest()
 
 void SVHDiagnostics::basicTestCallback(const schunk_svh_driver::SVHDiagnosticsGoalConstPtr & goal)
 {
+  m_msg_protocol_variable.date_as_string = goal->date_as_string;
   if (m_basic_test_running == false && m_finger_manager->isConnected())
   {
     initTest();
