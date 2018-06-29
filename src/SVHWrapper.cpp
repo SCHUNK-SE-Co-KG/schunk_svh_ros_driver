@@ -74,8 +74,15 @@ SVHWrapper::SVHWrapper(const ros::NodeHandle& nh)
   connect();
   if (autostart)
   {
-    m_finger_manager->resetChannel(driver_svh::eSVH_ALL);
-    ROS_INFO("Driver was autostarted! Input can now be sent. Have a safe and productive day!");
+    if (m_finger_manager->resetChannel(driver_svh::eSVH_ALL))
+    {
+      ROS_INFO("Driver was autostarted! Input can now be sent. Have a safe and productive day!");
+      m_channels_enabled = true;
+    }
+    else
+    {
+      ROS_ERROR("Tried to reset the fingers by autostart: Not succeeded!");
+    }
   }
   else
   {
@@ -298,16 +305,31 @@ bool SVHWrapper::homeAllNodes(schunk_svh_driver::HomeAll::Request& req,
 bool SVHWrapper::homeNodesChannelIds(schunk_svh_driver::HomeWithChannels::Request& req,
                                      schunk_svh_driver::HomeWithChannels::Response& resp)
 {
-  // disable flag to stop ros-control-loop
-  m_channels_enabled = false;
+  // is ros-control-loop enabled ?
+  bool channels_enabled_before;
+  if(m_channels_enabled)
+  {
+    // disable flag to stop ros-control-loop
+    m_channels_enabled = false;
+    channels_enabled_before = true;
+  }
+  {
+    // not all channels resetted before, so ros-control-loop won't be enabled after
+    channels_enabled_before = false;
+    ROS_WARN_STREAM("After resetting asked channel the ros controll loop will not be enabled");
+  }
+
 
   for (std::vector<uint8_t>::iterator it = req.channel_ids.begin(); it != req.channel_ids.end(); ++it)
   {
     m_finger_manager->resetChannel(static_cast<driver_svh::SVHChannel>(*it));
   }
 
-  // enable flag to stop ros-control-loop
-  m_channels_enabled = true;
+  if(channels_enabled_before)
+  {
+    // enable flag to stop ros-control-loop
+    m_channels_enabled = true;
+  }
 
   resp.success = true;
   return resp.success;
