@@ -229,7 +229,7 @@ schunk_svh_driver::SVHDiagnosticsResult SVHDiagnostics::evaluateBasicTest()
       m_action_feedback.fingers[3].motor == false && m_action_feedback.fingers[4].motor == false)
   {
     action_result.result = board_one;
-    ROS_INFO_STREAM("SVHDiagnostics::evaluateBasicTest: failure of : 1nd controller board both "
+    ROS_WARN_STREAM("SVHDiagnostics::evaluateBasicTest: failure of : 1nd controller board both "
                     "encoder and motor");
     return action_result;
   }
@@ -241,7 +241,7 @@ schunk_svh_driver::SVHDiagnosticsResult SVHDiagnostics::evaluateBasicTest()
       m_action_feedback.fingers[7].motor == false && m_action_feedback.fingers[8].motor == false)
   {
     action_result.result = board_two;
-    ROS_INFO_STREAM("SVHDiagnostics::evaluateBasicTest: failure of : 2nd controller board both "
+    ROS_WARN_STREAM("SVHDiagnostics::evaluateBasicTest: failure of : 2nd controller board both "
                     "encoder and motor");
     return action_result;
   }
@@ -252,7 +252,7 @@ schunk_svh_driver::SVHDiagnosticsResult SVHDiagnostics::evaluateBasicTest()
       m_action_feedback.fingers[4].encoder == false)
   {
     action_result.result = board_one_encoder;
-    ROS_INFO_STREAM("SVHDiagnostics::evaluateBasicTest: failure of : 1nd controller board encoder");
+    ROS_WARN_STREAM("SVHDiagnostics::evaluateBasicTest: failure of : 1nd controller board encoder");
     return action_result;
   }
 
@@ -262,7 +262,7 @@ schunk_svh_driver::SVHDiagnosticsResult SVHDiagnostics::evaluateBasicTest()
       m_action_feedback.fingers[4].motor == false)
   {
     action_result.result = board_one_motor;
-    ROS_INFO_STREAM("SVHDiagnostics::evaluateBasicTest: failure of : 1nd controller board motor");
+    ROS_WARN_STREAM("SVHDiagnostics::evaluateBasicTest: failure of : 1nd controller board motor");
     return action_result;
   }
 
@@ -271,7 +271,7 @@ schunk_svh_driver::SVHDiagnosticsResult SVHDiagnostics::evaluateBasicTest()
       m_action_feedback.fingers[7].encoder == false && m_action_feedback.fingers[8].encoder == false)
   {
     action_result.result = board_two_encoder;
-    ROS_INFO_STREAM("SVHDiagnostics::evaluateBasicTest: failure of : 2nd controller board encoder");
+    ROS_WARN_STREAM("SVHDiagnostics::evaluateBasicTest: failure of : 2nd controller board encoder");
     return action_result;
   }
 
@@ -280,7 +280,7 @@ schunk_svh_driver::SVHDiagnosticsResult SVHDiagnostics::evaluateBasicTest()
       m_action_feedback.fingers[7].motor == false && m_action_feedback.fingers[8].motor == false)
   {
     action_result.result = board_two_motor;
-    ROS_INFO_STREAM("SVHDiagnostics::evaluateBasicTest: failure of : 2nd controller board motor");
+    ROS_WARN_STREAM("SVHDiagnostics::evaluateBasicTest: failure of : 2nd controller board motor");
     return action_result;
   }
 
@@ -291,7 +291,7 @@ schunk_svh_driver::SVHDiagnosticsResult SVHDiagnostics::evaluateBasicTest()
     {
       action_result.result  = encoder_motor;
       action_result.channel = i;
-      ROS_INFO_STREAM(
+      ROS_WARN_STREAM(
         "SVHDiagnostics::evaluateBasicTest: encoder and motor failure, finger: " << i);
       return action_result;
     }
@@ -304,7 +304,7 @@ schunk_svh_driver::SVHDiagnosticsResult SVHDiagnostics::evaluateBasicTest()
     {
       action_result.result  = encoder;
       action_result.channel = i;
-      ROS_INFO_STREAM("SVHDiagnostics::evaluateBasicTest: encoder not working, finger: " << i);
+      ROS_WARN_STREAM("SVHDiagnostics::evaluateBasicTest: encoder not working, finger: " << i);
       return action_result;
     }
   }
@@ -316,7 +316,7 @@ schunk_svh_driver::SVHDiagnosticsResult SVHDiagnostics::evaluateBasicTest()
     {
       action_result.result  = motor;
       action_result.channel = i;
-      ROS_INFO_STREAM("SVHDiagnostics::evaluateBasicTest: motor not working, finger: " << i);
+      ROS_WARN_STREAM("SVHDiagnostics::evaluateBasicTest: motor not working, finger: " << i);
       return action_result;
     }
   }
@@ -331,7 +331,7 @@ schunk_svh_driver::SVHDiagnosticsResult SVHDiagnostics::evaluateBasicTest()
     {
       action_result.result  = current_range;
       action_result.channel = i;
-      ROS_INFO_STREAM(
+      ROS_WARN_STREAM(
         "SVHDiagnostics::evaluateBasicTest: motor don't get enough current, finger: " << i);
       return action_result;
     }
@@ -345,7 +345,7 @@ schunk_svh_driver::SVHDiagnosticsResult SVHDiagnostics::evaluateBasicTest()
     {
       action_result.result  = position_range;
       action_result.channel = i;
-      ROS_INFO_STREAM(
+      ROS_WARN_STREAM(
         "SVHDiagnostics::evaluateBasicTest: position range is not enough, finger: " << i);
       return action_result;
     }
@@ -369,7 +369,6 @@ void SVHDiagnostics::resetDiagnosticStatus()
     finger.motor                                       = false;
 
     m_action_feedback.fingers[channel] = finger;
-    ROS_INFO_STREAM("Diagnostic finger vector reset correctly: " << channel);
   }
 }
 
