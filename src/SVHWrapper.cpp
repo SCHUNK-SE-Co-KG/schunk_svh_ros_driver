@@ -325,7 +325,7 @@ bool SVHWrapper::homeNodesChannelIds(schunk_svh_driver::HomeWithChannels::Reques
     m_finger_manager->resetChannel(static_cast<driver_svh::SVHChannel>(*it));
   }
 
-  if(channels_enabled_before)
+  if(channels_enabled_before || m_finger_manager->isHomed(driver_svh::eSVH_ALL))
   {
     // enable flag to stop ros-control-loop
     m_channels_enabled = true;
