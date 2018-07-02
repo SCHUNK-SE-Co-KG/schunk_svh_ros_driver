@@ -307,12 +307,14 @@ bool SVHWrapper::homeNodesChannelIds(schunk_svh_driver::HomeWithChannels::Reques
 {
   // is ros-control-loop enabled ?
   bool channels_enabled_before;
-  if(m_channels_enabled)
+
+  if (m_channels_enabled)
   {
     // disable flag to stop ros-control-loop
     m_channels_enabled = false;
     channels_enabled_before = true;
   }
+  else
   {
     // not all channels resetted before, so ros-control-loop won't be enabled after
     channels_enabled_before = false;
@@ -325,7 +327,7 @@ bool SVHWrapper::homeNodesChannelIds(schunk_svh_driver::HomeWithChannels::Reques
     m_finger_manager->resetChannel(static_cast<driver_svh::SVHChannel>(*it));
   }
 
-  if(channels_enabled_before)
+  if(channels_enabled_before || m_finger_manager->isHomed(driver_svh::eSVH_ALL))
   {
     // enable flag to stop ros-control-loop
     m_channels_enabled = true;
@@ -356,7 +358,7 @@ bool SVHWrapper::setForceLimitById(schunk_svh_driver::SetChannelForceLimit::Requ
 
 float SVHWrapper::setChannelForceLimit(size_t channel, float force_limit)
 {
-  // no force
+  // no force setting if ros-control-loop disabled -> no impact on diagnostic test
   if (m_channels_enabled)
   {
     return m_finger_manager->setForceLimit(static_cast<driver_svh::SVHChannel>(channel), force_limit);
