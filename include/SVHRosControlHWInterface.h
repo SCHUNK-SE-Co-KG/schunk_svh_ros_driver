@@ -79,7 +79,6 @@ protected:
   std::vector<double> m_joint_velocity;
   std::vector<double> m_joint_effort;
   std::vector<double> m_joint_position_commands;
-  std::vector<double> m_joint_position_commands_last;
 
   bool m_is_fault;
 
