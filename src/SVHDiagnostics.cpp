@@ -199,7 +199,7 @@ void SVHDiagnostics::basicTestCallback(const schunk_svh_driver::SVHDiagnosticsGo
   {
     schunk_svh_driver::SVHDiagnosticsResult action_result;
 
-    action_result.result = zero_defect;
+    action_result.result = -1;
     action_result.channel = -1;
 
     m_diagnostics_action_server.setAborted(action_result);
