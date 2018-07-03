@@ -43,7 +43,6 @@ bool SVHRosControlHWInterface::init(ros::NodeHandle& root_nh, ros::NodeHandle& r
   m_svh.reset(new SVHWrapper(robot_hw_nh));
 
   m_joint_position_commands.resize(driver_svh::eSVH_DIMENSION);
-  m_joint_position_commands_last.resize(driver_svh::eSVH_DIMENSION);
   m_joint_positions.resize(driver_svh::eSVH_DIMENSION);
   m_joint_velocity.resize(driver_svh::eSVH_DIMENSION);
   m_joint_effort.resize(driver_svh::eSVH_DIMENSION);
@@ -150,15 +149,3 @@ void SVHRosControlHWInterface::doSwitch(
 {
   hardware_interface::RobotHW::doSwitch(start_list, stop_list);
 }
-
-// sensor_msgs::JointState SVHRosControlHWInterface::getJointMessage()
-// {
-//   sensor_msgs::JointState joint_msg;
-//   joint_msg.name         = m_channel_names;
-//   joint_msg.header.stamp = ros::Time::now();
-//   joint_msg.position     = m_joint_positions;
-//   joint_msg.velocity     = m_joint_velocity;
-//   joint_msg.effort       = m_joint_effort;
-//
-//   return joint_msg;
-// }
