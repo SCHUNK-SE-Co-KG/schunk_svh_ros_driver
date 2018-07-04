@@ -33,6 +33,7 @@
     <param name="use_ros_control" type="bool" value="True"/>
     <param name="maximal_force" value="$(arg maximal_force)" />
     <param name="trajectory_controller_name" value="$(arg trajectory_controller_name)" />
+    <remap from="~joint_states" to="/joint_states" />
   </node>
 
 </launch>
