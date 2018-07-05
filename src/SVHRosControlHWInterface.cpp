@@ -42,6 +42,8 @@ bool SVHRosControlHWInterface::init(ros::NodeHandle& root_nh, ros::NodeHandle& r
 {
   m_svh.reset(new SVHWrapper(robot_hw_nh));
 
+  m_hardware_ready = false;
+
   m_joint_position_commands.resize(driver_svh::eSVH_DIMENSION);
   m_joint_positions.resize(driver_svh::eSVH_DIMENSION);
   m_joint_velocity.resize(driver_svh::eSVH_DIMENSION);
@@ -92,7 +94,7 @@ void SVHRosControlHWInterface::read(const ros::Time& time, const ros::Duration& 
   m_joint_positions.resize(driver_svh::eSVH_DIMENSION);
   m_joint_effort.resize(driver_svh::eSVH_DIMENSION);
 
-  if (m_svh->getFingerManager()->isConnected() && m_svh->channelsEnabled())
+  if (m_svh->getFingerManager()->isConnected())
   {
     // Get positions in rad
     for (size_t channel = 0; channel < driver_svh::eSVH_DIMENSION; ++channel)
@@ -106,21 +108,39 @@ void SVHRosControlHWInterface::read(const ros::Time& time, const ros::Duration& 
       }
       else
       {
-        ROS_ERROR_STREAM("Node " << driver_svh::SVHController::m_channel_description[channel]
-                                  << " is in FAULT state");
+        if (isEnabled())
+        {
+          ROS_WARN_STREAM_THROTTLE(0.5, "Channel " << driver_svh::SVHController::m_channel_description[channel]
+                                    << " is not Homed");
+        }
       }
       m_joint_positions[channel] = cur_pos;
       m_joint_effort[channel] = m_svh->getFingerManager()->convertmAtoN(static_cast<driver_svh::SVHChannel>(channel), cur_cur);
     }
+
+    ROS_DEBUG_STREAM("read Position: " << m_joint_positions[0] << " " << m_joint_positions[1]
+     << " " << m_joint_positions[2] << " " << m_joint_positions[3] << " " << m_joint_positions[4]
+     << " " << m_joint_positions[5] << " " << m_joint_positions[6] << " " << m_joint_positions[7]
+     << " " << m_joint_positions[8]);
   }
+
 }
 
 void SVHRosControlHWInterface::write(const ros::Time& time, const ros::Duration& period)
 {
-  if (!m_svh->channelsEnabled())
+  m_hardware_ready = m_svh->channelsEnabled();
+
+  if (!isEnabled())
   {
+    ROS_DEBUG_THROTTLE(2, "ros-control-loop is not enabeled!");
     return;
   }
+
+  ROS_DEBUG_STREAM("write Position: " << m_joint_position_commands[0] << " "
+    << m_joint_position_commands[1] << " " << m_joint_position_commands[2] << " "
+    << m_joint_position_commands[3] << " " << m_joint_position_commands[4] << " "
+    << m_joint_position_commands[5] << " " << m_joint_position_commands[6] << " "
+    << m_joint_position_commands[7] << " " << m_joint_position_commands[8]);
 
   if (driver_svh::eSVH_DIMENSION == m_joint_position_commands.size())
   {
@@ -148,4 +168,9 @@ void SVHRosControlHWInterface::doSwitch(
   const std::list<hardware_interface::ControllerInfo>& stop_list)
 {
   hardware_interface::RobotHW::doSwitch(start_list, stop_list);
+}
+
+bool SVHRosControlHWInterface::isEnabled() const
+{
+  return m_hardware_ready;
 }

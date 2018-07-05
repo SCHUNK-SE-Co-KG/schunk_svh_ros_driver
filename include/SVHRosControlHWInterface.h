@@ -53,6 +53,8 @@ public:
   void doSwitch(const std::list<hardware_interface::ControllerInfo>& start_list,
                 const std::list<hardware_interface::ControllerInfo>& stop_list);
 
+
+  bool isEnabled() const;
   /*!
    * \brief Returns true, when at least one node in the hardware is in a fault state.
    */
@@ -85,6 +87,10 @@ protected:
   joint_limits_interface::JointLimits m_joint_limits;
   joint_limits_interface::SoftJointLimits
     m_joint_soft_limits; // only available through URDF, currently not used.
+
+private:
+
+  bool m_hardware_ready;
 };
 
 

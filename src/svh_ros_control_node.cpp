@@ -49,7 +49,7 @@ int main (int argc, char** argv)
     timestamp_last = timestamp_now;
 
     svh_hw.read(timestamp_now, period);
-    cm.update(timestamp_now, period); 
+    cm.update(timestamp_now, period, !svh_hw.isEnabled());
     svh_hw.write(timestamp_now, period);
     rate.sleep();
   }
