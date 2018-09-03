@@ -2,7 +2,7 @@
   <env name="ROSCONSOLE_CONFIG_FILE" value="$(find schunk_svh_driver)/etc/logging.config" />
   <!-- global PARAMS Change here if needed -->
   <arg name="gui" default="False" />
-  <arg name="autostart" default="true"/>
+  <arg name="autostart" default="True"/>
   <arg name="serial_device" default="/dev/ttyUSB0"/>
   <arg name="simulation" default="False"/>
   <arg name="logging_config" default="$(find schunk_svh_driver)/etc/logging.xml" />
