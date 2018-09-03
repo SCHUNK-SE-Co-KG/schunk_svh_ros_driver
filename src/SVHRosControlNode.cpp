@@ -93,11 +93,17 @@ SVHRosControlNode::SVHRosControlNode()
     // the available Error, Warning, Info, Debug, Trace)
     // in that case also the log files will be disregarded
     if (icl_core::logging::initialize(argc, argv))
+    {
       ROS_INFO("Internal logging was activated, output will be written as configured in "
                "logging.xml (default to ~/.ros/log)");
-    else
+    }
+    else 
+    {
       ROS_WARN("Internal logging was enabled but config file could not be read. Please make sure "
                "the provided path to the config file is correct.");
+    }
+    ROS_WARN("Waiting for logging to initialize...");
+    ros::Duration(5.0).sleep();
   }
   else
   {
