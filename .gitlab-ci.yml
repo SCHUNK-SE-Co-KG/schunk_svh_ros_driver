@@ -1,24 +1,24 @@
-# stages:
-#   - prepare
+stages:
+  - prepare
 #   - build
 #   - upload
 
-# variables:
-#   # This is used to actually get the ci_scripts submodule
-#   GIT_SUBMODULE_STRATEGY: normal
-#   GIT_STRATEGY: clone
+variables:
+  # This is used to actually get the ci_scripts submodule
+  GIT_SUBMODULE_STRATEGY: normal
+  GIT_STRATEGY: clone
 
 
-# integration_repository:
-#   stage: prepare
-#   image: shadowrobot/build-tools:xenial-kinetic
-#   tags:
-#     - docker
-#   script:
-#     - git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@ids-git.fzi.de/continuous_integration/ci_scripts .ci_scripts
-#   artifacts:
-#     paths:
-#       - .ci_scripts/
+integration_repository:
+  stage: prepare
+  image: shadowrobot/build-tools:xenial-kinetic
+  tags:
+    - docker
+  script:
+    - git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@ids-git.fzi.de/continuous_integration/ci_scripts .ci_scripts
+  artifacts:
+    paths:
+      - .ci_scripts/
 
 # sr-build-tools-build_xenial:
 #   stage: build
