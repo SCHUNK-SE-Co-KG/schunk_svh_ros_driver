@@ -10,10 +10,13 @@
   <license>LGPL</license>
 
   <author email="heppner@fzi.de">Georg Heppner</author>
-   <url>http://www.ros.org/wiki/schunk_svh_driver</url>
+  <url>http://www.ros.org/wiki/schunk_svh_driver</url>
 
   <buildtool_depend>catkin</buildtool_depend>
 
+  <build_depend>actionlib</build_depend>
+  <build_depend>actionlib_msgs</build_depend>
+  <build_depend>controller_manager</build_depend>
   <build_depend>roscpp</build_depend>
   <build_depend>std_msgs</build_depend>
   <build_depend>sensor_msgs</build_depend>
@@ -29,7 +32,9 @@
   <build_depend>combined_robot_hw</build_depend>
   <build_depend>pluginlib</build_depend>
 
-
+  <run_depend>actionlib</run_depend>
+  <run_depend>actionlib_msgs</run_depend>
+  <run_depend>controller_manager</run_depend>
   <run_depend>roscpp</run_depend>
   <run_depend>std_msgs</run_depend>
   <run_depend>sensor_msgs</run_depend>
@@ -46,7 +51,7 @@
 
   <export>
     <rqt_gui plugin="${prefix}/plugin.xml" />
-        <!--rosdoc config="etc/rosdoc.yaml" /-->
+    <!--rosdoc config="etc/rosdoc.yaml" />-->
     <hardware_interface plugin="${prefix}/robot_hw_plugin.xml"/>
   </export>
 

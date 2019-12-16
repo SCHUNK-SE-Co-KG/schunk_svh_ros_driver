@@ -2,24 +2,23 @@ cmake_minimum_required(VERSION 2.8.3)
 project(schunk_svh_driver)
 
 find_package(catkin REQUIRED COMPONENTS
-    roscpp
-    std_msgs
-    sensor_msgs
     actionlib
     actionlib_msgs
+    combined_robot_hw
+    controller_manager
     dynamic_reconfigure
+    hardware_interface
+    joint_limits_interface
+    message_generation
+    pluginlib
+    roscpp
     rospy
     rqt_gui
     rqt_gui_py
-    xacro
-    hardware_interface
-    joint_limits_interface
-    controller_manager
+    sensor_msgs
+    std_msgs
     urdf
-    message_generation
-    hardware_interface
-    combined_robot_hw
-    pluginlib
+    xacro
 )
 
 ## System dependencies are found with CMake's conventions
@@ -76,12 +75,20 @@ catkin_package(
   INCLUDE_DIRS include
   LIBRARIES svh_robot_hw svh_ros
   CATKIN_DEPENDS
-    roscpp
+    actionlib_msgs
+    combined_robot_hw
+    controller_manager
+    hardware_interface
     message_runtime
     pluginlib
-    hardware_interface
-    combined_robot_hw
-  DEPENDS roscpp icl_core icl_comm driver_svh message_runtime
+    roscpp
+    sensor_msgs
+    std_msgs
+    urdf
+  DEPENDS
+    driver_svh
+    icl_comm
+    icl_core
 )
 
 ###########
@@ -97,7 +104,7 @@ catkin_package(
 foreach(dir description/meshes description/urdf)
    install(DIRECTORY ${dir}/
       DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/${dir})
-endforeach(dir)
+endforeach()
 
 install(DIRECTORY launch
         DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/
@@ -123,8 +130,8 @@ add_definitions(
 
 # Declare a cpp executable
 add_executable(svh_controller
-  src/SVHNode.cpp
   src/DynamicParameterClass.cpp
+  src/SVHNode.cpp
 )
 
 # Simple test programs
@@ -135,7 +142,6 @@ add_executable(svh_sin_test
 # Add cmake target dependencies of the executable/library
 # as an example, message headers may need to be generated before nodes
 add_dependencies(svh_controller
-
   ${PROJECT_NAME}_gencfg
   ${PROJECT_NAME}_generate_messages_cpp
 )
@@ -158,9 +164,9 @@ target_link_libraries(svh_sin_test
 
 ## ROSControl
 add_library(svh_ros
-  src/SVHWrapper.cpp
   src/DynamicParameterClass.cpp
   src/SVHDiagnostics.cpp
+  src/SVHWrapper.cpp
 )
 add_dependencies(svh_ros
   ${PROJECT_NAME}_gencfg
@@ -209,8 +215,8 @@ target_link_libraries(svh_ros_control_node
 ## DynamicParametersTest ##
 
 add_executable(svh_dynamic_parameter_test
-  src/DynamicParameterTest.cpp
   src/DynamicParameterClass.cpp
+  src/DynamicParameterTest.cpp
 )
 
 add_dependencies(svh_dynamic_parameter_test
@@ -238,7 +244,13 @@ install(PROGRAMS
 )
 
 # Install targets of libs and executables
-install(TARGETS svh_controller svh_sin_test svh_ros svh_robot_hw
+install(
+  TARGETS
+    svh_controller
+    svh_robot_hw
+    svh_ros
+    svh_ros_control_node
+    svh_sin_test
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
@@ -246,27 +258,34 @@ install(TARGETS svh_controller svh_sin_test svh_ros svh_robot_hw
 
 # install the headers
 install(DIRECTORY include/
-  DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION})
+  DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
+)
 
 #config files
 install(DIRECTORY etc/
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/etc)
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/etc
+)
 
 #udev rules
 install(DIRECTORY udev/
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/udev)
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/udev
+)
 
 # Individual files (Quick commands and the urdf.rviz)
-install(FILES quick_commands plugin.xml
-DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
+install(
+  FILES
+    plugin.xml
+    quick_commands
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 )
 
 install(FILES robot_hw_plugin.xml
-DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
+)
 
 # Install resources
 install(DIRECTORY resource
-DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 )
 
 # Helper for installing the udev rules in an easy fashion and without any conflicts
