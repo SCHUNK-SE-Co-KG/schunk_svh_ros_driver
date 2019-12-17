@@ -2,5 +2,5 @@ trigger_build:
   stage: deploy
   script:
     - "apt-get update"
-    - "apt-get install curl"
+    - "apt-get install curl -y"
     - "curl -X POST -F token=ff27463f322e095c69b6b5840163a3 -F ref=master https://ids-git.fzi.de/api/v4/projects/2298/trigger/pipeline"
