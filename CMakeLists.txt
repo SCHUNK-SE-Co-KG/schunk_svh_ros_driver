@@ -101,11 +101,6 @@ catkin_package(
 #  2. generate convex decomposed .stl
 
 
-foreach(dir description/meshes description/urdf)
-   install(DIRECTORY ${dir}/
-      DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/${dir})
-endforeach()
-
 install(DIRECTORY launch
         DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/
 )

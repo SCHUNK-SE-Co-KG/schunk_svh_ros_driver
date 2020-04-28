@@ -22,7 +22,8 @@
   <rosparam file="$(arg controller_config)" command="load" ns="svh_controller"/>
 
   <!-- Robot description for State publishers -->
-  <param name="robot_description" command="$(find xacro)/xacro --inorder $(find schunk_svh_driver)/description/urdf/svh-standalone.urdf.xacro" />
+  <param name="robot_description" command="$(find xacro)/xacro --inorder $(find
+  schunk_svh_description)/urdf/svh-standalone.urdf.xacro" />
 
   <!-- Launch actual driver node (if not in simulation)-->
   <node unless="$(arg simulation)" name="svh_controller" pkg="schunk_svh_driver" type="svh_controller" output="screen">
