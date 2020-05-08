@@ -48,6 +48,7 @@
   <run_depend>hardware_interface</run_depend>
   <run_depend>combined_robot_hw</run_depend>
   <run_depend>pluginlib</run_depend>
+  <run_depend>schunk_svh_description</run_depend>
 
   <export>
     <rqt_gui plugin="${prefix}/plugin.xml" />
