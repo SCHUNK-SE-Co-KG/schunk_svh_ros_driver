@@ -49,7 +49,7 @@
 
 
   <!-- Robot state publisher for the TFs -->
-  <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher">
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher">
   </node>
 
   <!-- Joint state publisher to provide easy control of the real hardware. Just enabled if you want to use it standalone to provide easy acces with sliders -->
