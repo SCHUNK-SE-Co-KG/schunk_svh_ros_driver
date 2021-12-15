@@ -44,10 +44,10 @@
 #include "schunk_svh_driver/SVHDiagnosticsToProtocol.h"
 
 // Driver Specific things
-#include <driver_svh/SVHFingerManager.h>
-#include <driver_svh/SVHPositionSettings.h>
-#include <driver_svh/SVHCurrentSettings.h>
-#include <driver_svh/SVHFirmwareInfo.h>
+#include <schunk_svh_library/control/SVHFingerManager.h>
+#include <schunk_svh_library/control/SVHPositionSettings.h>
+#include <schunk_svh_library/control/SVHCurrentSettings.h>
+#include <schunk_svh_library/SVHFirmwareInfo.h>
 
 #include <boost/shared_ptr.hpp>
 

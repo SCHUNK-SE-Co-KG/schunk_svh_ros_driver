@@ -19,9 +19,9 @@
 #include <ros/ros.h>
 
 #include "DynamicParameterClass.h"
-#include <driver_svh/SVHCurrentSettings.h>
-#include <driver_svh/SVHFingerManager.h>
-#include <driver_svh/SVHPositionSettings.h>
+#include <schunk_svh_library/control/SVHCurrentSettings.h>
+#include <schunk_svh_library/control/SVHFingerManager.h>
+#include <schunk_svh_library/control/SVHPositionSettings.h>
 
 int main(int argc, char** argv)
 {

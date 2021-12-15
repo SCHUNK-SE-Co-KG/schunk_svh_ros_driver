@@ -19,9 +19,9 @@
 #include "SVHRosControlHWInterface.h"
 
 // Driver Specific things
-#include <driver_svh/SVHCurrentSettings.h>
-#include <driver_svh/SVHFingerManager.h>
-#include <driver_svh/SVHPositionSettings.h>
+#include <schunk_svh_library/control/SVHCurrentSettings.h>
+#include <schunk_svh_library/control/SVHFingerManager.h>
+#include <schunk_svh_library/control/SVHPositionSettings.h>
 
 #include <pluginlib/class_list_macros.h>
 

@@ -28,7 +28,7 @@
 #include <schunk_svh_driver/SetChannelForceLimit.h>
 
 // Driver Specific things
-#include <driver_svh/SVHFingerManager.h>
+#include <schunk_svh_library/control/SVHFingerManager.h>
 
 #include <SVHDiagnostics.h>
 

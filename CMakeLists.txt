@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.3)
+cmake_minimum_required(VERSION 3.10)
 project(schunk_svh_driver)
 
 find_package(catkin REQUIRED COMPONENTS
@@ -22,9 +22,9 @@ find_package(catkin REQUIRED COMPONENTS
 )
 
 ## System dependencies are found with CMake's conventions
-find_package(icl_comm)
 find_package(icl_core)
-find_package(driver_svh)
+find_package(schunk_svh_library REQUIRED)
+find_package(Boost COMPONENTS thread REQUIRED)
 
 catkin_python_setup()
 
@@ -86,8 +86,6 @@ catkin_package(
     std_msgs
     urdf
   DEPENDS
-    driver_svh
-    icl_comm
     icl_core
 )
 
@@ -112,14 +110,12 @@ install(DIRECTORY launch
 include_directories(
   include
   ${catkin_INCLUDE_DIRS}
-  ${icl_comm_INCLUDE_DIRS}
   ${icl_core_INCLUDE_DIRS}
   ${driver_svh_INCLUDE_DIRS}
 )
 
 # Additional compiler definitions
 add_definitions(
-  ${icl_comm_DEFINITIONS}
   ${icl_core_DEFINITIONS}
 )
 
@@ -144,17 +140,16 @@ add_dependencies(svh_controller
 ## Specify libraries to link a library or executable target against
 target_link_libraries(svh_controller
   ${catkin_LIBRARIES}
-  ${icl_comm_LIBRARIES}
   ${icl_core_LIBRARIES}
-  ${driver_svh_LIBRARIES}
+  Schunk::svh-library
 )
 
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(svh_sin_test
   ${catkin_LIBRARIES}
-  ${icl_comm_LIBRARIES}
   ${icl_core_LIBRARIES}
+  Schunk::svh-serial
 )
 
 ## ROSControl
@@ -172,9 +167,8 @@ add_dependencies(svh_ros
 ## Specify libraries to link a library or executable target against
 target_link_libraries(svh_ros
   ${catkin_LIBRARIES}
-  ${icl_comm_LIBRARIES}
   ${icl_core_LIBRARIES}
-  ${driver_svh_LIBRARIES}
+  Schunk::svh-library
 )
 
 add_library(svh_robot_hw
@@ -187,7 +181,7 @@ add_dependencies( svh_robot_hw
 target_link_libraries(svh_robot_hw
   svh_ros
   ${catkin_LIBRARIES}
-  ${Boost_LIBRARIES}
+  Boost::thread
 )
 
 add_executable(svh_ros_control_node
@@ -222,10 +216,8 @@ add_dependencies(svh_dynamic_parameter_test
 ## Specify libraries to link a library or executable target against
 target_link_libraries(svh_dynamic_parameter_test
  ${catkin_LIBRARIES}
- ${catkin_LIBRARIES}
- ${icl_comm_LIBRARIES}
  ${icl_core_LIBRARIES}
- ${driver_svh_LIBRARIES}
+ Schunk::svh-library
 )
 
 
