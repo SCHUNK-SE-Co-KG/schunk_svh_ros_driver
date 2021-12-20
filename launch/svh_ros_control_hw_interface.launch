@@ -12,6 +12,10 @@
   <arg name="frequency" default="30" />
   <arg name="maximal_force" default="0.9" />
   <arg name="trajectory_controller_name" />
+  <arg name="debug" default="False" />
+  <arg if="$(arg debug)" name="launch-prefix" value="screen -d -m gdb -command=$(env HOME)/.ros/my_debug_log --ex run --args"/>
+  <arg unless="$(arg debug)" name="launch-prefix" value=""/>
+
 
   <!-- load basic configuration -->
   <rosparam file="$(arg general_config)" command="load" ns="svh_ros_control_node"/>
@@ -22,7 +26,7 @@
 
 
   <!-- Launch actual driver node (if not in simulation)-->
-  <node unless="$(arg simulation)" name="svh_ros_control_node" pkg="schunk_svh_driver" type="svh_ros_control_node" output="screen">
+  <node unless="$(arg simulation)" name="svh_ros_control_node" pkg="schunk_svh_driver" type="svh_ros_control_node" output="screen" launch-prefix="$(arg launch-prefix)">
     <param name="serial_device" value="$(arg serial_device)"/>
     <param name="autostart" value="$(arg autostart)" />
     <!-- Params for the ICL (driver internal) logging. General configuration in the given logging.xml, output will be saved to the who given files -->

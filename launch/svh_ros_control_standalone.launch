@@ -13,6 +13,7 @@
   <arg name="frequency" default="30" />
   <arg name="maximal_force" default="0.9" />
   <arg name="trajectory_controller_name" default="pos_based_pos_traj_controller_hand" />
+  <arg name="debug" default="False" />
 
 
   <!-- Robot description for State publishers -->
@@ -25,6 +26,7 @@
         <arg name="maximal_force" value="$(arg maximal_force)" />
         <arg name="autostart" value="$(arg autostart)"/>
         <arg name="trajectory_controller_name" value="$(arg trajectory_controller_name)" />
+        <arg name="debug" value="$(arg debug)"/>
   </include>
 
   <!-- ROS_Control Controllers -->
