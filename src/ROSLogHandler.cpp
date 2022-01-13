@@ -23,7 +23,6 @@
 
 namespace driver_svh {
 std::unique_ptr<ROSLogHandler> g_log_handler(new ROSLogHandler);
-bool g_handler_set = false;
 
 void ROSLogHandler::log(const std::string& file,
                         const int line,
@@ -66,7 +65,7 @@ void ROSLogHandler::log(const std::string& file,
 
 void setupROSLogHandler()
 {
-  if (!g_handler_set)
+  if (g_log_handler != nullptr)
   {
     Logger::setLogLevel(LogLevel::DEBUG);
     Logger::setLogHandler(std::move(g_log_handler));
