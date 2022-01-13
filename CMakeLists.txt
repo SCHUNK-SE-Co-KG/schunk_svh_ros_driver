@@ -22,7 +22,6 @@ find_package(catkin REQUIRED COMPONENTS
 )
 
 ## System dependencies are found with CMake's conventions
-find_package(icl_core)
 find_package(schunk_svh_library REQUIRED)
 find_package(Boost COMPONENTS thread REQUIRED)
 
@@ -85,8 +84,6 @@ catkin_package(
     sensor_msgs
     std_msgs
     urdf
-  DEPENDS
-    icl_core
 )
 
 ###########
@@ -110,14 +107,10 @@ install(DIRECTORY launch
 include_directories(
   include
   ${catkin_INCLUDE_DIRS}
-  ${icl_core_INCLUDE_DIRS}
   ${driver_svh_INCLUDE_DIRS}
 )
 
 # Additional compiler definitions
-add_definitions(
-  ${icl_core_DEFINITIONS}
-)
 
 # Declare a cpp executable
 add_executable(svh_controller
@@ -140,7 +133,6 @@ add_dependencies(svh_controller
 ## Specify libraries to link a library or executable target against
 target_link_libraries(svh_controller
   ${catkin_LIBRARIES}
-  ${icl_core_LIBRARIES}
   Schunk::svh-library
 )
 
@@ -148,7 +140,6 @@ target_link_libraries(svh_controller
 ## Specify libraries to link a library or executable target against
 target_link_libraries(svh_sin_test
   ${catkin_LIBRARIES}
-  ${icl_core_LIBRARIES}
   Schunk::svh-serial
 )
 
@@ -167,7 +158,6 @@ add_dependencies(svh_ros
 ## Specify libraries to link a library or executable target against
 target_link_libraries(svh_ros
   ${catkin_LIBRARIES}
-  ${icl_core_LIBRARIES}
   Schunk::svh-library
 )
 
@@ -216,7 +206,6 @@ add_dependencies(svh_dynamic_parameter_test
 ## Specify libraries to link a library or executable target against
 target_link_libraries(svh_dynamic_parameter_test
  ${catkin_LIBRARIES}
- ${icl_core_LIBRARIES}
  Schunk::svh-library
 )
 
