@@ -18,6 +18,7 @@
 #include "std_msgs/Int16MultiArray.h"
 
 #include <SVHRosControlNode.h>
+#include <ROSLogHandler.h>
 
 #include "DynamicParameterClass.h"
 
@@ -75,40 +76,7 @@ SVHRosControlNode::SVHRosControlNode()
   // Tell the user what we are using
   ROS_INFO("Name prefix for this Hand was set to :%s", m_name_prefix.c_str());
 
-  // Initialize the icl_library logging framework ( THIS NEEDS TO BE DONE BEFORE ANY LIB OBJECT IS
-  // CREATED)
-  //if (use_internal_logging)
-  //{
-    //// Fake an input to the logging call to tell it where to look for the logging config
-
-    //// Strdup to create non const chars as it is required by the initialize function.
-    //// not really beatiful but it works.
-    //char* argv[] = {strdup("Logging"), strdup("-c"), strdup(logging_config_file.c_str())};
-    //int argc     = 3; // number of elements above
-
-    //// In case the file is not present (event though the parameter is) the logging will just put out
-    //// a
-    //// warning so we dont need to check it further. However the log level will only be Info (out of
-    //// the available Error, Warning, Info, Debug, Trace)
-    //// in that case also the log files will be disregarded
-    //if (icl_core::logging::initialize(argc, argv))
-    //{
-      //ROS_INFO("Internal logging was activated, output will be written as configured in "
-               //"logging.xml (default to ~/.ros/log)");
-    //}
-    //else 
-    //{
-      //ROS_WARN("Internal logging was enabled but config file could not be read. Please make sure "
-               //"the provided path to the config file is correct.");
-    //}
-    //ROS_WARN("Waiting for logging to initialize...");
-    //ros::Duration(5.0).sleep();
-  //}
-  //else
-  //{
-    //icl_core::logging::initialize();
-  //}
-
+  driver_svh::setupROSLogHandler();
 
   for (size_t i = 0; i < 9; ++i)
   {

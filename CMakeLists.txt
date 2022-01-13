@@ -116,11 +116,13 @@ include_directories(
 add_executable(svh_controller
   src/DynamicParameterClass.cpp
   src/SVHNode.cpp
+  src/ROSLogHandler.cpp
 )
 
 # Simple test programs
 add_executable(svh_sin_test
   src/SVHSinTest.cpp
+  src/ROSLogHandler.cpp
 )
 
 # Add cmake target dependencies of the executable/library
@@ -148,6 +150,7 @@ add_library(svh_ros
   src/DynamicParameterClass.cpp
   src/SVHDiagnostics.cpp
   src/SVHWrapper.cpp
+  src/ROSLogHandler.cpp
 )
 add_dependencies(svh_ros
   ${PROJECT_NAME}_gencfg
@@ -176,6 +179,7 @@ target_link_libraries(svh_robot_hw
 
 add_executable(svh_ros_control_node
   src/svh_ros_control_node.cpp
+  src/ROSLogHandler.cpp
 )
 add_dependencies(svh_ros_control_node
   svh_ros
@@ -196,6 +200,7 @@ target_link_libraries(svh_ros_control_node
 add_executable(svh_dynamic_parameter_test
   src/DynamicParameterClass.cpp
   src/DynamicParameterTest.cpp
+  src/ROSLogHandler.cpp
 )
 
 add_dependencies(svh_dynamic_parameter_test

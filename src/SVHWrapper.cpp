@@ -14,6 +14,7 @@
 
 #include "DynamicParameterClass.h"
 #include "SVHWrapper.h"
+#include "ROSLogHandler.h"
 
 
 #include <std_msgs/MultiArrayDimension.h>
@@ -55,7 +56,7 @@ SVHWrapper::SVHWrapper(const ros::NodeHandle& nh)
     ROS_INFO("Forced Handversion %d.%d", m_firmware_major_version, m_firmware_minor_version);
 
 
-  initLogging(use_internal_logging, logging_config_file);
+  driver_svh::setupROSLogHandler();
 
 
   for (size_t i = 0; i < 9; ++i)
@@ -121,45 +122,6 @@ SVHWrapper::SVHWrapper(const ros::NodeHandle& nh)
 void SVHWrapper::setRosControlEnable(bool enable)
 {
   m_channels_enabled = enable;
-}
-
-
-void SVHWrapper::initLogging(const bool use_internal_logging,
-                             const std::string& logging_config_file)
-{
-  // Initialize the icl_library logging framework ( THIS NEEDS TO BE DONE BEFORE ANY LIB OBJECT IS
-  // CREATED)
-  //if (use_internal_logging)
-  //{
-    //// Fake an input to the logging call to tell it where to look for the logging config
-
-    //// Strdup to create non const chars as it is required by the initialize function.
-    //// not really beatiful but it works.
-    //char* argv[] = {strdup("Logging"), strdup("-c"), strdup(logging_config_file.c_str())};
-    //int argc     = 3; // number of elements above
-
-    //// TODO: Setup logging correctly
-    ////// In case the file is not present (event though the parameter is) the logging will just put out
-    ////// a warning so we dont need to check it further. However the log level will only be Info
-    ////// (out of the available Error, Warning, Info, Debug, Trace)
-    ////// in that case also the log files will be disregarded
-    ////if (icl_core::logging::initialize(argc, argv))
-    ////{
-      ////ROS_INFO("Internal logging was activated, output will be written as configured in "
-               ////"logging.xml (default to ~/.ros/log)");
-    ////}
-    ////else
-    ////{
-      ////ROS_WARN("Internal logging was enabled but config file could not be read. Please make sure "
-               ////"the provided path to the config file is correct.");
-    ////}
-    ////ROS_WARN("Waiting for logging to initialize...");
-    //ros::Duration(5.0).sleep();
-  //}
-  //else
-  //{
-    //icl_core::logging::initialize();
-  //}
 }
 
 void SVHWrapper::initControllerParameters(const uint16_t firmware_major_version,

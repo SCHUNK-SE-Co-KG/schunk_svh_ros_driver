@@ -44,15 +44,6 @@ public:
   bool channelsEnabled() { return m_channels_enabled; };
 
 private:
-    /**
-     * @brief Initialize the icl_logging framework
-     *
-     * @param use_internal_logging If set to true all icl_logging will go to \p logging_config_file
-     * @param logging_config_file Filename of all logging from icl_logging
-     */
-  void initLogging(const bool use_internal_logging,
-                   const std::string& logging_config_file);
-
   void initControllerParameters(const uint16_t manual_major_version,
                                 const uint16_t manual_minor_version
                                );
