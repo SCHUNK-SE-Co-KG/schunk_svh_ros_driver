@@ -15,6 +15,8 @@
 
 #include <string>
 
+#include <ros/ros.h>
+
 #include <schunk_svh_library/LogHandler.h>
 #include <schunk_svh_library/LogLevel.h>
 
@@ -32,6 +34,7 @@ public:
                    const std::string& msg) override;
 
 private:
+  static ::ros::console::Level levelSVH2ROS(const LogLevel level);
 };
 
 void setupROSLogHandler();

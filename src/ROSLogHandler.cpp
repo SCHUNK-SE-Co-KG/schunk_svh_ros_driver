@@ -15,7 +15,6 @@
 #include <memory>
 #include <regex>
 
-#include <ros/ros.h>
 
 #include <schunk_svh_library/LogLevel.h>
 #include <schunk_svh_library/Logger.h>
@@ -32,23 +31,36 @@ void ROSLogHandler::log(const std::string& file,
                         LogLevel level,
                         const std::string& msg)
 {
+  ROSCONSOLE_DEFINE_LOCATION(true, levelSVH2ROS(level), std::string(ROSCONSOLE_NAME_PREFIX) + name);
+  if (ROS_UNLIKELY(__rosconsole_define_location__enabled))
+  {
+    ros::console::print(NULL,
+                        __rosconsole_define_location__loc.logger_,
+                        levelSVH2ROS(level),
+                        file.c_str(),
+                        line,
+                        "",
+                        "%s",
+                        msg.c_str());
+  }
+}
+
+::ros::console::Level ROSLogHandler::levelSVH2ROS(const LogLevel level)
+{
   switch (level)
   {
     case LogLevel::DEBUG:
-      ROS_DEBUG_STREAM_NAMED(name, msg);
-      break;
+      return ::ros::console::levels::Debug;
     case LogLevel::INFO:
-      ROS_INFO_STREAM_NAMED(name, msg);
-      break;
+      return ::ros::console::levels::Info;
     case LogLevel::WARN:
-      ROS_WARN_STREAM_NAMED(name, msg);
-      break;
+      return ::ros::console::levels::Warn;
     case LogLevel::ERROR:
-      ROS_ERROR_STREAM_NAMED(name, msg);
-      break;
+      return ::ros::console::levels::Error;
     case LogLevel::FATAL:
-      ROS_FATAL_STREAM_NAMED(name, msg);
-      break;
+      return ::ros::console::levels::Fatal;
+    default:
+      throw std::invalid_argument("Illegal logging level");
   }
 }
 
