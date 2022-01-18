@@ -22,7 +22,6 @@ find_package(catkin REQUIRED COMPONENTS
 )
 
 ## System dependencies are found with CMake's conventions
-find_package(icl_core)
 find_package(schunk_svh_library REQUIRED)
 find_package(Boost COMPONENTS thread REQUIRED)
 
@@ -85,8 +84,6 @@ catkin_package(
     sensor_msgs
     std_msgs
     urdf
-  DEPENDS
-    icl_core
 )
 
 ###########
@@ -110,24 +107,22 @@ install(DIRECTORY launch
 include_directories(
   include
   ${catkin_INCLUDE_DIRS}
-  ${icl_core_INCLUDE_DIRS}
   ${driver_svh_INCLUDE_DIRS}
 )
 
 # Additional compiler definitions
-add_definitions(
-  ${icl_core_DEFINITIONS}
-)
 
 # Declare a cpp executable
 add_executable(svh_controller
   src/DynamicParameterClass.cpp
   src/SVHNode.cpp
+  src/ROSLogHandler.cpp
 )
 
 # Simple test programs
 add_executable(svh_sin_test
   src/SVHSinTest.cpp
+  src/ROSLogHandler.cpp
 )
 
 # Add cmake target dependencies of the executable/library
@@ -140,7 +135,6 @@ add_dependencies(svh_controller
 ## Specify libraries to link a library or executable target against
 target_link_libraries(svh_controller
   ${catkin_LIBRARIES}
-  ${icl_core_LIBRARIES}
   Schunk::svh-library
 )
 
@@ -148,7 +142,6 @@ target_link_libraries(svh_controller
 ## Specify libraries to link a library or executable target against
 target_link_libraries(svh_sin_test
   ${catkin_LIBRARIES}
-  ${icl_core_LIBRARIES}
   Schunk::svh-serial
 )
 
@@ -157,6 +150,7 @@ add_library(svh_ros
   src/DynamicParameterClass.cpp
   src/SVHDiagnostics.cpp
   src/SVHWrapper.cpp
+  src/ROSLogHandler.cpp
 )
 add_dependencies(svh_ros
   ${PROJECT_NAME}_gencfg
@@ -167,7 +161,6 @@ add_dependencies(svh_ros
 ## Specify libraries to link a library or executable target against
 target_link_libraries(svh_ros
   ${catkin_LIBRARIES}
-  ${icl_core_LIBRARIES}
   Schunk::svh-library
 )
 
@@ -186,6 +179,7 @@ target_link_libraries(svh_robot_hw
 
 add_executable(svh_ros_control_node
   src/svh_ros_control_node.cpp
+  src/ROSLogHandler.cpp
 )
 add_dependencies(svh_ros_control_node
   svh_ros
@@ -206,6 +200,7 @@ target_link_libraries(svh_ros_control_node
 add_executable(svh_dynamic_parameter_test
   src/DynamicParameterClass.cpp
   src/DynamicParameterTest.cpp
+  src/ROSLogHandler.cpp
 )
 
 add_dependencies(svh_dynamic_parameter_test
@@ -216,7 +211,6 @@ add_dependencies(svh_dynamic_parameter_test
 ## Specify libraries to link a library or executable target against
 target_link_libraries(svh_dynamic_parameter_test
  ${catkin_LIBRARIES}
- ${icl_core_LIBRARIES}
  Schunk::svh-library
 )
 

@@ -14,9 +14,6 @@
 //----------------------------------------------------------------------
 #include "SVHDiagnostics.h"
 
-// Custom includes
-#include <icl_core/EnumHelper.h>
-
 
 SVHDiagnostics::SVHDiagnostics(
   const ros::NodeHandle& nh,

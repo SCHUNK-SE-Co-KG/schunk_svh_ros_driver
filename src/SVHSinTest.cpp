@@ -25,8 +25,6 @@
 #include <std_msgs/Empty.h>
 #include <std_msgs/Int8.h>
 
-#include <icl_core/EnumHelper.h>
-
 #include <stdlib.h> /* srand, rand */
 #include <time.h>   /* time */
 
