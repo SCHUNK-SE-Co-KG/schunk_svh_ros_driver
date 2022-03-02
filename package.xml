@@ -11,6 +11,10 @@ schematypens="http://www.w3.org/2001/XMLSchema"?>
 
         <buildtool_depend>ament_cmake</buildtool_depend>
 
+        <depend>hardware_interface</depend>
+        <depend>pluginlib</depend>
+        <depend>rclcpp</depend>
+
         <test_depend>ament_lint_auto</test_depend>
         <test_depend>ament_lint_common</test_depend>
 

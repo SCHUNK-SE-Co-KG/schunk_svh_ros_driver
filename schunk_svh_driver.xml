@@ -1,0 +1,9 @@
+<library path="schunk_svh_driver">
+  <class name="schunk_svh_driver/SystemInterface"
+         type="schunk_svh_driver::SystemInterface"
+         base_class_type="hardware_interface::SystemInterface">
+    <description>
+      A ROS2-control SystemInterface for the Schunk SVH
+    </description>
+  </class>
+</library>
