@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<robot name="schunk_svh" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+        <xacro:include filename="$(find schunk_svh_description)/urdf/svh.urdf.xacro" />
+
+        <link name="base_link" />
+
+        <xacro:svh parent="base_link" name="Right_Hand" side="1"> <!-- left hand side=-1 -->
+                <origin xyz="0 0 0"  rpy= "0 0 0" />
+        </xacro:svh>
+
+        <!-- Individual joint configuration -->
+        <xacro:macro name="joint_ros2_control" params="name">
+                <joint name="${name}">
+                        <command_interface name="position">
+                                <param name="min">-1</param>
+                                <param name="max">1</param>
+                        </command_interface>
+                        <state_interface name="position"/>
+                        <state_interface name="velocity"/>
+                        <state_interface name="current"/>
+                </joint>
+        </xacro:macro>
+
+
+        <!-- ROS2 control interfaces -->
+        <ros2_control name="schunk_svh_driver" type="system">
+                <xacro:joint_ros2_control name="Right_Hand_Thumb_Opposition"/>
+                <xacro:joint_ros2_control name="Right_Hand_Thumb_Flexion"/>
+                <xacro:joint_ros2_control name="Right_Hand_Index_Finger_Proximal"/>
+                <xacro:joint_ros2_control name="Right_Hand_Index_Finger_Distal"/>
+                <xacro:joint_ros2_control name="Right_Hand_Middle_Finger_Proximal"/>
+                <xacro:joint_ros2_control name="Right_Hand_Middle_Finger_Distal"/>
+                <xacro:joint_ros2_control name="Right_Hand_Finger_Spread"/>
+                <xacro:joint_ros2_control name="Right_Hand_Pinky"/>
+                <xacro:joint_ros2_control name="Right_Hand_Ring_Finger"/>
+
+                <hardware>
+                        <plugin>schunk_svh_driver/SystemInterface</plugin>
+                </hardware>
+        </ros2_control>
+</robot>

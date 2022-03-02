@@ -49,10 +49,10 @@ install(
   DESTINATION include
 )
 
-#install(
-#  DIRECTORY cfg etc launch
-#  DESTINATION share/${PROJECT_NAME}
-#)
+install(
+  DIRECTORY cfg urdf launch
+  DESTINATION share/${PROJECT_NAME}
+)
 
 install(
   TARGETS ${PROJECT_NAME}
