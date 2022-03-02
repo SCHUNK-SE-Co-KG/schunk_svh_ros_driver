@@ -122,7 +122,7 @@
     <link name="${name}_e">
     </link>
 
-    <!-- LENGTH NOT FOUND IN DATASHEET! GUESSED, BUT POSITION CALCULATED: E4 = D-G-F!!! -->
+    <!-- LENGTH NOT FOUND IN DATASHEET! GUESSED, BUT POSITION CALCULATED WITH E4 = D-G-F!!! -->
     <link name="${name}_e4">
       <!-- <visual> -->
       <!-- 	<origin rpy="0 0 0" xyz="${side*(0.02825)} 0 0.043" /> -->
@@ -134,7 +134,7 @@
       <xacro:default_inertial mass="0.01"/>
     </link>
 
-    <!-- LENGTH NOT FOUND IN DATASHEET! GUESSED, BUT POSITION CALCULATED: E5 = D-G!!! -->
+    <!-- LENGTH NOT FOUND IN DATASHEET! GUESSED, BUT POSITION CALCULATED WITH E5 = D-G!!! -->
     <link name="${name}_e5">
       <!-- <visual> -->
       <!-- 	<origin rpy="0 0 0" xyz="${side*(0.00675)} 0 0.04775" /> -->
