@@ -20,6 +20,7 @@
 #include "hardware_interface/hardware_info.hpp"
 #include "hardware_interface/system_interface.hpp"
 #include "rclcpp/macros.hpp"
+#include "rclcpp/rclcpp.hpp"
 
 namespace schunk_svh_driver
 {
@@ -62,6 +63,9 @@ public:
   return_type write() override;
 
 private:
+  // Parameter handling for the hardware
+  std::unique_ptr<rclcpp::Node> m_node;
+
   // Command buffers for the controllers
   std::vector<double> m_position_commands;
 

@@ -23,6 +23,7 @@
 
 #include "hardware_interface/types/hardware_interface_type_values.hpp"
 #include "rclcpp/rclcpp.hpp"
+#include <rclcpp/node.hpp>
 
 namespace schunk_svh_driver
 {
@@ -73,6 +74,10 @@ SystemInterface::return_type SystemInterface::configure(
       return return_type::ERROR;
     }
   }
+
+  // Initialize ROS2 node
+  m_node = std::make_unique<rclcpp::Node>(
+    "schunk_svh_driver", rclcpp::NodeOptions().start_parameter_services(false).use_global_arguments(false));
 
   this->status_ = hardware_interface::status::CONFIGURED;
   return return_type::OK;
