@@ -65,6 +65,12 @@ public:
   return_type write() override;
 
 private:
+
+  // Initialization of the SVH in a separate thread to meet ROS2-control's
+  // timing requirements.
+  void init();
+  std::thread m_init_thread;
+
   // Parameter handling for the hardware
   std::unique_ptr<rclcpp::Node> m_node;
 
