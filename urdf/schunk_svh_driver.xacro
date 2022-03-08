@@ -10,7 +10,7 @@
         </xacro:svh>
 
         <!-- Individual joint configuration -->
-        <xacro:macro name="joint_ros2_control" params="name">
+        <xacro:macro name="joint_ros2_control" params="name **config">
                 <joint name="${name}">
                         <command_interface name="position">
                                 <param name="min">-1</param>
@@ -19,21 +19,76 @@
                         <state_interface name="position"/>
                         <state_interface name="velocity"/>
                         <state_interface name="current"/>
+                        <xacro:insert_block name="config" />
                 </joint>
         </xacro:macro>
 
 
         <!-- ROS2 control interfaces -->
         <ros2_control name="schunk_svh_driver" type="system">
-                <xacro:joint_ros2_control name="Right_Hand_Thumb_Opposition"/>
-                <xacro:joint_ros2_control name="Right_Hand_Thumb_Flexion"/>
-                <xacro:joint_ros2_control name="Right_Hand_Index_Finger_Proximal"/>
-                <xacro:joint_ros2_control name="Right_Hand_Index_Finger_Distal"/>
-                <xacro:joint_ros2_control name="Right_Hand_Middle_Finger_Proximal"/>
-                <xacro:joint_ros2_control name="Right_Hand_Middle_Finger_Distal"/>
-                <xacro:joint_ros2_control name="Right_Hand_Finger_Spread"/>
-                <xacro:joint_ros2_control name="Right_Hand_Pinky"/>
-                <xacro:joint_ros2_control name="Right_Hand_Ring_Finger"/>
+                <xacro:joint_ros2_control name="Right_Hand_Thumb_Opposition">
+                        <config>
+                                <param name="position_controller">-1.0e+6, 1.0e+6,  50.0e+3, 1.00, 1.0e-3, -2000.0, 2000.0, 0.6, 0.1, 2000.0</param>
+                                <param name="current_controller">-605.0, 605.0, 0.405, 10.0e-6, -0.125 , 0.125, 0, 1984, -248.0, 248.0</param>
+                                <param name="home_settings">+1, -135.0e+3,  -5.0e+3, -15.0e+3, 0.99, 0.75</param>
+                        </config>
+                </xacro:joint_ros2_control>
+                <xacro:joint_ros2_control name="Right_Hand_Thumb_Flexion">
+                        <config>
+                                <param name="position_controller">-1.0e+6, 1.0e+6,  65.0e+3, 1.00, 1.0e-3, -2000.0, 2000.0, 0.6, 0.1, 2000.0</param>
+                                <param name="current_controller">-605.0, 605.0, 0.405, 10.0e-6, -0.125, 0.125, 0.0 , 1984, -248.0, 248.0</param>
+                                <param name="home_settings">+1, -105.0e+3,  -5.0e+3, -15.0e+3, 0.97, 0.75</param>
+                        </config>
+                </xacro:joint_ros2_control>
+                <xacro:joint_ros2_control name="Right_Hand_Index_Finger_Proximal">
+                        <config>
+                                <param name="position_controller">-1.0e+6, 1.0e+6,  40.0e+3, 1.00, 1.0e-3, -2000.0, 2000.0, 0.2, 0.17, 1600</param>
+                                <param name="current_controller">-350.0, 350.0, 0.405, 10.0e-6, -0.125 , 0.125 , 0, 1984, -248.0, 248.0</param>
+                                <param name="home_settings">-1,  2.0e+3,  42.0e+3,   -8.0e+3, 0.8, 0.75</param>
+                        </config>
+                </xacro:joint_ros2_control>
+                <xacro:joint_ros2_control name="Right_Hand_Index_Finger_Distal">
+                        <config>
+                                <param name="position_controller">-1.0e+6, 1.0e+6,  25.0e+3, 1.00, 1.0e-3, -1000.0, 1000.0, 0.4, 0.36, 2400</param>
+                                <param name="current_controller">-360.0, 360.0, 0.405, 10.0e-6, -0.125, 0.125, 0, 1984, -248.0, 248.0</param>
+                                <param name="home_settings">+1,  -47.0e+3,  -2.0e+3,  -8.0e+3, 1.33, 0.75</param>
+                        </config>
+                </xacro:joint_ros2_control>
+                <xacro:joint_ros2_control name="Right_Hand_Middle_Finger_Proximal">
+                        <config>
+                                <param name="position_controller">-1.0e+6, 1.0e+6,  40.0e+3, 1.00, 1.0e-3, -2000.0, 2000.0, 0.2, 0.17, 1600</param>
+                                <param name="current_controller">-350.0, 350.0, 0.405, 10.0e-6, -0.125 , 0.125 , 0, 1984, -248.0, 248.0</param>
+                                <param name="home_settings">-1,  2.0e+3,  42.0e+3,   -8.0e+3, 0.8, 0.75</param>
+                        </config>
+                </xacro:joint_ros2_control>
+                <xacro:joint_ros2_control name="Right_Hand_Middle_Finger_Distal">
+                        <config>
+                                <param name="position_controller">-1.0e+6, 1.0e+6,  25.0e+3, 1.00, 1.0e-3, -1000.0, 1000.0, 0.4, 0.36, 2400</param>
+                                <param name="current_controller">-360.0, 360.0, 0.405, 10.0e-6, -0.125, 0.125, 0, 1984, -248.0, 248.0</param>
+                                <param name="home_settings">+1,  -47.0e+3,  -2.0e+3,  -8.0e+3, 1.33, 0.75</param>
+                        </config>
+                </xacro:joint_ros2_control>
+                <xacro:joint_ros2_control name="Right_Hand_Finger_Spread">
+                        <config>
+                                <param name="position_controller">-1.0e+6, 1.0e+6,  25.0e+3, 1.00, 1.0e-3, -1000.0, 1000.0, 1.0, 0.36, 4000</param>
+                                <param name="current_controller">-500.0, 500.0, 0.405, 10.0e-6, -0.125 , 0.125 , 0, 1984, -248.0, 248.0</param>
+                                <param name="home_settings">+1,  -52.0e+3,  -2.0e+3,  -25.0e+3,0.58, 0.4</param>
+                        </config>
+                </xacro:joint_ros2_control>
+                <xacro:joint_ros2_control name="Right_Hand_Pinky">
+                        <config>
+                                <param name="position_controller">-1.0e+6, 1.0e+6,  20.0e+3, 1.00, 1.0e-3, -1000.0, 1000.0, 0.6, 0.0, 2500</param>
+                                <param name="current_controller">-360.0, 360.0, 0.405, 10.0e-6, -0.125, 0.125, 0, 1984, -248.0, 248.0</param>
+                                <param name="home_settings">+1,  -47.0e+3,  -2.0e+3,  -8.0e+3, 0.98, 0.75</param>
+                        </config>
+                </xacro:joint_ros2_control>
+                <xacro:joint_ros2_control name="Right_Hand_Ring_Finger">
+                        <config>
+                                <param name="position_controller">-1.0e+6, 1.0e+6,  20.0e+3, 1.00, 1.0e-3, -1000.0, 1000.0, 0.6, 0.0, 2500</param>
+                                <param name="current_controller">-360.0, 360.0, 0.405, 10.0e-6, -0.125, 0.125, 0, 1984, -248.0, 248.0</param>
+                                <param name="home_settings">+1,  -47.0e+3,  -2.0e+3,  -8.0e+3, 0.98, 0.75</param>
+                        </config>
+                </xacro:joint_ros2_control>
 
                 <hardware>
                         <plugin>schunk_svh_driver/SystemInterface</plugin>
