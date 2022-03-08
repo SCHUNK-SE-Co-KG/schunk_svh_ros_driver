@@ -79,6 +79,8 @@ SystemInterface::return_type SystemInterface::configure(
   m_node = std::make_unique<rclcpp::Node>(
     "schunk_svh_driver", rclcpp::NodeOptions().start_parameter_services(false).use_global_arguments(false));
 
+  m_svh = std::make_unique<driver_svh::SVHFingerManager>();
+
   this->status_ = hardware_interface::status::CONFIGURED;
   return return_type::OK;
 }
@@ -119,6 +121,19 @@ SystemInterface::return_type SystemInterface::prepare_command_mode_switch(
 
 SystemInterface::return_type SystemInterface::start()
 {
+  auto firmware = m_svh->getFirmwareInfo("/dev/ttyUSB0");
+  if (!m_svh->connect("/dev/ttyUSB0"))
+  {
+    RCLCPP_ERROR(rclcpp::get_logger("SystemInterface"), "No connection to the Schunk SVH");
+    return return_type::ERROR;
+  }
+
+  if (!m_svh->resetChannel(driver_svh::eSVH_ALL))
+  {
+    RCLCPP_ERROR(rclcpp::get_logger("SystemInterface"), "Could not reset the Schunk SVH");
+    return return_type::ERROR;
+  }
+
   this->status_ = hardware_interface::status::STARTED;
   RCLCPP_INFO(rclcpp::get_logger("SystemInterface"), "Started SVH driver");
   return return_type::OK;
@@ -126,12 +141,28 @@ SystemInterface::return_type SystemInterface::start()
 
 SystemInterface::return_type SystemInterface::stop()
 {
+  m_svh->disconnect();
+
   this->status_ = hardware_interface::status::STOPPED;
   RCLCPP_INFO(rclcpp::get_logger("SystemInterface"), "Stopped SVH driver");
   return return_type::OK;
 }
 
-SystemInterface::return_type SystemInterface::read() { return return_type::OK; }
+SystemInterface::return_type SystemInterface::read()
+{
+  if (m_svh->isConnected())
+  {
+    for (size_t channel = 0; channel < driver_svh::eSVH_DIMENSION; ++channel)
+    {
+      if (m_svh->isHomed(static_cast<driver_svh::SVHChannel>(channel)))  // resetted and ready to use
+      {
+        m_svh->getPosition(static_cast<driver_svh::SVHChannel>(channel), m_positions[channel]);
+        m_svh->getCurrent(static_cast<driver_svh::SVHChannel>(channel), m_currents[channel]);
+      }
+    }
+  }
+  return return_type::OK;
+}
 
 SystemInterface::return_type SystemInterface::write() { return return_type::OK; }
 

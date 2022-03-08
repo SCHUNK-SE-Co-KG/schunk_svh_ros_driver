@@ -14,6 +14,7 @@ schematypens="http://www.w3.org/2001/XMLSchema"?>
         <depend>hardware_interface</depend>
         <depend>pluginlib</depend>
         <depend>rclcpp</depend>
+        <depend>schunk_svh_library</depend>
 
         <test_depend>ament_lint_auto</test_depend>
         <test_depend>ament_lint_common</test_depend>

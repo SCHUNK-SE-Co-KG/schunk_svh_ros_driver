@@ -13,6 +13,7 @@
 #pragma once
 
 #include <map>
+#include <memory>
 #include <thread>
 
 #include "hardware_interface/base_interface.hpp"
@@ -21,6 +22,7 @@
 #include "hardware_interface/system_interface.hpp"
 #include "rclcpp/macros.hpp"
 #include "rclcpp/rclcpp.hpp"
+#include "schunk_svh_library/control/SVHFingerManager.h"
 
 namespace schunk_svh_driver
 {
@@ -65,6 +67,9 @@ public:
 private:
   // Parameter handling for the hardware
   std::unique_ptr<rclcpp::Node> m_node;
+
+  // Handle to the SVH driver library
+  std::unique_ptr<driver_svh::SVHFingerManager> m_svh;
 
   // Command buffers for the controllers
   std::vector<double> m_position_commands;
