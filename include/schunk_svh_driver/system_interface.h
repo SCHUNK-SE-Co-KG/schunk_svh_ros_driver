@@ -71,9 +71,6 @@ private:
   void init();
   std::thread m_init_thread;
 
-  // Parameter handling for the hardware
-  std::unique_ptr<rclcpp::Node> m_node;
-
   // Handle to the SVH driver library
   std::unique_ptr<driver_svh::SVHFingerManager> m_svh;
 

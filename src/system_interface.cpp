@@ -75,10 +75,6 @@ SystemInterface::return_type SystemInterface::configure(
     }
   }
 
-  // Initialize ROS2 node
-  m_node = std::make_unique<rclcpp::Node>(
-    "schunk_svh_driver", rclcpp::NodeOptions().start_parameter_services(false).use_global_arguments(false));
-
   // Initialize SVH in parallel.
   // Detach the thread to die cleanly with the controller manager node.
   m_svh = std::make_unique<driver_svh::SVHFingerManager>();
