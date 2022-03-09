@@ -23,7 +23,9 @@
 
 #include "hardware_interface/types/hardware_interface_type_values.hpp"
 #include "rclcpp/rclcpp.hpp"
-#include <rclcpp/node.hpp>
+#include "schunk_svh_library/control/SVHCurrentSettings.h"
+#include "schunk_svh_library/control/SVHPositionSettings.h"
+#include "schunk_svh_library/control/SVHHomeSettings.h"
 
 namespace schunk_svh_driver
 {
@@ -161,6 +163,39 @@ void SystemInterface::init()
   {
     RCLCPP_ERROR(rclcpp::get_logger("SystemInterface"), "No connection to the Schunk SVH");
     return;
+  }
+
+  // Convert std::string("1.0 2.0") to std::vector<float>{1.0, 2.0}
+  auto make_floats = [](const std::string& s)
+  {
+    std::vector<float> vec;
+    std::stringstream stream(s);
+    std::string element;
+
+    while(std::getline(stream, element, ' '))
+    {
+      vec.emplace_back(std::stof(element));
+    }
+    return vec;
+  };
+
+  for (size_t i = 0; i < driver_svh::eSVH_DIMENSION; ++i)
+  {
+    auto current_settings = info_.joints[i].parameters["current_controller"];
+    auto position_settings = info_.joints[i].parameters["position_controller"];
+    auto home_settings = info_.joints[i].parameters["home_settings"];
+
+    m_svh->setCurrentSettings(
+      static_cast<driver_svh::SVHChannel>(i),
+      driver_svh::SVHCurrentSettings(make_floats(current_settings)));
+
+    m_svh->setPositionSettings(
+      static_cast<driver_svh::SVHChannel>(i),
+      driver_svh::SVHPositionSettings(make_floats(position_settings)));
+
+    m_svh->setHomeSettings(
+      static_cast<driver_svh::SVHChannel>(i),
+      driver_svh::SVHHomeSettings(make_floats(home_settings)));
   }
 
   if (!m_svh->resetChannel(driver_svh::eSVH_ALL))
