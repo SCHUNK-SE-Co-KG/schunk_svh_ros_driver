@@ -69,6 +69,7 @@ private:
   // Initialization of the SVH in a separate thread to meet ROS2-control's
   // timing requirements.
   void init();
+  std::atomic<bool> m_initialized{false};
   std::thread m_init_thread;
 
   // Handle to the SVH driver library

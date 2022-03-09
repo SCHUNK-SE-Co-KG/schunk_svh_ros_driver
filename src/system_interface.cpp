@@ -41,7 +41,7 @@ SystemInterface::return_type SystemInterface::configure(
   m_velocities.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
   m_efforts.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
   m_currents.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
-  m_position_commands.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
+  m_position_commands.resize(info_.joints.size(), 0.0);
 
   for (const hardware_interface::ComponentInfo & joint : info_.joints) {
     if (joint.command_interfaces.size() != 1) {
@@ -158,10 +158,18 @@ SystemInterface::return_type SystemInterface::read()
       }
     }
   }
+
   return return_type::OK;
 }
 
-SystemInterface::return_type SystemInterface::write() { return return_type::OK; }
+SystemInterface::return_type SystemInterface::write()
+{
+  if (m_initialized)
+  {
+    m_svh->setAllTargetPositions(m_position_commands);  // Does all plausibility checks
+  }
+  return return_type::OK;
+}
 
 
 void SystemInterface::init()
@@ -206,9 +214,10 @@ void SystemInterface::init()
       driver_svh::SVHHomeSettings(make_floats(home_settings)));
   }
 
-  if (!m_svh->resetChannel(driver_svh::eSVH_ALL))
+  m_initialized = m_svh->resetChannel(driver_svh::eSVH_ALL);
+  if (!m_initialized)
   {
-    RCLCPP_ERROR(rclcpp::get_logger("SystemInterface"), "Could not reset the Schunk SVH");
+    RCLCPP_ERROR(rclcpp::get_logger("SystemInterface"), "Could not initialize the Schunk SVH");
     return;
   }
 }
