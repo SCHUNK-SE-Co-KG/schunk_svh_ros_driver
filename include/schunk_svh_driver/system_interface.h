@@ -80,6 +80,7 @@ private:
   // State buffers for the controllers
   std::vector<double> m_positions;
   std::vector<double> m_velocities;
+  std::vector<double> m_efforts;
   std::vector<double> m_currents;
 };
 

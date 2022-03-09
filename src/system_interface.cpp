@@ -39,6 +39,7 @@ SystemInterface::return_type SystemInterface::configure(
 
   m_positions.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
   m_velocities.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
+  m_efforts.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
   m_currents.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
   m_position_commands.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
 
@@ -58,21 +59,22 @@ SystemInterface::return_type SystemInterface::configure(
       return return_type::ERROR;
     }
 
-    if (joint.state_interfaces.size() != 3) {
+    if (joint.state_interfaces.size() != 4) {
       RCLCPP_ERROR(
-        rclcpp::get_logger("SystemInterface"), "Joint '%s' uses 3 state interfaces.",
+        rclcpp::get_logger("SystemInterface"), "Joint '%s' uses 4 state interfaces.",
         joint.name.c_str());
       return return_type::ERROR;
     }
 
     if (!(joint.state_interfaces[0].name == hardware_interface::HW_IF_POSITION ||
           joint.state_interfaces[1].name == hardware_interface::HW_IF_VELOCITY ||
-          joint.state_interfaces[2].name == schunk_svh_driver::HW_IF_CURRENT)) {
+          joint.state_interfaces[2].name == hardware_interface::HW_IF_EFFORT ||
+          joint.state_interfaces[3].name == schunk_svh_driver::HW_IF_CURRENT)) {
       RCLCPP_ERROR(
         rclcpp::get_logger("SystemInterface"),
-        "Joint '%s' needs the following state interfaces in this order: %s, %s, and %s.",
+        "Joint '%s' needs the following state interfaces in this order: %s, %s, %s, and %s.",
         joint.name.c_str(), hardware_interface::HW_IF_POSITION, hardware_interface::HW_IF_VELOCITY,
-        schunk_svh_driver::HW_IF_CURRENT);
+        hardware_interface::HW_IF_EFFORT, schunk_svh_driver::HW_IF_CURRENT);
       return return_type::ERROR;
     }
   }
@@ -95,6 +97,8 @@ std::vector<hardware_interface::StateInterface> SystemInterface::export_state_in
       info_.joints[i].name, hardware_interface::HW_IF_POSITION, &m_positions[i]));
     state_interfaces.emplace_back(hardware_interface::StateInterface(
       info_.joints[i].name, hardware_interface::HW_IF_VELOCITY, &m_velocities[i]));
+    state_interfaces.emplace_back(hardware_interface::StateInterface(
+      info_.joints[i].name, hardware_interface::HW_IF_EFFORT, &m_efforts[i]));
     state_interfaces.emplace_back(hardware_interface::StateInterface(
       info_.joints[i].name, schunk_svh_driver::HW_IF_CURRENT, &m_currents[i]));
   }
@@ -147,6 +151,10 @@ SystemInterface::return_type SystemInterface::read()
       {
         m_svh->getPosition(static_cast<driver_svh::SVHChannel>(channel), m_positions[channel]);
         m_svh->getCurrent(static_cast<driver_svh::SVHChannel>(channel), m_currents[channel]);
+
+        // Joint efforts are an estimation based on motor currents
+        m_svh->getCurrent(static_cast<driver_svh::SVHChannel>(channel), m_efforts[channel]);
+        m_efforts[channel] = m_svh->convertmAtoN(static_cast<driver_svh::SVHChannel>(channel), m_efforts[channel]);
       }
     }
   }

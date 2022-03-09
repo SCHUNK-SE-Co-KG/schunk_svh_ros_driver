@@ -18,6 +18,7 @@
                         </command_interface>
                         <state_interface name="position"/>
                         <state_interface name="velocity"/>
+                        <state_interface name="effort"/>
                         <state_interface name="current"/>
                         <xacro:insert_block name="config" />
                 </joint>
