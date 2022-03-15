@@ -12,10 +12,7 @@
         <!-- Individual joint configuration -->
         <xacro:macro name="joint_ros2_control" params="name **config">
                 <joint name="${name}">
-                        <command_interface name="position">
-                                <param name="min">-1</param>
-                                <param name="max">1</param>
-                        </command_interface>
+                        <command_interface name="position"/>
                         <state_interface name="position"/>
                         <state_interface name="velocity"/>
                         <state_interface name="effort"/>
