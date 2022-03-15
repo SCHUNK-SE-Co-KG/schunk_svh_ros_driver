@@ -174,12 +174,15 @@ SystemInterface::return_type SystemInterface::write()
 
 void SystemInterface::init()
 {
-  auto firmware = m_svh->getFirmwareInfo("/dev/ttyUSB0");
   if (!m_svh->connect("/dev/ttyUSB0"))
   {
     RCLCPP_ERROR(rclcpp::get_logger("SystemInterface"), "No connection to the Schunk SVH");
     return;
   }
+  auto firmware = m_svh->getFirmwareInfo("/dev/ttyUSB0");
+  auto version =
+    std::to_string(firmware.version_major) + "." + std::to_string(firmware.version_minor) + ".";
+  RCLCPP_INFO(rclcpp::get_logger("SystemInterface"), "The Schunk SVH is version: %s", version.c_str());
 
   // Convert std::string("1.0 2.0") to std::vector<float>{1.0, 2.0}
   auto make_floats = [](const std::string& s)
@@ -197,9 +200,32 @@ void SystemInterface::init()
 
   for (size_t i = 0; i < driver_svh::eSVH_DIMENSION; ++i)
   {
-    auto current_settings = info_.joints[i].parameters["current_controller"];
-    auto position_settings = info_.joints[i].parameters["position_controller"];
-    auto home_settings = info_.joints[i].parameters["home_settings"];
+    auto current_settings = info_.joints[i].parameters[version + "current_controller"];
+    auto position_settings = info_.joints[i].parameters[version + "position_controller"];
+    auto home_settings = info_.joints[i].parameters[version + "home_settings"];
+
+    // Use default values if the current version is not directly supported.
+    if (current_settings.empty())
+    {
+      current_settings = info_.joints[i].parameters["0.0.current_controller"];
+      RCLCPP_WARN(
+        rclcpp::get_logger("SystemInterface"),
+        "Channel %i parameters for motor currents not available. Using defaults.", i);
+    }
+    if (position_settings.empty())
+    {
+      position_settings = info_.joints[i].parameters["0.0.position_controller"];
+      RCLCPP_WARN(
+        rclcpp::get_logger("SystemInterface"),
+        "Channel %i parameters for position controllers not available. Using defaults.", i);
+    }
+    if (home_settings.empty())
+    {
+      home_settings = info_.joints[i].parameters["0.0.home_settings"];
+      RCLCPP_WARN(
+        rclcpp::get_logger("SystemInterface"),
+        "Channel %i parameters for home settings not available. Using defaults.", i);
+    }
 
     m_svh->setCurrentSettings(
       static_cast<driver_svh::SVHChannel>(i),
