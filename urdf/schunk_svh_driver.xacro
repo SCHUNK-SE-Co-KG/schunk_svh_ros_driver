@@ -74,6 +74,7 @@
 
                 <hardware>
                         <plugin>schunk_svh_driver/SystemInterface</plugin>
+                        <param name="device_file">$(arg device_file)</param>
                 </hardware>
         </ros2_control>
 </robot>

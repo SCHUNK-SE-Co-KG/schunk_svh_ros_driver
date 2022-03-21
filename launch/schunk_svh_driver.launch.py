@@ -10,7 +10,8 @@
 # -----------------------------------------------------------------------------
 
 from launch import LaunchDescription
-from launch.substitutions import Command, FindExecutable, PathJoinSubstitution
+from launch.substitutions import Command, FindExecutable, LaunchConfiguration, PathJoinSubstitution
+from launch.actions import DeclareLaunchArgument
 
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
@@ -19,6 +20,13 @@ from launch_ros.substitutions import FindPackageShare
 def generate_launch_description():
     # Declare arguments
     declared_arguments = []
+
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "device_file", default_value="/dev/ttyUSB0", description="Device file of the Schunk SVH serial interface."
+        )
+    )
+    device_file = LaunchConfiguration("device_file")
 
     # Build the URDF with command line xacro.
     # We also pass parameters for the system_interface here.
@@ -29,6 +37,9 @@ def generate_launch_description():
             PathJoinSubstitution(
                 [FindPackageShare("schunk_svh_driver"), "urdf", "schunk_svh_driver.xacro"]
             ),
+            " ",
+            "device_file:=",
+            device_file,
         ]
     )
     robot_description = {"robot_description": robot_description_content}

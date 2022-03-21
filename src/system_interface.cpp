@@ -37,6 +37,8 @@ SystemInterface::return_type SystemInterface::configure(
     return return_type::ERROR;
   }
 
+  m_device_file = info_.hardware_parameters["device_file"];
+
   m_positions.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
   m_velocities.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
   m_efforts.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
@@ -174,12 +176,12 @@ SystemInterface::return_type SystemInterface::write()
 
 void SystemInterface::init()
 {
-  if (!m_svh->connect("/dev/ttyUSB0"))
+  if (!m_svh->connect(m_device_file))
   {
-    RCLCPP_ERROR(rclcpp::get_logger("SystemInterface"), "No connection to the Schunk SVH");
+    RCLCPP_ERROR(rclcpp::get_logger("SystemInterface"), "No connection to the Schunk SVH under %s", m_device_file.c_str());
     return;
   }
-  auto firmware = m_svh->getFirmwareInfo("/dev/ttyUSB0");
+  auto firmware = m_svh->getFirmwareInfo(m_device_file);
   auto version =
     std::to_string(firmware.version_major) + "." + std::to_string(firmware.version_minor) + ".";
   RCLCPP_INFO(rclcpp::get_logger("SystemInterface"), "The Schunk SVH is version: %s", version.c_str());

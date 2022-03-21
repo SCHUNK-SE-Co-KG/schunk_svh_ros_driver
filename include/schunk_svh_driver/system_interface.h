@@ -83,6 +83,9 @@ private:
   std::vector<double> m_velocities;
   std::vector<double> m_efforts;
   std::vector<double> m_currents;
+
+  // Parameters
+  std::string m_device_file;
 };
 
 }  // namespace schunk_svh_driver
