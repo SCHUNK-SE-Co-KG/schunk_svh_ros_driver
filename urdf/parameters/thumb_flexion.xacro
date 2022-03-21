@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <robot name="parameters" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
+        <!-- See README.md for further explanations -->
         <config>
                 <param name="2.3.position_controller">-1.0e+6 1.0e+6 65.0e+3 1.00 1.0e-3 -2000.0 2000.0 0.6 0.1 2000.0</param>
                 <param name="2.3.current_controller">-605.0 605.0 0.405 10.0e-6 -0.125 0.125 0.0 1984 -248.0 248.0</param>
