@@ -26,6 +26,7 @@ find_package(rclcpp REQUIRED)
 #--------------------------------------------------------------------------------
 add_library(${PROJECT_NAME} SHARED
         src/system_interface.cpp
+        src/ROSLogHandler.cpp
         )
 
 target_include_directories(${PROJECT_NAME} PUBLIC

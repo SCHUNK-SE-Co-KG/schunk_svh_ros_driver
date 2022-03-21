@@ -23,6 +23,7 @@
 
 #include "hardware_interface/types/hardware_interface_type_values.hpp"
 #include "rclcpp/rclcpp.hpp"
+#include "schunk_svh_driver/ROSLogHandler.h"
 #include "schunk_svh_library/control/SVHCurrentSettings.h"
 #include "schunk_svh_library/control/SVHPositionSettings.h"
 #include "schunk_svh_library/control/SVHHomeSettings.h"
@@ -80,6 +81,9 @@ SystemInterface::return_type SystemInterface::configure(
       return return_type::ERROR;
     }
   }
+
+  // Activate logging in the library
+  driver_svh::setupROSLogHandler();
 
   // Initialize SVH in parallel.
   // Detach the thread to die cleanly with the controller manager node.
