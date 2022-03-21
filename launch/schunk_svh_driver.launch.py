@@ -28,6 +28,13 @@ def generate_launch_description():
     )
     device_file = LaunchConfiguration("device_file")
 
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "handedness", default_value="right", description="Is the Schunk SVH a right or a left hand?"
+        )
+    )
+    handedness = LaunchConfiguration("handedness")
+
     # Build the URDF with command line xacro.
     # We also pass parameters for the system_interface here.
     robot_description_content = Command(
@@ -40,6 +47,9 @@ def generate_launch_description():
             " ",
             "device_file:=",
             device_file,
+            " ",
+            "handedness:=",
+            handedness,
         ]
     )
     robot_description = {"robot_description": robot_description_content}
