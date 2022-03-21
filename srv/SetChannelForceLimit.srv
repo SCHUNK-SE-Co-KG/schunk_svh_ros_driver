@@ -1,5 +1,0 @@
-# Service for setting the force limit finger joint with channel_id
-uint8 channel_id
-float32 force_limit
-----
-float32 force_limit

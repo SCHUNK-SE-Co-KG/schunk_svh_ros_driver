@@ -1,3 +1,0 @@
-Either call the script create_udev_rules or use the following commands:
-sudo cp 99-brainboxes-us.rules /etc/udev/rules.d/
-sudo /etc/init.d/udev restart
