@@ -50,11 +50,11 @@ void ROSLogHandler::log(const std::string& file,
   }
 }
 
-void setupROSLogHandler()
+void setupROSLogHandler(LogLevel level)
 {
   if (g_log_handler != nullptr)
   {
-    Logger::setLogLevel(LogLevel::DEBUG);
+    Logger::setLogLevel(level);
     Logger::setLogHandler(std::move(g_log_handler));
   }
 }

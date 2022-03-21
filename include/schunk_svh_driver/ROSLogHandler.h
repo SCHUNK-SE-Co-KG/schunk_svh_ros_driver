@@ -36,6 +36,6 @@ public:
 private:
 };
 
-void setupROSLogHandler();
+void setupROSLogHandler(LogLevel level = LogLevel::INFO);
 
 } // namespace driver_svh
