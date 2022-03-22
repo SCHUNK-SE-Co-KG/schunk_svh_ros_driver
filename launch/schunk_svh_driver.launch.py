@@ -66,7 +66,7 @@ def generate_launch_description():
         package="controller_manager",
         executable="ros2_control_node",
         parameters=[robot_description, robot_controllers],
-        prefix="screen -d -m gdb -command=/home/scherzin/.ros/my_debug_log --ex run --args",
+        #prefix="screen -d -m gdb -command=/home/scherzin/.ros/my_debug_log --ex run --args",
         output={
             "stdout": "screen",
             "stderr": "screen",
@@ -79,11 +79,17 @@ def generate_launch_description():
         executable="spawner.py",
         arguments=["joint_state_controller", "-c", "/controller_manager"],
     )
+    joint_trajectory_controller_spawner = Node(
+        package="controller_manager",
+        executable="spawner.py",
+        arguments=["joint_trajectory_controller", "-c", "/controller_manager"],
+    )
 
     # List all nodes that we want to start
     nodes = [
         control_node,
-        joint_state_controller_spawner
+        joint_state_controller_spawner,
+        joint_trajectory_controller_spawner
     ]
 
     return LaunchDescription(declared_arguments + nodes)

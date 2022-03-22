@@ -1,17 +1,10 @@
-# Schunk SVH Driver
+# Schunk SVH ROS2 Driver
 
-This is the repository for the Schunk SVH ROS package
+TODO
 
-## ROS Requirements
+## Getting started
 
-- ros-$ROS_DISTRO-hardware-interface
-- ros-$ROS_DISTRO-joint-limits-interface
-- ros-$ROS_DISTRO-controller-manager
-
-Install all by calling  
-  ```sudo apt-get install ros-$ROS_DISTRO-hardware-interface ros-$ROS_DISTRO-joint-limits-interface ros-$ROS_DISTRO-controller-manager```
-
-## IC Requirements
-
-- icl_comm
-- icl_core
+In a sourced terminal, run
+```bash
+ros2 launch schunk_svh_driver schunk_svh_driver.launch.py handedness:=left
+```
