@@ -12,30 +12,28 @@
 
 #pragma once
 
-#include <string>
-
-#include <rclcpp/rclcpp.hpp>
-#include "rclcpp/logger.hpp"
-
 #include <schunk_svh_library/LogHandler.h>
 #include <schunk_svh_library/LogLevel.h>
 
-namespace driver_svh {
+#include <rclcpp/rclcpp.hpp>
+#include <string>
 
+#include "rclcpp/logger.hpp"
+
+namespace driver_svh
+{
 class ROSLogHandler : public LogHandler
 {
 public:
-  ROSLogHandler()                   = default;
+  ROSLogHandler() = default;
   virtual ~ROSLogHandler() override = default;
-  virtual void log(const std::string& file,
-                   const int line,
-                   const std::string& name,
-                   LogLevel level,
-                   const std::string& msg) override;
+  virtual void log(
+    const std::string & file, const int line, const std::string & name, LogLevel level,
+    const std::string & msg) override;
 
 private:
 };
 
 void setupROSLogHandler(LogLevel level = LogLevel::INFO);
 
-} // namespace driver_svh
+}  // namespace driver_svh

@@ -30,14 +30,14 @@ namespace schunk_svh_driver
 constexpr char HW_IF_CURRENT[] = "current";
 
 /**
- * @brief A ROS2-control SystemInterface for the Schunk SVH
- *
- * This class provides the hardware abstraction for the Schunk SVH in ROS2.
- * It's instantiated via the usual ROS2-conform lifecylce as a
- * controller_manager coordinated library.  Its goal is to support all relevant
- * hardware_interfaces as exposed by the schunk_svh_library.
- *
- */
+   * @brief A ROS2-control SystemInterface for the Schunk SVH
+   *
+   * This class provides the hardware abstraction for the Schunk SVH in ROS2.
+   * It's instantiated via the usual ROS2-conform lifecylce as a
+   * controller_manager coordinated library.  Its goal is to support all
+   * relevant hardware_interfaces as exposed by the schunk_svh_library.
+   *
+   */
 class SystemInterface
 : public hardware_interface::BaseInterface<hardware_interface::SystemInterface>
 {
@@ -65,7 +65,6 @@ public:
   return_type write() override;
 
 private:
-
   // Initialization of the SVH in a separate thread to meet ROS2-control's
   // timing requirements.
   void init();

@@ -26,8 +26,8 @@
 #include "schunk_svh_driver/ROSLogHandler.h"
 #include "schunk_svh_library/LogLevel.h"
 #include "schunk_svh_library/control/SVHCurrentSettings.h"
-#include "schunk_svh_library/control/SVHPositionSettings.h"
 #include "schunk_svh_library/control/SVHHomeSettings.h"
+#include "schunk_svh_library/control/SVHPositionSettings.h"
 
 namespace schunk_svh_driver
 {
@@ -57,8 +57,7 @@ SystemInterface::return_type SystemInterface::configure(
 
     if (joint.command_interfaces[0].name != hardware_interface::HW_IF_POSITION) {
       RCLCPP_ERROR(
-        rclcpp::get_logger("SystemInterface"),
-        "Joint '%s' needs a %s command interface.",
+        rclcpp::get_logger("SystemInterface"), "Joint '%s' needs a %s command interface.",
         joint.name.c_str(), hardware_interface::HW_IF_POSITION);
       return return_type::ERROR;
     }
@@ -150,18 +149,18 @@ SystemInterface::return_type SystemInterface::stop()
 
 SystemInterface::return_type SystemInterface::read()
 {
-  if (m_svh->isConnected())
-  {
-    for (size_t channel = 0; channel < driver_svh::eSVH_DIMENSION; ++channel)
-    {
-      if (m_svh->isHomed(static_cast<driver_svh::SVHChannel>(channel)))  // resetted and ready to use
+  if (m_svh->isConnected()) {
+    for (size_t channel = 0; channel < driver_svh::eSVH_DIMENSION; ++channel) {
+      if (m_svh->isHomed(
+            static_cast<driver_svh::SVHChannel>(channel)))  // resetted and ready to use
       {
         m_svh->getPosition(static_cast<driver_svh::SVHChannel>(channel), m_positions[channel]);
         m_svh->getCurrent(static_cast<driver_svh::SVHChannel>(channel), m_currents[channel]);
 
         // Joint efforts are an estimation based on motor currents
         m_svh->getCurrent(static_cast<driver_svh::SVHChannel>(channel), m_efforts[channel]);
-        m_efforts[channel] = m_svh->convertmAtoN(static_cast<driver_svh::SVHChannel>(channel), m_efforts[channel]);
+        m_efforts[channel] =
+          m_svh->convertmAtoN(static_cast<driver_svh::SVHChannel>(channel), m_efforts[channel]);
       }
     }
   }
@@ -171,63 +170,57 @@ SystemInterface::return_type SystemInterface::read()
 
 SystemInterface::return_type SystemInterface::write()
 {
-  if (m_initialized)
-  {
+  if (m_initialized) {
     m_svh->setAllTargetPositions(m_position_commands);  // Does all plausibility checks
   }
   return return_type::OK;
 }
 
-
 void SystemInterface::init()
 {
-  if (!m_svh->connect(m_device_file))
-  {
-    RCLCPP_ERROR(rclcpp::get_logger("SystemInterface"), "No connection to the Schunk SVH under %s", m_device_file.c_str());
+  if (!m_svh->connect(m_device_file)) {
+    RCLCPP_ERROR(
+      rclcpp::get_logger("SystemInterface"), "No connection to the Schunk SVH under %s",
+      m_device_file.c_str());
     return;
   }
   auto firmware = m_svh->getFirmwareInfo(m_device_file);
   auto version =
     std::to_string(firmware.version_major) + "." + std::to_string(firmware.version_minor) + ".";
-  RCLCPP_INFO(rclcpp::get_logger("SystemInterface"), "The Schunk SVH is version: %s", version.c_str());
+  RCLCPP_INFO(
+    rclcpp::get_logger("SystemInterface"), "The Schunk SVH is version: %s", version.c_str());
 
   // Convert std::string("1.0 2.0") to std::vector<float>{1.0, 2.0}
-  auto make_floats = [](const std::string& s)
-  {
+  auto make_floats = [](const std::string & s) {
     std::vector<float> vec;
     std::stringstream stream(s);
     std::string element;
 
-    while(std::getline(stream, element, ' '))
-    {
+    while (std::getline(stream, element, ' ')) {
       vec.emplace_back(std::stof(element));
     }
     return vec;
   };
 
-  for (size_t i = 0; i < driver_svh::eSVH_DIMENSION; ++i)
-  {
+  for (size_t i = 0; i < driver_svh::eSVH_DIMENSION; ++i) {
     auto current_settings = info_.joints[i].parameters[version + "current_controller"];
     auto position_settings = info_.joints[i].parameters[version + "position_controller"];
     auto home_settings = info_.joints[i].parameters[version + "home_settings"];
 
     // Use default values if the current version is not directly supported.
-    if (current_settings.empty())
-    {
+    if (current_settings.empty()) {
       current_settings = info_.joints[i].parameters["0.0.current_controller"];
       RCLCPP_WARN(
         rclcpp::get_logger("SystemInterface"),
         "Channel %i parameters for motor currents not available. Using defaults.", i);
     }
-    if (position_settings.empty())
-    {
+    if (position_settings.empty()) {
       position_settings = info_.joints[i].parameters["0.0.position_controller"];
       RCLCPP_WARN(
         rclcpp::get_logger("SystemInterface"),
         "Channel %i parameters for position controllers not available. Using defaults.", i);
     }
-    if (home_settings.empty())
-    {
+    if (home_settings.empty()) {
       home_settings = info_.joints[i].parameters["0.0.home_settings"];
       RCLCPP_WARN(
         rclcpp::get_logger("SystemInterface"),
@@ -248,8 +241,7 @@ void SystemInterface::init()
   }
 
   m_initialized = m_svh->resetChannel(driver_svh::eSVH_ALL);
-  if (!m_initialized)
-  {
+  if (!m_initialized) {
     RCLCPP_ERROR(rclcpp::get_logger("SystemInterface"), "Could not initialize the Schunk SVH");
     return;
   }
