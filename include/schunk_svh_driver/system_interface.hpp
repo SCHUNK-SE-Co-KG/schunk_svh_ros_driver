@@ -2,7 +2,7 @@
 // -- END LICENSE BLOCK -------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-/*!\file    system_interface.h
+/*!\file    system_interface.hpp
  *
  * \author  Stefan Scherzinger <scherzin@fzi.de>
  * \date    2022/03/02

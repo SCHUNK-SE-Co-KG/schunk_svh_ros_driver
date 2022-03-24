@@ -10,7 +10,7 @@
  */
 //----------------------------------------------------------------------
 
-#include "schunk_svh_driver/ROSLogHandler.h"
+#include "schunk_svh_driver/ROSLogHandler.hpp"
 
 #include <schunk_svh_library/LogLevel.h>
 #include <schunk_svh_library/Logger.h>

@@ -2,7 +2,7 @@
 // -- END LICENSE BLOCK ------------------------------------------------
 
 //-----------------------------------------------------------------------------
-/*!\file    ROSLogHandler.h
+/*!\file    ROSLogHandler.hpp
  *
  * \author  Felix Exner exner@fzi.de
  * \date    2022-01-13

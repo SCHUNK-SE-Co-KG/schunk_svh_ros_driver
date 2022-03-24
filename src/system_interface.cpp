@@ -10,7 +10,7 @@
  */
 //-----------------------------------------------------------------------------
 
-#include "schunk_svh_driver/system_interface.h"
+#include "schunk_svh_driver/system_interface.hpp"
 
 #include <algorithm>
 #include <chrono>
@@ -23,7 +23,7 @@
 
 #include "hardware_interface/types/hardware_interface_type_values.hpp"
 #include "rclcpp/rclcpp.hpp"
-#include "schunk_svh_driver/ROSLogHandler.h"
+#include "schunk_svh_driver/ROSLogHandler.hpp"
 #include "schunk_svh_library/LogLevel.h"
 #include "schunk_svh_library/control/SVHCurrentSettings.h"
 #include "schunk_svh_library/control/SVHHomeSettings.h"
