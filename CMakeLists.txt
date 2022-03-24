@@ -66,6 +66,10 @@ install(
   DESTINATION lib
 )
 
+install(
+  PROGRAMS scripts/example.py
+  DESTINATION lib/${PROJECT_NAME}
+)
 
 #--------------------------------------------------------------------------------
 # Test
