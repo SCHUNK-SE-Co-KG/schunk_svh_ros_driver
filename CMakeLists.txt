@@ -5,6 +5,7 @@ find_package(catkin REQUIRED COMPONENTS
     actionlib
     actionlib_msgs
     combined_robot_hw
+    control_msgs
     controller_manager
     dynamic_reconfigure
     hardware_interface
@@ -13,12 +14,9 @@ find_package(catkin REQUIRED COMPONENTS
     pluginlib
     roscpp
     rospy
-    rqt_gui
-    rqt_gui_py
     sensor_msgs
     std_msgs
-    urdf
-    xacro
+    std_srvs
 )
 
 ## System dependencies are found with CMake's conventions
@@ -74,16 +72,23 @@ catkin_package(
   INCLUDE_DIRS include
   LIBRARIES svh_robot_hw svh_ros
   CATKIN_DEPENDS
+    actionlib
     actionlib_msgs
     combined_robot_hw
+    control_msgs
     controller_manager
+    dynamic_reconfigure
     hardware_interface
+    joint_limits_interface
     message_runtime
     pluginlib
     roscpp
+    rospy
     sensor_msgs
     std_msgs
-    urdf
+    std_srvs
+  DEPENDS
+    schunk_svh_library
 )
 
 ###########
@@ -124,12 +129,12 @@ add_executable(svh_sin_test
   src/SVHSinTest.cpp
   src/ROSLogHandler.cpp
 )
+add_dependencies(svh_sin_test ${catkin_EXPORTED_TARGETS} ${schunk_svh_driver_EXPORTED_TARGETS})
 
 # Add cmake target dependencies of the executable/library
 # as an example, message headers may need to be generated before nodes
 add_dependencies(svh_controller
-  ${PROJECT_NAME}_gencfg
-  ${PROJECT_NAME}_generate_messages_cpp
+  ${schunk_svh_driver_EXPORTED_TARGETS}
 )
 
 ## Specify libraries to link a library or executable target against
@@ -153,8 +158,8 @@ add_library(svh_ros
   src/ROSLogHandler.cpp
 )
 add_dependencies(svh_ros
-  ${PROJECT_NAME}_gencfg
-  ${PROJECT_NAME}_generate_messages_cpp
+  ${catkin_EXPORTED_TARGETS}
+  ${schunk_svh_driver_EXPORTED_TARGETS}
 )
 
 
@@ -170,6 +175,7 @@ add_library(svh_robot_hw
 add_dependencies( svh_robot_hw
   svh_ros
   ${catkin_EXPORTED_TARGETS}
+  ${schunk_svh_driver_EXPORTED_TARGETS}
 )
 target_link_libraries(svh_robot_hw
   svh_ros
@@ -184,8 +190,7 @@ add_executable(svh_ros_control_node
 add_dependencies(svh_ros_control_node
   svh_ros
   svh_robot_hw
-  ${PROJECT_NAME}_gencfg
-  ${PROJECT_NAME}_generate_messages_cpp
+  ${schunk_svh_driver_EXPORTED_TARGETS}
 )
 
 ## Specify libraries to link a library or executable target against
@@ -204,8 +209,7 @@ add_executable(svh_dynamic_parameter_test
 )
 
 add_dependencies(svh_dynamic_parameter_test
-  ${PROJECT_NAME}_gencfg
-  ${PROJECT_NAME}_generate_messages_cpp
+  ${schunk_svh_driver_EXPORTED_TARGETS}
 )
 
 ## Specify libraries to link a library or executable target against
