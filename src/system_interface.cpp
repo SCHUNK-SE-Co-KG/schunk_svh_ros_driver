@@ -150,7 +150,7 @@ SystemInterface::return_type SystemInterface::stop()
 SystemInterface::return_type SystemInterface::read()
 {
   if (m_svh->isConnected()) {
-    for (size_t channel = 0; channel < driver_svh::eSVH_DIMENSION; ++channel) {
+    for (size_t channel = 0; channel < driver_svh::SVH_DIMENSION; ++channel) {
       if (m_svh->isHomed(
             static_cast<driver_svh::SVHChannel>(channel)))  // resetted and ready to use
       {
@@ -202,7 +202,7 @@ void SystemInterface::init()
     return vec;
   };
 
-  for (size_t i = 0; i < driver_svh::eSVH_DIMENSION; ++i) {
+  for (size_t i = 0; i < driver_svh::SVH_DIMENSION; ++i) {
     auto current_settings = info_.joints[i].parameters[version + "current_controller"];
     auto position_settings = info_.joints[i].parameters[version + "position_controller"];
     auto home_settings = info_.joints[i].parameters[version + "home_settings"];
@@ -240,7 +240,7 @@ void SystemInterface::init()
       driver_svh::SVHHomeSettings(make_floats(home_settings)));
   }
 
-  m_initialized = m_svh->resetChannel(driver_svh::eSVH_ALL);
+  m_initialized = m_svh->resetChannel(driver_svh::SVH_ALL);
   if (!m_initialized) {
     RCLCPP_ERROR(rclcpp::get_logger("SystemInterface"), "Could not initialize the Schunk SVH");
     return;
