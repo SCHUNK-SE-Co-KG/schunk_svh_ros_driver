@@ -20,23 +20,23 @@ from builtin_interfaces.msg import Duration
 class SVH(Node):
     def __init__(self):
         super().__init__('svh_gui')
-        self.publisher = self.create_publisher(JointTrajectory, 'joint_trajectory_controller/joint_trajectory', 10)
+        self.publisher = self.create_publisher(
+            JointTrajectory, 'joint_trajectory_controller/joint_trajectory', 10)
 
         # Configuration presets
         self.joint_names = [
-                'Left_Hand_Thumb_Flexion',
-                'Left_Hand_Thumb_Opposition',
-                'Left_Hand_Index_Finger_Distal',
-                'Left_Hand_Index_Finger_Proximal',
-                'Left_Hand_Middle_Finger_Distal',
-                'Left_Hand_Middle_Finger_Proximal',
-                'Left_Hand_Ring_Finger',
-                'Left_Hand_Pinky',
-                'Left_Hand_Finger_Spread',
-                ]
+            'Left_Hand_Thumb_Flexion',
+            'Left_Hand_Thumb_Opposition',
+            'Left_Hand_Index_Finger_Distal',
+            'Left_Hand_Index_Finger_Proximal',
+            'Left_Hand_Middle_Finger_Distal',
+            'Left_Hand_Middle_Finger_Proximal',
+            'Left_Hand_Ring_Finger',
+            'Left_Hand_Pinky',
+            'Left_Hand_Finger_Spread',
+        ]
         self.fist = [0.6, 0.6, 0.7, 0.7, 0.7, 0.7, 0.6, 0.6, 0.3]
         self.full_spread = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.5]
-
 
     def gui(self):
         """ A GUI with a single slider for opening/closing the SVH """
@@ -49,7 +49,6 @@ class SVH(Node):
         self.slider.pack()
         self.window.mainloop()
 
-
     def slider_changed(self, event):
         self.publish(self.slider.get())
         rclpy.spin_once(self, timeout_sec=0)
@@ -59,7 +58,8 @@ class SVH(Node):
 
         We scale linearly with opening=[0,1] between `fist` and `full_spread`.
         """
-        jpos = opening * np.array(self.full_spread) + (self.percent - opening) * np.array(self.fist)
+        jpos = opening * np.array(self.full_spread) + \
+            (self.percent - opening) * np.array(self.fist)
         jpos = jpos / self.percent
         msg = JointTrajectory()
         msg.joint_names = self.joint_names
