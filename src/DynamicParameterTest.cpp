@@ -35,7 +35,7 @@ int main(int argc, char** argv)
   DynamicParameter dyn_parameters(2, 2, parameters);
 
 
-  for (size_t channel = 0; channel < driver_svh::eSVH_DIMENSION; ++channel)
+  for (size_t channel = 0; channel < driver_svh::SVH_DIMENSION; ++channel)
   {
     ROS_INFO_STREAM("using channel " << channel);
 

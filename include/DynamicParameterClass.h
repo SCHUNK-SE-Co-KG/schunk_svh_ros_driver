@@ -59,12 +59,12 @@ public:
   struct Settings
   {
     Settings()
-    : position_settings(driver_svh::eSVH_DIMENSION)
-    , position_settings_given(driver_svh::eSVH_DIMENSION, false)
-    , current_settings(driver_svh::eSVH_DIMENSION)
-    , current_settings_given(driver_svh::eSVH_DIMENSION, false)
-    , home_settings(driver_svh::eSVH_DIMENSION)
-    , home_settings_given(driver_svh::eSVH_DIMENSION, false)
+    : position_settings(driver_svh::SVH_DIMENSION)
+    , position_settings_given(driver_svh::SVH_DIMENSION, false)
+    , current_settings(driver_svh::SVH_DIMENSION)
+    , current_settings_given(driver_svh::SVH_DIMENSION, false)
+    , home_settings(driver_svh::SVH_DIMENSION)
+    , home_settings_given(driver_svh::SVH_DIMENSION, false)
     , major_version(0)
     , minor_version(0)
     {}

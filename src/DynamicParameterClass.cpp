@@ -37,19 +37,19 @@ DynamicParameter::DynamicParameter(const uint16_t major_version,
 {
   // joint names used for parameter mapping from string to SVHChannel
   // currently hardcoded...
-  m_name_to_enum[driver_svh::eSVH_THUMB_FLEXION]          = "THUMB_FLEXION";
-  m_name_to_enum[driver_svh::eSVH_THUMB_OPPOSITION]       = "THUMB_OPPOSITION";
-  m_name_to_enum[driver_svh::eSVH_INDEX_FINGER_DISTAL]    = "INDEX_FINGER_DISTAL";
-  m_name_to_enum[driver_svh::eSVH_INDEX_FINGER_PROXIMAL]  = "INDEX_FINGER_PROXIMAL";
-  m_name_to_enum[driver_svh::eSVH_MIDDLE_FINGER_DISTAL]   = "MIDDLE_FINGER_DISTAL";
-  m_name_to_enum[driver_svh::eSVH_MIDDLE_FINGER_PROXIMAL] = "MIDDLE_FINGER_PROXIMAL";
-  m_name_to_enum[driver_svh::eSVH_RING_FINGER]            = "RING_FINGER";
-  m_name_to_enum[driver_svh::eSVH_PINKY]                  = "PINKY";
-  m_name_to_enum[driver_svh::eSVH_FINGER_SPREAD]          = "FINGER_SPREAD";
+  m_name_to_enum[driver_svh::SVH_THUMB_FLEXION]          = "THUMB_FLEXION";
+  m_name_to_enum[driver_svh::SVH_THUMB_OPPOSITION]       = "THUMB_OPPOSITION";
+  m_name_to_enum[driver_svh::SVH_INDEX_FINGER_DISTAL]    = "INDEX_FINGER_DISTAL";
+  m_name_to_enum[driver_svh::SVH_INDEX_FINGER_PROXIMAL]  = "INDEX_FINGER_PROXIMAL";
+  m_name_to_enum[driver_svh::SVH_MIDDLE_FINGER_DISTAL]   = "MIDDLE_FINGER_DISTAL";
+  m_name_to_enum[driver_svh::SVH_MIDDLE_FINGER_PROXIMAL] = "MIDDLE_FINGER_PROXIMAL";
+  m_name_to_enum[driver_svh::SVH_RING_FINGER]            = "RING_FINGER";
+  m_name_to_enum[driver_svh::SVH_PINKY]                  = "PINKY";
+  m_name_to_enum[driver_svh::SVH_FINGER_SPREAD]          = "FINGER_SPREAD";
 
   // Assertion to test whether the vector sizes are the same. Otherwise fail
   ROS_ASSERT(static_cast<driver_svh::SVHChannel>(m_name_to_enum.size()) ==
-             driver_svh::eSVH_DIMENSION);
+             driver_svh::SVH_DIMENSION);
 
   try
   {

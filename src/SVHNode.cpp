@@ -34,7 +34,7 @@ SVHNode::SVHNode(const ros::NodeHandle& nh)
 
   bool autostart, use_internal_logging;
   int reset_timeout;
-  std::vector<bool> disable_flags(driver_svh::eSVH_DIMENSION, false);
+  std::vector<bool> disable_flags(driver_svh::SVH_DIMENSION, false);
   // Config that contains the log stream configuration without the file names
   std::string logging_config_file;
 
@@ -109,7 +109,7 @@ SVHNode::SVHNode(const ros::NodeHandle& nh)
     DynamicParameter dyn_parameters(manual_major_version, manual_minor_version, dynamic_parameters);
 
 
-    for (size_t channel = 0; channel < driver_svh::eSVH_DIMENSION; ++channel)
+    for (size_t channel = 0; channel < driver_svh::SVH_DIMENSION; ++channel)
     {
       // Only update the values in case actually have some. Otherwise the driver will use internal
       // defaults. Overwriting them with zeros would be counter productive
@@ -140,10 +140,10 @@ SVHNode::SVHNode(const ros::NodeHandle& nh)
   }
 
   // prepare the channel position message for later sending
-  channel_pos_.name.resize(driver_svh::eSVH_DIMENSION);
-  channel_pos_.position.resize(driver_svh::eSVH_DIMENSION, 0.0);
-  channel_pos_.effort.resize(driver_svh::eSVH_DIMENSION, 0.0);
-  for (size_t channel = 0; channel < driver_svh::eSVH_DIMENSION; ++channel)
+  channel_pos_.name.resize(driver_svh::SVH_DIMENSION);
+  channel_pos_.position.resize(driver_svh::SVH_DIMENSION, 0.0);
+  channel_pos_.effort.resize(driver_svh::SVH_DIMENSION, 0.0);
+  for (size_t channel = 0; channel < driver_svh::SVH_DIMENSION; ++channel)
   {
     channel_pos_.name[channel] =
       name_prefix + "_" + driver_svh::SVHController::m_channel_description[channel];
@@ -151,7 +151,7 @@ SVHNode::SVHNode(const ros::NodeHandle& nh)
 
   // Prepare the channel current message for later sending
   channel_currents.data.clear();
-  channel_currents.data.resize(driver_svh::eSVH_DIMENSION, 0.0);
+  channel_currents.data.resize(driver_svh::SVH_DIMENSION, 0.0);
   channel_currents.layout.data_offset = 0;
   std_msgs::MultiArrayDimension dim;
   dim.label  = "channel currents";
@@ -162,7 +162,7 @@ SVHNode::SVHNode(const ros::NodeHandle& nh)
   // Connect and start the reset so that the hand is ready for use
   if (autostart && fm_->connect(serial_device_name_, connect_retry_count))
   {
-    fm_->resetChannel(driver_svh::eSVH_ALL);
+    fm_->resetChannel(driver_svh::SVH_ALL);
     ROS_INFO("Driver was autostarted! Input can now be sent. Have a safe and productive day!");
   }
   else
@@ -230,9 +230,9 @@ void SVHNode::enableChannelCallback(const std_msgs::Int8ConstPtr& channel)
 void SVHNode::jointStateCallback(const sensor_msgs::JointStateConstPtr& input)
 {
   // vector to read target positions from joint states
-  std::vector<double> target_positions(driver_svh::eSVH_DIMENSION, 0.0);
+  std::vector<double> target_positions(driver_svh::SVH_DIMENSION, 0.0);
   // bool vector storing true, if new target position read
-  std::vector<bool> pos_read(driver_svh::eSVH_DIMENSION, false);
+  std::vector<bool> pos_read(driver_svh::SVH_DIMENSION, false);
   // target positions read counter
   uint8_t pos_read_counter = 0;
 
@@ -244,7 +244,7 @@ void SVHNode::jointStateCallback(const sensor_msgs::JointStateConstPtr& input)
 
     // Find the corresponding channels to the input joint names
     bool valid_input = false;
-    for (channel = 0; !valid_input && (channel < driver_svh::eSVH_DIMENSION) &&
+    for (channel = 0; !valid_input && (channel < driver_svh::SVH_DIMENSION) &&
                       (driver_svh::SVHController::m_channel_description[channel] != NULL);
          ++channel)
     {
@@ -279,7 +279,7 @@ void SVHNode::jointStateCallback(const sensor_msgs::JointStateConstPtr& input)
   }
 
   // send target values at once
-  if (pos_read_counter == driver_svh::eSVH_DIMENSION)
+  if (pos_read_counter == driver_svh::SVH_DIMENSION)
   {
     if (!fm_->setAllTargetPositions(target_positions))
     {
@@ -289,7 +289,7 @@ void SVHNode::jointStateCallback(const sensor_msgs::JointStateConstPtr& input)
   // not all positions has been set: send only the available positions
   else
   {
-    for (size_t i = 0; i < driver_svh::eSVH_DIMENSION; ++i)
+    for (size_t i = 0; i < driver_svh::SVH_DIMENSION; ++i)
     {
       if (pos_read[i])
       {
@@ -305,7 +305,7 @@ sensor_msgs::JointState SVHNode::getChannelFeedback()
   if (fm_->isConnected())
   {
     // Get positions in rad
-    for (size_t channel = 0; channel < driver_svh::eSVH_DIMENSION; ++channel)
+    for (size_t channel = 0; channel < driver_svh::SVH_DIMENSION; ++channel)
     {
       double cur_pos = 0.0;
       double cur_cur = 0.0;
@@ -329,7 +329,7 @@ std_msgs::Float64MultiArray SVHNode::getChannelCurrents()
   if (fm_->isConnected())
   {
     // Get currents
-    for (size_t channel = 0; channel < driver_svh::eSVH_DIMENSION; ++channel)
+    for (size_t channel = 0; channel < driver_svh::SVH_DIMENSION; ++channel)
     {
       double cur_cur = 0.0;
       if (fm_->isHomed(static_cast<driver_svh::SVHChannel>(channel)))

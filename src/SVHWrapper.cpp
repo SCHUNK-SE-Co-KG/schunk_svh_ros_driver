@@ -28,7 +28,7 @@ SVHWrapper::SVHWrapper(const ros::NodeHandle& nh)
   bool use_internal_logging;
 
   int reset_timeout;
-  std::vector<bool> disable_flags(driver_svh::eSVH_DIMENSION, false);
+  std::vector<bool> disable_flags(driver_svh::SVH_DIMENSION, false);
   // Config that contains the log stream configuration without the file names
   std::string logging_config_file;
 
@@ -75,7 +75,7 @@ SVHWrapper::SVHWrapper(const ros::NodeHandle& nh)
   connect();
   if (autostart)
   {
-    if (m_finger_manager->resetChannel(driver_svh::eSVH_ALL))
+    if (m_finger_manager->resetChannel(driver_svh::SVH_ALL))
     {
       ROS_INFO("Driver was autostarted! Input can now be sent. Have a safe and productive day!");
       m_channels_enabled = true;
@@ -153,7 +153,7 @@ void SVHWrapper::initControllerParameters(const uint16_t firmware_major_version,
     DynamicParameter dyn_parameters(
       firmware_major_version, firmware_minor_version, dynamic_parameters);
 
-    for (size_t channel = 0; channel < driver_svh::eSVH_DIMENSION; ++channel)
+    for (size_t channel = 0; channel < driver_svh::SVH_DIMENSION; ++channel)
     {
       // Only update the values in case actually have some. Otherwise the driver will use internal
       // defaults. Overwriting them with zeros would be counter productive
@@ -259,7 +259,7 @@ bool SVHWrapper::homeAllNodes(schunk_svh_driver::HomeAll::Request& req,
   // disable flag to stop ros-control-loop
   m_channels_enabled = false;
 
-  resp.success = m_finger_manager->resetChannel(driver_svh::eSVH_ALL);
+  resp.success = m_finger_manager->resetChannel(driver_svh::SVH_ALL);
 
   // enable flag to start ros-control-loop if successfully resetted
   if (resp.success == true)
@@ -296,7 +296,7 @@ bool SVHWrapper::homeNodesChannelIds(schunk_svh_driver::HomeWithChannels::Reques
     m_finger_manager->resetChannel(static_cast<driver_svh::SVHChannel>(*it));
   }
 
-  if(channels_enabled_before || m_finger_manager->isHomed(driver_svh::eSVH_ALL))
+  if(channels_enabled_before || m_finger_manager->isHomed(driver_svh::SVH_ALL))
   {
     // enable flag to stop ros-control-loop
     m_channels_enabled = true;
@@ -310,7 +310,7 @@ bool SVHWrapper::homeNodesChannelIds(schunk_svh_driver::HomeWithChannels::Reques
 bool SVHWrapper::setAllForceLimits(schunk_svh_driver::SetAllChannelForceLimits::Request &req,
                                    schunk_svh_driver::SetAllChannelForceLimits::Response &res)
 {
-  for (size_t channel = 0; channel < driver_svh::eSVH_DIMENSION; ++channel)
+  for (size_t channel = 0; channel < driver_svh::SVH_DIMENSION; ++channel)
   {
     res.force_limit[channel] = setChannelForceLimit(channel, req.force_limit[channel]);
   }

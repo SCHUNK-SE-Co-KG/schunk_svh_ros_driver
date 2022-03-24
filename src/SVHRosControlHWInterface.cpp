@@ -44,14 +44,14 @@ bool SVHRosControlHWInterface::init(ros::NodeHandle& root_nh, ros::NodeHandle& r
 
   m_hardware_ready = false;
 
-  m_joint_position_commands.resize(driver_svh::eSVH_DIMENSION);
-  m_joint_positions.resize(driver_svh::eSVH_DIMENSION);
-  m_joint_velocity.resize(driver_svh::eSVH_DIMENSION);
-  m_joint_effort.resize(driver_svh::eSVH_DIMENSION);
-  m_channel_names.resize(driver_svh::eSVH_DIMENSION);
+  m_joint_position_commands.resize(driver_svh::SVH_DIMENSION);
+  m_joint_positions.resize(driver_svh::SVH_DIMENSION);
+  m_joint_velocity.resize(driver_svh::SVH_DIMENSION);
+  m_joint_effort.resize(driver_svh::SVH_DIMENSION);
+  m_channel_names.resize(driver_svh::SVH_DIMENSION);
 
   // Initialize controller
-  for (std::size_t channel = 0; channel < driver_svh::eSVH_DIMENSION; ++channel)
+  for (std::size_t channel = 0; channel < driver_svh::SVH_DIMENSION; ++channel)
   {
     m_channel_names[channel] =
       m_svh->getNamePrefix() + "_" + driver_svh::SVHController::m_channel_description[channel];
@@ -91,13 +91,13 @@ bool SVHRosControlHWInterface::init(ros::NodeHandle& root_nh, ros::NodeHandle& r
 
 void SVHRosControlHWInterface::read(const ros::Time& time, const ros::Duration& period)
 {
-  m_joint_positions.resize(driver_svh::eSVH_DIMENSION);
-  m_joint_effort.resize(driver_svh::eSVH_DIMENSION);
+  m_joint_positions.resize(driver_svh::SVH_DIMENSION);
+  m_joint_effort.resize(driver_svh::SVH_DIMENSION);
 
   if (m_svh->getFingerManager()->isConnected())
   {
     // Get positions in rad
-    for (size_t channel = 0; channel < driver_svh::eSVH_DIMENSION; ++channel)
+    for (size_t channel = 0; channel < driver_svh::SVH_DIMENSION; ++channel)
     {
       double cur_pos = 0.0;
       double cur_cur = 0.0;
@@ -142,7 +142,7 @@ void SVHRosControlHWInterface::write(const ros::Time& time, const ros::Duration&
     << m_joint_position_commands[5] << " " << m_joint_position_commands[6] << " "
     << m_joint_position_commands[7] << " " << m_joint_position_commands[8]);
 
-  if (driver_svh::eSVH_DIMENSION == m_joint_position_commands.size())
+  if (driver_svh::SVH_DIMENSION == m_joint_position_commands.size())
   {
     if (!m_svh->getFingerManager()->setAllTargetPositions(m_joint_position_commands))
     {

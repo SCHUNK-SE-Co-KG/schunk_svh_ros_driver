@@ -65,7 +65,7 @@ void SVHDiagnostics::initTest()
   m_action_feedback.fingers.clear();
 
   // init the indidividual finger params
-  for (size_t channel = 0; channel < driver_svh::eSVH_DIMENSION; ++channel)
+  for (size_t channel = 0; channel < driver_svh::SVH_DIMENSION; ++channel)
   {
     schunk_svh_driver::SVHDiagnosticsFinger finger;
     finger.channel               = channel;
@@ -81,19 +81,19 @@ void SVHDiagnostics::initTest()
         static_cast<driver_svh::SVHChannel>(channel), home_settings);
 
     finger.current_max_target =
-        home_settings.resetCurrentFactor * current_settings.wmx;
+        home_settings.reset_current_factor * current_settings.wmx;
     finger.current_min_target =
-        home_settings.resetCurrentFactor * current_settings.wmn;
+        home_settings.reset_current_factor * current_settings.wmn;
     finger.position_range_target =
-        abs(abs(home_settings.maximumOffset) -
-        abs(home_settings.minimumOffset));
+        abs(abs(home_settings.maximum_offset) -
+        abs(home_settings.minimum_offset));
     finger.name = driver_svh::SVHController::m_channel_description[channel];
 
     m_action_feedback.fingers.push_back(finger);
   }
 
   // initialize reset success vector
-  reset_success.resize(driver_svh::eSVH_DIMENSION, false);
+  reset_success.resize(driver_svh::SVH_DIMENSION, false);
 }
 
 void SVHDiagnostics::basicTestCallback(const schunk_svh_driver::SVHDiagnosticsGoalConstPtr & goal)
@@ -123,16 +123,16 @@ void SVHDiagnostics::basicTestCallback(const schunk_svh_driver::SVHDiagnosticsGo
 
     // get current / home settings from the finger manager
     driver_svh::SVHHomeSettings home_settings;
-    struct driver_svh::SVHFingerManager::diagnostic_state diagnostic_data;
+    struct driver_svh::SVHFingerManager::DiagnosticState diagnostic_data;
 
     // clear reset success vector to false
     ROS_INFO("SVHDiagnostics - Resetting all fingers ...");
-    reset_success.resize(driver_svh::eSVH_DIMENSION, false);
+    reset_success.resize(driver_svh::SVH_DIMENSION, false);
 
     // reset the finger vector with the diagnostic data, if basic test get executed multiple times
-    m_finger_manager->resetDiagnosticData(static_cast<driver_svh::SVHChannel>(driver_svh::eSVH_ALL));
+    m_finger_manager->resetDiagnosticData(static_cast<driver_svh::SVHChannel>(driver_svh::SVH_ALL));
 
-    for (size_t channel = 0; channel < driver_svh::eSVH_DIMENSION; ++channel)
+    for (size_t channel = 0; channel < driver_svh::SVH_DIMENSION; ++channel)
     {
       schunk_svh_driver::SVHDiagnosticsFinger finger = m_action_feedback.fingers[channel];
 
@@ -282,7 +282,7 @@ schunk_svh_driver::SVHDiagnosticsResult SVHDiagnostics::evaluateBasicTest()
   }
 
   // encoder and motor failure, any finger
-  for (size_t i = 0; i < driver_svh::eSVH_DIMENSION; i++)
+  for (size_t i = 0; i < driver_svh::SVH_DIMENSION; i++)
   {
     if (m_action_feedback.fingers[i].motor == false && m_action_feedback.fingers[i].encoder == false)
     {
@@ -295,7 +295,7 @@ schunk_svh_driver::SVHDiagnosticsResult SVHDiagnostics::evaluateBasicTest()
   }
 
   // encoder not working, any finger
-  for (size_t i = 0; i < driver_svh::eSVH_DIMENSION; i++)
+  for (size_t i = 0; i < driver_svh::SVH_DIMENSION; i++)
   {
     if (m_action_feedback.fingers[i].encoder == false)
     {
@@ -307,7 +307,7 @@ schunk_svh_driver::SVHDiagnosticsResult SVHDiagnostics::evaluateBasicTest()
   }
 
   // motor not working, any finger
-  for (size_t i = 0; i < driver_svh::eSVH_DIMENSION; i++)
+  for (size_t i = 0; i < driver_svh::SVH_DIMENSION; i++)
   {
     if (m_action_feedback.fingers[i].motor == false)
     {
@@ -319,7 +319,7 @@ schunk_svh_driver::SVHDiagnosticsResult SVHDiagnostics::evaluateBasicTest()
   }
 
   // motor don't get enough current, any finger
-  for (size_t i = 0; i < driver_svh::eSVH_DIMENSION; i++)
+  for (size_t i = 0; i < driver_svh::SVH_DIMENSION; i++)
   {
     if (m_action_feedback.fingers[i].current_max_actual <
           m_action_feedback.fingers[i].current_max_target ||
@@ -335,7 +335,7 @@ schunk_svh_driver::SVHDiagnosticsResult SVHDiagnostics::evaluateBasicTest()
   }
 
   // position range is not enough, any finger
-  for (size_t i = 0; i < driver_svh::eSVH_DIMENSION; i++)
+  for (size_t i = 0; i < driver_svh::SVH_DIMENSION; i++)
   {
     if (m_action_feedback.fingers[i].position_range_actual <
         m_action_feedback.fingers[i].position_range_target)
@@ -356,7 +356,7 @@ schunk_svh_driver::SVHDiagnosticsResult SVHDiagnostics::evaluateBasicTest()
 
 void SVHDiagnostics::resetDiagnosticStatus()
 {
-  for (size_t channel = 0; channel < driver_svh::eSVH_DIMENSION; ++channel)
+  for (size_t channel = 0; channel < driver_svh::SVH_DIMENSION; ++channel)
   {
     schunk_svh_driver::SVHDiagnosticsFinger finger = m_action_feedback.fingers[channel];
     finger.current_max_actual                          = 0;
@@ -374,7 +374,7 @@ void SVHDiagnostics::debugOuput()
   // get current / home settings from the finger manager
   driver_svh::SVHHomeSettings home_settings;
   driver_svh::SVHCurrentSettings current_settings;
-  struct driver_svh::SVHFingerManager::diagnostic_state diagnostic_data;
+  struct driver_svh::SVHFingerManager::DiagnosticState diagnostic_data;
 
   // ---------------- evaluation output of the finger resets
   ROS_INFO_STREAM("SVHDiagnostics - Results of basic test:");
@@ -390,8 +390,8 @@ void SVHDiagnostics::debugOuput()
     double max_position, min_position;
     double deadlock;
 
-    desired_current_pos = home_settings.resetCurrentFactor * current_settings.wmx;
-    desired_current_neg = home_settings.resetCurrentFactor * current_settings.wmn;
+    desired_current_pos = home_settings.reset_current_factor * current_settings.wmx;
+    desired_current_neg = home_settings.reset_current_factor * current_settings.wmn;
     max_current         = diagnostic_data.diagnostic_current_maximum;
     min_current         = diagnostic_data.diagnostic_current_minimum;
     max_position        = diagnostic_data.diagnostic_position_maximum;
@@ -424,7 +424,7 @@ void SVHDiagnostics::qualityProtocolWritting()
 
   m_msg_protocol_variable.ppnr = " ";
 
-  for (size_t channel = 0; channel < driver_svh::eSVH_DIMENSION; ++channel)
+  for (size_t channel = 0; channel < driver_svh::SVH_DIMENSION; ++channel)
   {
     m_msg_protocol_variable.joint[channel] =
       (m_action_feedback.fingers[channel].encoder && m_action_feedback.fingers[channel].motor &&
@@ -442,7 +442,7 @@ void SVHDiagnostics::qualityProtocolWritting()
 void SVHDiagnostics::initializeProtocolMessage()
 {
   // date will be evaluate in SVHProtocol
-  m_msg_protocol_variable.joint.resize(driver_svh::eSVH_DIMENSION, false);
+  m_msg_protocol_variable.joint.resize(driver_svh::SVH_DIMENSION, false);
   m_msg_protocol_variable.serial_number = "";
   m_msg_protocol_variable.firmware      = "";
   m_msg_protocol_variable.assembly_of   = "";
