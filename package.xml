@@ -7,7 +7,7 @@ schematypens="http://www.w3.org/2001/XMLSchema"?>
         <version>0.0.0</version>
         <description>ROS2-control system interface for the Schunk SVH</description>
         <maintainer email="scherzin@fzi.de">user</maintainer>
-        <license>TODO: License declaration</license>
+        <license>Apache License 2.0</license>
 
         <buildtool_depend>ament_cmake</buildtool_depend>
 
