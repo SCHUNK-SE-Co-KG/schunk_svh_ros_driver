@@ -5,11 +5,14 @@ controller_manager:
     joint_state_controller:
       type: joint_state_controller/JointStateController
 
-    joint_trajectory_controller:
+    left_hand:
+      type: joint_trajectory_controller/JointTrajectoryController
+
+    right_hand:
       type: joint_trajectory_controller/JointTrajectoryController
 
 
-joint_trajectory_controller:
+left_hand:
   ros__parameters:
     joints:
       - Left_Hand_Thumb_Flexion
@@ -21,6 +24,24 @@ joint_trajectory_controller:
       - Left_Hand_Ring_Finger
       - Left_Hand_Pinky
       - Left_Hand_Finger_Spread
+    command_interfaces:
+      - position
+    state_interfaces:
+      - position
+      - velocity
+
+right_hand:
+  ros__parameters:
+    joints:
+      - Right_Hand_Thumb_Flexion
+      - Right_Hand_Thumb_Opposition
+      - Right_Hand_Index_Finger_Distal
+      - Right_Hand_Index_Finger_Proximal
+      - Right_Hand_Middle_Finger_Distal
+      - Right_Hand_Middle_Finger_Proximal
+      - Right_Hand_Ring_Finger
+      - Right_Hand_Pinky
+      - Right_Hand_Finger_Spread
     command_interfaces:
       - position
     state_interfaces:

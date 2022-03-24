@@ -42,10 +42,10 @@ def generate_launch_description():
 
     declared_arguments.append(
         DeclareLaunchArgument(
-            "handedness", default_value="right", description="Is the Schunk SVH a right or a left hand?"
+            "control", default_value="right_hand", description="Is the Schunk SVH a right_hand or a left_hand?"
         )
     )
-    handedness = LaunchConfiguration("handedness")
+    control = LaunchConfiguration("control")
 
     # Build the URDF with command line xacro.
     # We also pass parameters for the system_interface here.
@@ -60,8 +60,8 @@ def generate_launch_description():
             "device_file:=",
             device_file,
             " ",
-            "handedness:=",
-            handedness,
+            "control:=",
+            control,
         ]
     )
     robot_description = {"robot_description": robot_description_content}
@@ -91,17 +91,17 @@ def generate_launch_description():
         executable="spawner.py",
         arguments=["joint_state_controller", "-c", "/controller_manager"],
     )
-    joint_trajectory_controller_spawner = Node(
+    hand_controller_spawner = Node(
         package="controller_manager",
         executable="spawner.py",
-        arguments=["joint_trajectory_controller", "-c", "/controller_manager"],
+        arguments=[control, "-c", "/controller_manager"],
     )
 
     # List all nodes that we want to start
     nodes = [
         control_node,
         joint_state_controller_spawner,
-        joint_trajectory_controller_spawner
+        hand_controller_spawner
     ]
 
     return LaunchDescription(declared_arguments + nodes)

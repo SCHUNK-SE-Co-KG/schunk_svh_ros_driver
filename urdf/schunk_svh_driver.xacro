@@ -6,14 +6,14 @@
         <link name="base_link" />
 
         <!-- Use a launch file parameter to choose between right and left hand -->
-        <xacro:property name="handedness" value="$(arg handedness)"/>
-        <xacro:if value="${handedness == 'right'}">
+        <xacro:property name="control" value="$(arg control)"/>
+        <xacro:if value="${control == 'right_hand'}">
                 <xacro:property name="Hand" value="Right_Hand" />
                 <xacro:svh parent="base_link" name="${Hand}" side="1">
                         <origin xyz="0 0 0"  rpy="0 0 0" />
                 </xacro:svh>
         </xacro:if>
-        <xacro:unless value="${handedness == 'right'}">
+        <xacro:unless value="${control == 'right_hand'}">
                 <xacro:property name="Hand" value="Left_Hand" />
                 <xacro:svh parent="base_link" name="${Hand}" side="-1">
                         <origin xyz="0 0 0"  rpy="0 0 0" />
