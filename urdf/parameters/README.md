@@ -13,7 +13,7 @@ This version is printed during startup and looks similar to
 In this case major version `2` and minor version `3`.
 
 
---- 
+---
 
 **Warning**: Only change the values in the `.xacro` files if you know what you are doing.
 Setting wrong values, especially for the current controller,
@@ -81,4 +81,3 @@ All values need to be set.
 * `idle position` :  finger will drive there after reset
 * `Rad range` :  angle in rad that the finger is able to move (used for conversion)
 * `Reset Current Factor` :  Indicates how much of the total allowed controller current must be reached to detect a hard stop. Should usually be lower than 1.0  `[0.0 - 1.0]`.
-
