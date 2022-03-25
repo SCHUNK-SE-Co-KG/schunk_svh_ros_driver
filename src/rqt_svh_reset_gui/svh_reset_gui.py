@@ -6,7 +6,7 @@ from qt_gui.plugin import Plugin
 from python_qt_binding import loadUi
 from python_qt_binding.QtGui import QWidget
 from python_qt_binding import QtGui
-from std_msgs.msg import Int8, Empty 
+from std_msgs.msg import Int8, Empty
 
 class SVHResetGui(Plugin):
 
@@ -26,7 +26,7 @@ class SVHResetGui(Plugin):
 
         # Create QWidget
         self._widget = QWidget()
-        
+
         rp = rospkg.RosPack()
         ui_file = os.path.join(rp.get_path('schunk_svh_driver'), 'resource', 'SVHResetGui.ui')
         loadUi(ui_file, self._widget)
@@ -35,11 +35,11 @@ class SVHResetGui(Plugin):
             self._widget.setWindowTitle(self._widget.windowTitle() + (' (%d)' % context.serial_number()))
         # Add widget to the user interface
         context.add_widget(self._widget)
-        
+
         self._widget.connect_button.clicked[bool].connect(self.ConnectButton)
         self._widget.reset_button.clicked[bool].connect(self.ResetButton)
         self._widget.enable_button.clicked[bool].connect(self.EnableButton)
-  
+
         self._widget.finger_select_box.addItem("All",-1)
         self._widget.finger_select_box.addItem("Thumb Flexion",0)
         self._widget.finger_select_box.addItem("Thumb Opposition",1)
@@ -50,24 +50,23 @@ class SVHResetGui(Plugin):
         self._widget.finger_select_box.addItem("Ring Finger",6)
         self._widget.finger_select_box.addItem("Pinky Finger",7)
         self._widget.finger_select_box.addItem("Finger Spread",8)
-        
+
         self.reset_pub = rospy.Publisher('svh_controller/reset_channel',  Int8, queue_size=1)
         self.enable_pub = rospy.Publisher('svh_controller/enable_channel', Int8, queue_size=1)
         self.connect_pub = rospy.Publisher('svh_controller/connect',  Empty, queue_size=1)
-        
-        
+
+
     def ConnectButton(self):
         self.connect_pub.publish(Empty())
-        print "ConnectButton\n"
+        rospy.loginfo("ConnectButton\n")
 
     def ResetButton(self):
         selected = self._widget.finger_select_box.itemData(self._widget.finger_select_box.currentIndex())
         self.reset_pub.publish(Int8(selected))
-        print "Reset\n" + str(selected)
+        rospy.loginfo("Reset\n" + str(selected))
 
 
     def EnableButton(self):
         selected = self._widget.finger_select_box.itemData(self._widget.finger_select_box.currentIndex())
         self.enable_pub.publish(Int8(selected))
-        print "Enabled\n" + str(selected)
-        
+        rospy.loginfo("Enabled\n" + str(selected))
