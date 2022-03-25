@@ -21,11 +21,12 @@ a minimal GUI with a single slider that changes the SVH's state between a
 `fist` and a `full spread`.  It assumes a running `joint_trajectory_controller`
 for all joints.
 """
-import threading
 import numpy as np
 from tkinter import Tk, Scale
 import rclpy
 from rclpy.node import Node
+import subprocess
+import sys
 
 from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
 from builtin_interfaces.msg import Duration
@@ -34,20 +35,37 @@ from builtin_interfaces.msg import Duration
 class SVH(Node):
     def __init__(self):
         super().__init__('svh_gui')
+
+        # Check the available ROS2 nodes for a joint trajectory controller.
+        # It's either called /left_hand or /right_hand.
+        nodes = subprocess.check_output("ros2 node list", stderr=subprocess.STDOUT, shell=True)
+        nodes = nodes.decode("utf-8").split('\n')
+        if "/left_hand" in nodes:
+            controller = "/left_hand"
+            joint_prefix = "Left_Hand"
+        elif "/right_hand" in nodes:
+            controller = "/right_hand"
+            joint_prefix = "Right_Hand"
+        else:
+            rclpy.shutdown()
+            print("No suitable hand controller found.")
+            sys.exit(0)
+
+        # Control the hand with publishing joint trajectories.
         self.publisher = self.create_publisher(
-            JointTrajectory, 'joint_trajectory_controller/joint_trajectory', 10)
+            JointTrajectory, f'{controller}/joint_trajectory', 10)
 
         # Configuration presets
         self.joint_names = [
-            'Left_Hand_Thumb_Flexion',
-            'Left_Hand_Thumb_Opposition',
-            'Left_Hand_Index_Finger_Distal',
-            'Left_Hand_Index_Finger_Proximal',
-            'Left_Hand_Middle_Finger_Distal',
-            'Left_Hand_Middle_Finger_Proximal',
-            'Left_Hand_Ring_Finger',
-            'Left_Hand_Pinky',
-            'Left_Hand_Finger_Spread',
+            f'{joint_prefix}_Thumb_Flexion',
+            f'{joint_prefix}_Thumb_Opposition',
+            f'{joint_prefix}_Index_Finger_Distal',
+            f'{joint_prefix}_Index_Finger_Proximal',
+            f'{joint_prefix}_Middle_Finger_Distal',
+            f'{joint_prefix}_Middle_Finger_Proximal',
+            f'{joint_prefix}_Ring_Finger',
+            f'{joint_prefix}_Pinky',
+            f'{joint_prefix}_Finger_Spread',
         ]
         self.fist = [0.6, 0.6, 0.7, 0.7, 0.7, 0.7, 0.6, 0.6, 0.3]
         self.full_spread = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.5]
