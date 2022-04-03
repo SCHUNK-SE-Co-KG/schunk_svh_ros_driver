@@ -37,6 +37,6 @@ private:
   static ::ros::console::Level levelSVH2ROS(const LogLevel level);
 };
 
-void setupROSLogHandler();
+void setupROSLogHandler(LogLevel level = LogLevel::INFO);
 
 } // namespace driver_svh
