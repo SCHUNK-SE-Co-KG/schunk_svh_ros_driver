@@ -26,6 +26,7 @@
 #include <schunk_svh_driver/HomeWithChannels.h>
 #include <schunk_svh_driver/SetAllChannelForceLimits.h>
 #include <schunk_svh_driver/SetChannelForceLimit.h>
+#include <memory>
 
 // Driver Specific things
 #include <schunk_svh_library/control/SVHFingerManager.h>
@@ -37,7 +38,7 @@ public:
   SVHWrapper(const ros::NodeHandle& nh);
   ~SVHWrapper();
 
-  boost::shared_ptr<driver_svh::SVHFingerManager> getFingerManager () const { return m_finger_manager; }
+  std::shared_ptr<driver_svh::SVHFingerManager> getFingerManager () const { return m_finger_manager; }
 
   std::string getNamePrefix () const { return m_name_prefix; }
 
@@ -61,10 +62,10 @@ private:
   ros::NodeHandle m_priv_nh;
 
   //! Handle to the SVH finger manager for library access
-  boost::shared_ptr<driver_svh::SVHFingerManager> m_finger_manager;
+  std::shared_ptr<driver_svh::SVHFingerManager> m_finger_manager;
 
   //! Handle to the diagnostics test class creating a test protocol with the web gui package
-  boost::shared_ptr<SVHDiagnostics> m_svh_diagnostics;
+  std::shared_ptr<SVHDiagnostics> m_svh_diagnostics;
 
   //! Serial device to use for communication with hardware
   std::string m_serial_device_name;

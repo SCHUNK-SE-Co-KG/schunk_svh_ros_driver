@@ -110,8 +110,8 @@ SVHWrapper::SVHWrapper(const ros::NodeHandle& nh)
 
   m_svh_diagnostics.reset(new SVHDiagnostics(
                                 m_priv_nh, m_finger_manager,
-                                boost::bind( &SVHWrapper::setRosControlEnable, this, _1),
-                                boost::bind( &SVHWrapper::initControllerParameters, this, _1, _2),
+                                std::bind( &SVHWrapper::setRosControlEnable, this, std::placeholders::_1),
+                                std::bind( &SVHWrapper::initControllerParameters, this, std::placeholders::_1, std::placeholders::_2),
                                 "diagnostics_to_protocol"));
 }
 

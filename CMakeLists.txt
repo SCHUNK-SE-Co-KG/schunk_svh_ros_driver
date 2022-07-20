@@ -21,7 +21,6 @@ find_package(catkin REQUIRED COMPONENTS
 
 ## System dependencies are found with CMake's conventions
 find_package(schunk_svh_library REQUIRED)
-find_package(Boost COMPONENTS thread REQUIRED)
 
 catkin_python_setup()
 
@@ -145,7 +144,6 @@ add_dependencies( svh_robot_hw
 target_link_libraries(svh_robot_hw
   svh_ros
   ${catkin_LIBRARIES}
-  Boost::thread
 )
 
 add_executable(svh_ros_control_node
