@@ -14,6 +14,7 @@ find_package(catkin REQUIRED COMPONENTS
     pluginlib
     roscpp
     rospy
+    schunk_svh_description
     sensor_msgs
     std_msgs
     std_srvs
@@ -117,10 +118,11 @@ include_directories(
 ## ROSControl
 add_library(svh_ros
   src/DynamicParameterClass.cpp
+  src/ROSLogHandler.cpp
   src/SVHDiagnostics.cpp
   src/SVHWrapper.cpp
-  src/ROSLogHandler.cpp
 )
+
 add_dependencies(svh_ros
   ${catkin_EXPORTED_TARGETS}
   ${schunk_svh_driver_EXPORTED_TARGETS}
@@ -136,7 +138,7 @@ target_link_libraries(svh_ros
 add_library(svh_robot_hw
   src/SVHRosControlHWInterface.cpp
 )
-add_dependencies( svh_robot_hw
+add_dependencies(svh_robot_hw
   svh_ros
   ${catkin_EXPORTED_TARGETS}
   ${schunk_svh_driver_EXPORTED_TARGETS}
@@ -147,8 +149,8 @@ target_link_libraries(svh_robot_hw
 )
 
 add_executable(svh_ros_control_node
-  src/svh_ros_control_node.cpp
   src/ROSLogHandler.cpp
+  src/svh_ros_control_node.cpp
 )
 add_dependencies(svh_ros_control_node
   svh_ros
@@ -210,7 +212,7 @@ install(DIRECTORY include
 )
 
 # Install config files
-install(DIRECTORY etc udev resource
+install(DIRECTORY etc resource udev
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 )
 
