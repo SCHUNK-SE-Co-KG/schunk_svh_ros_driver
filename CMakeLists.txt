@@ -185,9 +185,11 @@ target_link_libraries(svh_dynamic_parameter_test
 #############
 ## Install ##
 #############
-# Special python handling
+
+# Install scripts
 install(PROGRAMS
   src/rqt_svh_reset_gui/svh_reset_gui.py
+  udev/create_udev_rules
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
@@ -202,39 +204,21 @@ install(
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
-# install the headers
-install(DIRECTORY include/
+# Install the headers
+install(DIRECTORY include
   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
 )
 
-#config files
-install(DIRECTORY etc/
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/etc
+# Install config files
+install(DIRECTORY etc udev resource
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 )
 
-#udev rules
-install(DIRECTORY udev/
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/udev
-)
-
-# Individual files (Quick commands and the urdf.rviz)
+# Install individual files
 install(
   FILES
     plugin.xml
-    quick_commands
+    robot_hw_plugin.xml
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 )
 
-install(FILES robot_hw_plugin.xml
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
-)
-
-# Install resources
-install(DIRECTORY resource
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
-)
-
-# Helper for installing the udev rules in an easy fashion and without any conflicts
-install(PROGRAMS udev/create_udev_rules
-    DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-)
