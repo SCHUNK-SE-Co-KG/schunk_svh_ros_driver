@@ -178,7 +178,7 @@ install(DIRECTORY include
 )
 
 # Install config files
-install(DIRECTORY etc resource udev
+install(DIRECTORY cfg etc resource udev
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 )
 
