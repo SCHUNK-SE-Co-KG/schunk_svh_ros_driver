@@ -1,13 +1,9 @@
 <launch>
   <!-- global PARAMS Change here if needed -->
-  <arg name="gui" default="False" />
   <arg name="autostart" default="True"/>
   <arg name="serial_device" default="/dev/ttyUSB0"/>
   <arg name="simulation" default="False"/>
-  <arg name="controller_config" default="$(find schunk_svh_driver)/etc/controller_user.yaml" />
-  <arg name="general_config" default="$(find schunk_svh_driver)/etc/svh.yaml" />
   <arg name="name_prefix" default="left_hand" />
-  <arg name="frequency" default="30" />
   <arg name="maximal_force" default="0.9" />
   <arg name="trajectory_controller_name" default="pos_based_pos_traj_controller_hand" />
   <arg name="debug" default="False" />
@@ -24,6 +20,7 @@
         <arg name="autostart" value="$(arg autostart)"/>
         <arg name="trajectory_controller_name" value="$(arg trajectory_controller_name)" />
         <arg name="debug" value="$(arg debug)"/>
+        <arg name="name_prefix" value="$(arg name_prefix)"/>
   </include>
 
   <!-- ROS_Control Controllers -->
