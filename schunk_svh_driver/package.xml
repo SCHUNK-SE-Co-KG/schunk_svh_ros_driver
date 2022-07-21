@@ -6,15 +6,18 @@
 
   <name>schunk_svh_driver</name>
   <version>0.0.1</version>
-  <description>SVH Driver wrapper to enable control of the Schunk five finger hand</description>
+  <description>ROS1 driver for the Schunk SVH five finger hand</description>
 
-  <maintainer email="heppner@fzi.de">Georg Heppner</maintainer>
+  <maintainer email="scherzin@fzi.de">Stefan Scherzinger</maintainer>
 
   <license>LGPL</license>
 
   <url>http://www.ros.org/wiki/schunk_svh_driver</url>
 
   <author email="heppner@fzi.de">Georg Heppner</author>
+  <author email="exner@fzi.de">Felix Exner</author>
+  <author email="pbecker@fzi.de">Pascal Becker</author>
+  <author email="mangler@fzi.de">Johannes Mangler</author>
 
   <buildtool_depend>catkin</buildtool_depend>
 
