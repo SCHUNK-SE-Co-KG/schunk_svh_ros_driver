@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<?xml-model
+  href="http://download.ros.org/schema/package_format3.xsd"
+  schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+
+  <name>schunk_svh_msgs</name>
+  <version>0.0.1</version>
+  <description>ROS1 messages, services, and actions for the Schunk SVH five finger hand</description>
+
+  <maintainer email="scherzin@fzi.de">Stefan Scherzinger</maintainer>
+
+  <license>TODO</license>
+
+  <author email="heppner@fzi.de">Georg Heppner</author>
+  <author email="exner@fzi.de">Felix Exner</author>
+  <author email="pbecker@fzi.de">Pascal Becker</author>
+  <author email="mangler@fzi.de">Johannes Mangler</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <depend>actionlib_msgs</depend>
+  <depend>message_generation</depend>
+  <depend>std_msgs</depend>
+  <depend>std_srvs</depend>
+
+  <exec_depend>message_runtime</exec_depend>
+
+  <export>
+  </export>
+
+</package>

@@ -22,10 +22,10 @@
 #include <std_msgs/Empty.h>
 #include <std_msgs/Int8.h>
 
-#include <schunk_svh_driver/HomeAll.h>
-#include <schunk_svh_driver/HomeWithChannels.h>
-#include <schunk_svh_driver/SetAllChannelForceLimits.h>
-#include <schunk_svh_driver/SetChannelForceLimit.h>
+#include <schunk_svh_msgs/HomeAll.h>
+#include <schunk_svh_msgs/HomeWithChannels.h>
+#include <schunk_svh_msgs/SetAllChannelForceLimits.h>
+#include <schunk_svh_msgs/SetChannelForceLimit.h>
 #include <memory>
 
 // Driver Specific things
@@ -76,16 +76,16 @@ private:
   //! Callback function to enable channels of SCHUNK five finger hand
   void enableChannelCallback(const std_msgs::Int8ConstPtr& channel);
 
-  bool homeAllNodes(schunk_svh_driver::HomeAllRequest& req,
-                    schunk_svh_driver::HomeAllResponse& resp);
+  bool homeAllNodes(schunk_svh_msgs::HomeAllRequest& req,
+                    schunk_svh_msgs::HomeAllResponse& resp);
 
-  bool homeNodesChannelIds(schunk_svh_driver::HomeWithChannelsRequest& req,
-                           schunk_svh_driver::HomeWithChannelsResponse& resp);
+  bool homeNodesChannelIds(schunk_svh_msgs::HomeWithChannelsRequest& req,
+                           schunk_svh_msgs::HomeWithChannelsResponse& resp);
 
-  bool setAllForceLimits(schunk_svh_driver::SetAllChannelForceLimits::Request &req,
-                         schunk_svh_driver::SetAllChannelForceLimits::Response &res);
-  bool setForceLimitById(schunk_svh_driver::SetChannelForceLimit::Request &req,
-                         schunk_svh_driver::SetChannelForceLimit::Response &res);
+  bool setAllForceLimits(schunk_svh_msgs::SetAllChannelForceLimits::Request &req,
+                         schunk_svh_msgs::SetAllChannelForceLimits::Response &res);
+  bool setForceLimitById(schunk_svh_msgs::SetChannelForceLimit::Request &req,
+                         schunk_svh_msgs::SetChannelForceLimit::Response &res);
 
   float setChannelForceLimit(size_t channel, float force_limit);
 

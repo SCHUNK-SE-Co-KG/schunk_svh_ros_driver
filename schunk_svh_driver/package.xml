@@ -6,39 +6,36 @@
 
   <name>schunk_svh_driver</name>
   <version>0.0.1</version>
-  <description>SVH Driver wrapper to enable control of the Schunk five finger hand</description>
+  <description>ROS1 driver for the Schunk SVH five finger hand</description>
 
-  <maintainer email="heppner@fzi.de">Georg Heppner</maintainer>
+  <maintainer email="scherzin@fzi.de">Stefan Scherzinger</maintainer>
 
   <license>LGPL</license>
 
   <url>http://www.ros.org/wiki/schunk_svh_driver</url>
 
   <author email="heppner@fzi.de">Georg Heppner</author>
+  <author email="exner@fzi.de">Felix Exner</author>
+  <author email="pbecker@fzi.de">Pascal Becker</author>
+  <author email="mangler@fzi.de">Johannes Mangler</author>
 
   <buildtool_depend>catkin</buildtool_depend>
 
   <depend>actionlib</depend>
-  <depend>actionlib_msgs</depend>
   <depend>combined_robot_hw</depend>
-  <depend>control_msgs</depend>
   <depend>controller_manager</depend>
   <depend>dynamic_reconfigure</depend>
   <depend>hardware_interface</depend>
   <depend>joint_limits_interface</depend>
-  <depend>message_generation</depend>
   <depend>pluginlib</depend>
   <depend>roscpp</depend>
   <depend>rospy</depend>
   <depend>schunk_svh_description</depend>
+  <depend>schunk_svh_msgs</depend>
   <depend>schunk_svh_library</depend>
   <depend>sensor_msgs</depend>
   <depend>std_msgs</depend>
-  <depend>std_srvs</depend>
 
-  <build_export_depend>message_runtime</build_export_depend>
-
-  <exec_depend>message_runtime</exec_depend>
   <exec_depend condition="$ROS_PYTHON_VERSION == 2">python-rospkg</exec_depend>
   <exec_depend condition="$ROS_PYTHON_VERSION == 3">python3-rospkg</exec_depend>
   <exec_depend>python_qt_binding</exec_depend>

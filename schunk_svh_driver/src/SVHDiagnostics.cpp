@@ -33,7 +33,7 @@ SVHDiagnostics::SVHDiagnostics(
   //! \brief m_pub_protocol_variables pubished the diagnostic results to the SVHProtocol Node
   //! to print the Test-Protocol
   //!
-  m_pub_protocol_variables = m_priv_nh.advertise<schunk_svh_driver::SVHDiagnosticsToProtocol>("diagnostic_info_to_protocol", 1);
+  m_pub_protocol_variables = m_priv_nh.advertise<schunk_svh_msgs::SVHDiagnosticsToProtocol>("diagnostic_info_to_protocol", 1);
 
   m_basic_test_running = false;
 
@@ -67,7 +67,7 @@ void SVHDiagnostics::initTest()
   // init the indidividual finger params
   for (size_t channel = 0; channel < driver_svh::SVH_DIMENSION; ++channel)
   {
-    schunk_svh_driver::SVHDiagnosticsFinger finger;
+    schunk_svh_msgs::SVHDiagnosticsFinger finger;
     finger.channel               = channel;
     finger.current_max_actual    = 10;
     finger.current_min_actual    = 100;
@@ -96,7 +96,7 @@ void SVHDiagnostics::initTest()
   reset_success.resize(driver_svh::SVH_DIMENSION, false);
 }
 
-void SVHDiagnostics::basicTestCallback(const schunk_svh_driver::SVHDiagnosticsGoalConstPtr & goal)
+void SVHDiagnostics::basicTestCallback(const schunk_svh_msgs::SVHDiagnosticsGoalConstPtr & goal)
 {
   m_msg_protocol_variable.date_as_string = goal->date_as_string;
 
@@ -134,7 +134,7 @@ void SVHDiagnostics::basicTestCallback(const schunk_svh_driver::SVHDiagnosticsGo
 
     for (size_t channel = 0; channel < driver_svh::SVH_DIMENSION; ++channel)
     {
-      schunk_svh_driver::SVHDiagnosticsFinger finger = m_action_feedback.fingers[channel];
+      schunk_svh_msgs::SVHDiagnosticsFinger finger = m_action_feedback.fingers[channel];
 
       for (int i = 0; i <= 1; i++) // for both hardware constraints (pos/neg)
       {
@@ -194,7 +194,7 @@ void SVHDiagnostics::basicTestCallback(const schunk_svh_driver::SVHDiagnosticsGo
   }
   else
   {
-    schunk_svh_driver::SVHDiagnosticsResult action_result;
+    schunk_svh_msgs::SVHDiagnosticsResult action_result;
 
     action_result.result = -1;
     action_result.channel = -1;
@@ -208,11 +208,11 @@ void SVHDiagnostics::basicTestCallback(const schunk_svh_driver::SVHDiagnosticsGo
 
 }
 
-schunk_svh_driver::SVHDiagnosticsResult SVHDiagnostics::evaluateBasicTest()
+schunk_svh_msgs::SVHDiagnosticsResult SVHDiagnostics::evaluateBasicTest()
 {
   ROS_INFO_STREAM("SVHDiagnostics - Evaluate the Basic Test");
 
-  schunk_svh_driver::SVHDiagnosticsResult action_result;
+  schunk_svh_msgs::SVHDiagnosticsResult action_result;
 
   action_result.result = zero_defect;
   action_result.channel = -1;
@@ -358,7 +358,7 @@ void SVHDiagnostics::resetDiagnosticStatus()
 {
   for (size_t channel = 0; channel < driver_svh::SVH_DIMENSION; ++channel)
   {
-    schunk_svh_driver::SVHDiagnosticsFinger finger = m_action_feedback.fingers[channel];
+    schunk_svh_msgs::SVHDiagnosticsFinger finger = m_action_feedback.fingers[channel];
     finger.current_max_actual                          = 0;
     finger.current_min_actual                          = 0;
     finger.position_range_actual                       = 0;
