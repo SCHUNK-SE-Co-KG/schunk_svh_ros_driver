@@ -1,0 +1,18 @@
+<package>
+  <name>schunk_svh</name>
+  <version>0.1.0</version>
+  <description>ROS1 specific packages for the Schunk SVH five finger hand</description>
+
+  <author email="scherzin@fzi.de">Stefan Scherzinger</author> 
+  <maintainer email="scherzin@fzi.de">Stefan Scherzinger</maintainer>
+
+  <license>TODO</license>
+  <url type="repository">https://github.com/fzi-forschungszentrum-informatik/schunk_svh_ros_driver</url> 
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <run_depend>schunk_svh_driver</run_depend>
+
+  <export>
+    <metapackage/>
+  </export>
+</package>
