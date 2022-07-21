@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<robot name="svh" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+ <xacro:include filename="$(find schunk_svh_description)/urdf/svh.urdf.xacro" />
+
+ <link name="base_link" />
+ 
+ <xacro:svh parent="base_link" name="left_hand" side="-1">
+    <origin xyz="0 0 0"  rpy= "0 0 0" />
+  </xacro:svh>
+
+</robot>
