@@ -249,8 +249,8 @@ void SVHWrapper::enableChannelCallback(const std_msgs::Int8ConstPtr& channel)
   m_finger_manager->enableChannel(static_cast<driver_svh::SVHChannel>(channel->data));
 }
 
-bool SVHWrapper::homeAllNodes(schunk_svh_driver::HomeAll::Request& req,
-                              schunk_svh_driver::HomeAll::Response& resp)
+bool SVHWrapper::homeAllNodes(schunk_svh_msgs::HomeAll::Request& req,
+                              schunk_svh_msgs::HomeAll::Response& resp)
 {
   // disable flag to stop ros-control-loop
   m_channels_enabled = false;
@@ -267,8 +267,8 @@ bool SVHWrapper::homeAllNodes(schunk_svh_driver::HomeAll::Request& req,
   return resp.success;
 }
 
-bool SVHWrapper::homeNodesChannelIds(schunk_svh_driver::HomeWithChannels::Request& req,
-                                     schunk_svh_driver::HomeWithChannels::Response& resp)
+bool SVHWrapper::homeNodesChannelIds(schunk_svh_msgs::HomeWithChannels::Request& req,
+                                     schunk_svh_msgs::HomeWithChannels::Response& resp)
 {
   // is ros-control-loop enabled ?
   bool channels_enabled_before;
@@ -303,8 +303,8 @@ bool SVHWrapper::homeNodesChannelIds(schunk_svh_driver::HomeWithChannels::Reques
 }
 
 
-bool SVHWrapper::setAllForceLimits(schunk_svh_driver::SetAllChannelForceLimits::Request &req,
-                                   schunk_svh_driver::SetAllChannelForceLimits::Response &res)
+bool SVHWrapper::setAllForceLimits(schunk_svh_msgs::SetAllChannelForceLimits::Request &req,
+                                   schunk_svh_msgs::SetAllChannelForceLimits::Response &res)
 {
   for (size_t channel = 0; channel < driver_svh::SVH_DIMENSION; ++channel)
   {
@@ -313,8 +313,8 @@ bool SVHWrapper::setAllForceLimits(schunk_svh_driver::SetAllChannelForceLimits::
   return true;
 }
 
-bool SVHWrapper::setForceLimitById(schunk_svh_driver::SetChannelForceLimit::Request &req,
-                                   schunk_svh_driver::SetChannelForceLimit::Response &res)
+bool SVHWrapper::setForceLimitById(schunk_svh_msgs::SetChannelForceLimit::Request &req,
+                                   schunk_svh_msgs::SetChannelForceLimit::Response &res)
 {
   res.force_limit = setChannelForceLimit(req.channel_id, req.force_limit);
   return true;

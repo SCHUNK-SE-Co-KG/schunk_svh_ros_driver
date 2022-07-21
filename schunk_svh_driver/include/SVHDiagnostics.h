@@ -42,8 +42,8 @@
 #include <std_msgs/String.h>
 
 // FZI includes
-#include "schunk_svh_driver/SVHDiagnosticsAction.h"
-#include "schunk_svh_driver/SVHDiagnosticsToProtocol.h"
+#include "schunk_svh_msgs/SVHDiagnosticsAction.h"
+#include "schunk_svh_msgs/SVHDiagnosticsToProtocol.h"
 
 // Driver Specific things
 #include <schunk_svh_library/control/SVHFingerManager.h>
@@ -74,7 +74,7 @@ public:
 
   //! Callback function to conduct the basic test for the SCHUNK five finger hand (msg defined in
   //! schunk_web_gui/msg/DiagnosticsMsg.msg)
-  void basicTestCallback(const schunk_svh_driver::SVHDiagnosticsGoalConstPtr & goal);
+  void basicTestCallback(const schunk_svh_msgs::SVHDiagnosticsGoalConstPtr & goal);
 
   //! Callback function to test the subfunctions of SVHDiagnostics
   void testCallback(const std_msgs::String&);
@@ -101,7 +101,7 @@ private:
   //! \brief evaluateBasicTest evaluates the diagnostics status of the basic test to send the hint informations to the webside
   //! \return std_msgs::UInt8MultiArray mesg with the test results
   //!
-  schunk_svh_driver::SVHDiagnosticsResult evaluateBasicTest();
+  schunk_svh_msgs::SVHDiagnosticsResult evaluateBasicTest();
 
   //!
   //! \brief set the protocol variables
@@ -170,16 +170,16 @@ private:
   ros::Publisher m_pub_protocol_variables;
 
   //! Message for the Protocol variable
-  schunk_svh_driver::SVHDiagnosticsToProtocol m_msg_protocol_variable;
+  schunk_svh_msgs::SVHDiagnosticsToProtocol m_msg_protocol_variable;
 
   //! Action Server
-  actionlib::SimpleActionServer<schunk_svh_driver::SVHDiagnosticsAction> m_diagnostics_action_server;
+  actionlib::SimpleActionServer<schunk_svh_msgs::SVHDiagnosticsAction> m_diagnostics_action_server;
 
   // Action Feedback
-  schunk_svh_driver::SVHDiagnosticsFeedback m_action_feedback;
+  schunk_svh_msgs::SVHDiagnosticsFeedback m_action_feedback;
 
   //! Action result
-  schunk_svh_driver::SVHDiagnosticsResult m_action_result;
+  schunk_svh_msgs::SVHDiagnosticsResult m_action_result;
 
   // Action server name
   std::string m_action_name;
