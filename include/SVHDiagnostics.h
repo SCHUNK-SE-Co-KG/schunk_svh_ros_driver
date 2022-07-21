@@ -23,6 +23,8 @@
 
 #include <stdint.h>
 #include <string>
+#include <memory>
+#include <functional>
 
 // Date
 #include <ctime>
@@ -49,8 +51,6 @@
 #include <schunk_svh_library/control/SVHCurrentSettings.h>
 #include <schunk_svh_library/SVHFirmwareInfo.h>
 
-#include <boost/shared_ptr.hpp>
-
 class SVHDiagnostics{
 
 public:
@@ -64,9 +64,9 @@ public:
   //!
   SVHDiagnostics(
     const ros::NodeHandle &nh,
-    boost::shared_ptr<driver_svh::SVHFingerManager>& finger_manager,
-    boost::function<void(bool)> enable_ros_contol_loop,
-    boost::function<void(uint16_t, uint16_t)> init_controller_parameters,
+    std::shared_ptr<driver_svh::SVHFingerManager>& finger_manager,
+    std::function<void(bool)> enable_ros_contol_loop,
+    std::function<void(uint16_t, uint16_t)> init_controller_parameters,
     std::string name);
 
   //! Default DTOR
@@ -119,18 +119,18 @@ private:
   void initTest();
 
   //! Handle to the SVH finger manager for library access
-  boost::shared_ptr<driver_svh::SVHFingerManager> m_finger_manager;
+  std::shared_ptr<driver_svh::SVHFingerManager> m_finger_manager;
 
   //!
   //! function handle to set the ros-control-loop enabling flag in the SVHWrapper
   //!
-  boost::function<void(bool)> m_enable_ros_contol_loop;
+  std::function<void(bool)> m_enable_ros_contol_loop;
 
   //!
   //! function handle to get the hand parameters from ros-param-server
   //! and set them to the finger_manager to have cleared parameter set
   //!
-  boost::function<void(uint16_t, uint16_t)> m_init_controller_parameters;
+  std::function<void(uint16_t, uint16_t)> m_init_controller_parameters;
 
   //! Serial device to use for communication with hardware
   std::string m_serial_device_name;

@@ -14,6 +14,7 @@ find_package(catkin REQUIRED COMPONENTS
     pluginlib
     roscpp
     rospy
+    schunk_svh_description
     sensor_msgs
     std_msgs
     std_srvs
@@ -21,7 +22,6 @@ find_package(catkin REQUIRED COMPONENTS
 
 ## System dependencies are found with CMake's conventions
 find_package(schunk_svh_library REQUIRED)
-find_package(Boost COMPONENTS thread REQUIRED)
 
 catkin_python_setup()
 
@@ -115,48 +115,14 @@ include_directories(
   ${driver_svh_INCLUDE_DIRS}
 )
 
-# Additional compiler definitions
-
-# Declare a cpp executable
-add_executable(svh_controller
-  src/DynamicParameterClass.cpp
-  src/SVHNode.cpp
-  src/ROSLogHandler.cpp
-)
-
-# Simple test programs
-add_executable(svh_sin_test
-  src/SVHSinTest.cpp
-  src/ROSLogHandler.cpp
-)
-add_dependencies(svh_sin_test ${catkin_EXPORTED_TARGETS} ${schunk_svh_driver_EXPORTED_TARGETS})
-
-# Add cmake target dependencies of the executable/library
-# as an example, message headers may need to be generated before nodes
-add_dependencies(svh_controller
-  ${schunk_svh_driver_EXPORTED_TARGETS}
-)
-
-## Specify libraries to link a library or executable target against
-target_link_libraries(svh_controller
-  ${catkin_LIBRARIES}
-  Schunk::svh-library
-)
-
-
-## Specify libraries to link a library or executable target against
-target_link_libraries(svh_sin_test
-  ${catkin_LIBRARIES}
-  Schunk::svh-serial
-)
-
 ## ROSControl
 add_library(svh_ros
   src/DynamicParameterClass.cpp
+  src/ROSLogHandler.cpp
   src/SVHDiagnostics.cpp
   src/SVHWrapper.cpp
-  src/ROSLogHandler.cpp
 )
+
 add_dependencies(svh_ros
   ${catkin_EXPORTED_TARGETS}
   ${schunk_svh_driver_EXPORTED_TARGETS}
@@ -172,7 +138,7 @@ target_link_libraries(svh_ros
 add_library(svh_robot_hw
   src/SVHRosControlHWInterface.cpp
 )
-add_dependencies( svh_robot_hw
+add_dependencies(svh_robot_hw
   svh_ros
   ${catkin_EXPORTED_TARGETS}
   ${schunk_svh_driver_EXPORTED_TARGETS}
@@ -180,12 +146,11 @@ add_dependencies( svh_robot_hw
 target_link_libraries(svh_robot_hw
   svh_ros
   ${catkin_LIBRARIES}
-  Boost::thread
 )
 
 add_executable(svh_ros_control_node
-  src/svh_ros_control_node.cpp
   src/ROSLogHandler.cpp
+  src/svh_ros_control_node.cpp
 )
 add_dependencies(svh_ros_control_node
   svh_ros
@@ -222,58 +187,40 @@ target_link_libraries(svh_dynamic_parameter_test
 #############
 ## Install ##
 #############
-# Special python handling
+
+# Install scripts
 install(PROGRAMS
   src/rqt_svh_reset_gui/svh_reset_gui.py
+  udev/create_udev_rules
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
 # Install targets of libs and executables
 install(
   TARGETS
-    svh_controller
     svh_robot_hw
     svh_ros
     svh_ros_control_node
-    svh_sin_test
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
-# install the headers
-install(DIRECTORY include/
+# Install the headers
+install(DIRECTORY include
   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
 )
 
-#config files
-install(DIRECTORY etc/
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/etc
+# Install config files
+install(DIRECTORY etc resource udev
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 )
 
-#udev rules
-install(DIRECTORY udev/
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/udev
-)
-
-# Individual files (Quick commands and the urdf.rviz)
+# Install individual files
 install(
   FILES
     plugin.xml
-    quick_commands
+    robot_hw_plugin.xml
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 )
 
-install(FILES robot_hw_plugin.xml
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
-)
-
-# Install resources
-install(DIRECTORY resource
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
-)
-
-# Helper for installing the udev rules in an easy fashion and without any conflicts
-install(PROGRAMS udev/create_udev_rules
-    DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-)

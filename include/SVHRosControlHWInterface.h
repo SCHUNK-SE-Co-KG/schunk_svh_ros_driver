@@ -25,6 +25,7 @@
 #include <joint_limits_interface/joint_limits.h>
 #include <ros/ros.h>
 #include <sensor_msgs/JointState.h>
+#include <memory>
 
 /*!
  * \brief This class defines a ros-control hardware interface.
@@ -35,8 +36,6 @@ class SVHRosControlHWInterface : public hardware_interface::RobotHW
 public:
   SVHRosControlHWInterface ();
   ~SVHRosControlHWInterface ();
-
-//   SVHRosControlHWInterface (ros::NodeHandle& nh, boost::shared_ptr<driver_svh::SVHFingerManager> &finger_manager, std::string &name_prefix);
 
   /// \brief Initialize the hardware interface
   virtual bool init(ros::NodeHandle& root_nh, ros::NodeHandle& robot_hw_nh);
@@ -67,7 +66,7 @@ public:
 protected:
   ros::NodeHandle m_node_handle;
   //! Handle to the SVH finger manager for library access
-  boost::shared_ptr<SVHWrapper> m_svh;
+  std::shared_ptr<SVHWrapper> m_svh;
 
   // Interfaces
   hardware_interface::JointStateInterface m_joint_state_interface;

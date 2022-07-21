@@ -25,24 +25,20 @@ SVHWrapper::SVHWrapper(const ros::NodeHandle& nh)
 
 {
   bool autostart;
-  bool use_internal_logging;
 
   int reset_timeout;
   std::vector<bool> disable_flags(driver_svh::SVH_DIMENSION, false);
   // Config that contains the log stream configuration without the file names
-  std::string logging_config_file;
 
   sensor_msgs::JointState joint_msg;
 
   float max_force;
 
   m_priv_nh.param<bool>("autostart", autostart, false);
-  m_priv_nh.param<bool>("use_internal_logging", use_internal_logging, false);
   m_priv_nh.param<std::string>("serial_device", m_serial_device_name, "/dev/ttyUSB0");
   // Note : Wrong values (like numerics) in the launch file will lead to a "true" value here
   m_priv_nh.getParam("disable_flags", disable_flags);
   m_priv_nh.param<int>("reset_timeout", reset_timeout, 5);
-  m_priv_nh.getParam("logging_config", logging_config_file);
   m_priv_nh.param<std::string>("name_prefix", m_name_prefix, "left_hand");
   m_priv_nh.param<int>("connect_retry_count", m_connect_retry_count, 3);
   m_priv_nh.param<float>("maximal_force", max_force, 0.8);
@@ -67,7 +63,7 @@ SVHWrapper::SVHWrapper(const ros::NodeHandle& nh)
     }
   }
 
-  // Init the actual driver hook (after logging initialize)
+  // Init the actual driver hook
   m_finger_manager.reset(new driver_svh::SVHFingerManager(disable_flags, reset_timeout));
 
   // Connect and start the reset so that the hand is ready for use
@@ -114,8 +110,8 @@ SVHWrapper::SVHWrapper(const ros::NodeHandle& nh)
 
   m_svh_diagnostics.reset(new SVHDiagnostics(
                                 m_priv_nh, m_finger_manager,
-                                boost::bind( &SVHWrapper::setRosControlEnable, this, _1),
-                                boost::bind( &SVHWrapper::initControllerParameters, this, _1, _2),
+                                std::bind( &SVHWrapper::setRosControlEnable, this, std::placeholders::_1),
+                                std::bind( &SVHWrapper::initControllerParameters, this, std::placeholders::_1, std::placeholders::_2),
                                 "diagnostics_to_protocol"));
 }
 

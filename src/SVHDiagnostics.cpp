@@ -17,12 +17,12 @@
 
 SVHDiagnostics::SVHDiagnostics(
   const ros::NodeHandle& nh,
-  boost::shared_ptr<driver_svh::SVHFingerManager>& finger_manager,
-  boost::function<void(bool)> enable_ros_contol_loop,
-  boost::function<void(uint16_t, uint16_t)> init_controller_parameters,
+  std::shared_ptr<driver_svh::SVHFingerManager>& finger_manager,
+  std::function<void(bool)> enable_ros_contol_loop,
+  std::function<void(uint16_t, uint16_t)> init_controller_parameters,
   std::string name)
   : m_priv_nh(nh)
-  , m_diagnostics_action_server(m_priv_nh, name, boost::bind(&SVHDiagnostics::basicTestCallback, this, _1), false)
+  , m_diagnostics_action_server(m_priv_nh, name, std::bind(&SVHDiagnostics::basicTestCallback, this, std::placeholders::_1), false)
   , m_action_name(name)
   , m_finger_manager(finger_manager)
   , m_enable_ros_contol_loop(enable_ros_contol_loop)
