@@ -14,6 +14,7 @@ controller_manager:
 
 left_hand:
   ros__parameters:
+    allow_partial_joints_goal: True
     joints:
       - Left_Hand_Thumb_Flexion
       - Left_Hand_Thumb_Opposition
@@ -32,6 +33,7 @@ left_hand:
 
 right_hand:
   ros__parameters:
+    allow_partial_joints_goal: True
     joints:
       - Right_Hand_Thumb_Flexion
       - Right_Hand_Thumb_Opposition
