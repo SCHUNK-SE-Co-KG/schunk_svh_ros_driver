@@ -136,8 +136,8 @@ std::vector<hardware_interface::CommandInterface> SystemInterface::export_comman
 }
 
 SystemInterface::return_type SystemInterface::prepare_command_mode_switch(
-  const std::vector<std::string> & start_interfaces,
-  const std::vector<std::string> & stop_interfaces)
+  [[maybe_unused]] const std::vector<std::string> & start_interfaces,
+  [[maybe_unused]] const std::vector<std::string> & stop_interfaces)
 {
   // We currently allow any combination of command interfaces.
   return return_type::OK;

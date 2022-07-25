@@ -35,8 +35,8 @@ namespace driver_svh
 auto g_log_handler = std::make_unique<ROSLogHandler>();
 
 void ROSLogHandler::log(
-  const std::string & file, const int line, const std::string & name, LogLevel level,
-  const std::string & msg)
+  [[maybe_unused]] const std::string & file, [[maybe_unused]] const int line,
+  const std::string & name, LogLevel level, const std::string & msg)
 {
   switch (level) {
     case LogLevel::DEBUG:
