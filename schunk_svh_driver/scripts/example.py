@@ -77,7 +77,14 @@ class SVH(Node):
         self.sliders = {}
         for name in self.joint_names:
             widget_name = name.lower() # Required by tkinter
-            self.sliders[widget_name] = Scale(self.window, from_=self.percent, to=0, name=widget_name)
+            self.sliders[widget_name] = Scale(
+                self.window,
+                from_=self.percent,
+                to=0,
+                orient='horizontal',
+                length=250,
+                label=widget_name,
+                name=widget_name)
             self.sliders[widget_name].set(self.percent)
             self.sliders[widget_name].bind("<ButtonRelease-1>", self.slider_changed)
             self.sliders[widget_name].pack()
@@ -101,7 +108,7 @@ class SVH(Node):
             (self.percent - state) * self.fist[index]
         jpos = jpos / self.percent
         jtp.positions = [jpos]
-        jtp.time_from_start = Duration(sec=2)
+        jtp.time_from_start = Duration(sec=1)
 
         msg.points.append(jtp)
         self.publisher.publish(msg)
