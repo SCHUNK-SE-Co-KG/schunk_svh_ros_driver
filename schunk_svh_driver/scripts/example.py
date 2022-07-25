@@ -14,12 +14,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 """
-Control the Schunk SVH's joints with a graphical slider
+Control the Schunk SVH's joints with graphical sliders
 
 This is a small helper to manually test the SVH with ROS2-control.  It provides
-a minimal GUI with a single slider that changes the SVH's state between a
-`fist` and a `full spread`.  It assumes a running `joint_trajectory_controller`
-for all joints.
+a minimal GUI with sliders that change the SVH's state for each joint individually.
+It assumes a running `joint_trajectory_controller` for all joints.
 """
 import numpy as np
 from tkinter import Tk, Scale
@@ -71,33 +70,46 @@ class SVH(Node):
         self.full_spread = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.5]
 
     def gui(self):
-        """ A GUI with a single slider for opening/closing the SVH """
+        """ A GUI with sliders for joint actuation """
         self.percent = 100
         self.window = Tk()
         self.window.title('Schunk SVH')
-        self.slider = Scale(self.window, from_=self.percent, to=0)
-        self.slider.set(self.percent)
-        self.slider.bind("<ButtonRelease-1>", self.slider_changed)
-        self.slider.pack()
+        self.sliders = {}
+        for name in self.joint_names:
+            widget_name = name.lower() # Required by tkinter
+            self.sliders[widget_name] = Scale(
+                self.window,
+                from_=self.percent,
+                to=0,
+                orient='horizontal',
+                length=250,
+                label=widget_name,
+                name=widget_name)
+            self.sliders[widget_name].set(self.percent)
+            self.sliders[widget_name].bind("<ButtonRelease-1>", self.slider_changed)
+            self.sliders[widget_name].pack()
         self.window.mainloop()
 
     def slider_changed(self, event):
-        self.publish(self.slider.get())
+        self.publish(event.widget._name, self.sliders[event.widget._name].get())
         rclpy.spin_once(self, timeout_sec=0)
 
-    def publish(self, opening):
-        """ Publish a new joint trajectory with an interpolated state
+    def publish(self, slider, state):
+        """ Publish a new, single-joint trajectory with an interpolated state
 
-        We scale linearly with opening=[0,1] between `fist` and `full_spread`.
+        We scale linearly with state=[0,1] between the values for `fist` and
+        `full_spread` for each joint.
         """
-        jpos = opening * np.array(self.full_spread) + \
-            (self.percent - opening) * np.array(self.fist)
-        jpos = jpos / self.percent
+        index = [j.lower() for j in self.joint_names].index(slider)
         msg = JointTrajectory()
-        msg.joint_names = self.joint_names
+        msg.joint_names = [self.joint_names[index]]
         jtp = JointTrajectoryPoint()
-        jtp.positions = jpos.tolist()
-        jtp.time_from_start = Duration(sec=2)
+        jpos = state * self.full_spread[index] + \
+            (self.percent - state) * self.fist[index]
+        jpos = jpos / self.percent
+        jtp.positions = [jpos]
+        jtp.time_from_start = Duration(sec=1)
+
         msg.points.append(jtp)
         self.publisher.publish(msg)
 
