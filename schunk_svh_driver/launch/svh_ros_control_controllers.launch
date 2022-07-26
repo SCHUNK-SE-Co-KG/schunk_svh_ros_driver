@@ -1,8 +1,9 @@
 <launch>
   <arg name="trajectory_controller_name" />
+  <arg name="name_prefix" default="right_hand" />
 
   <!-- Load controller settings -->
-  <rosparam file="$(find schunk_svh_driver)/cfg/svh_controllers.yaml" command="load"/>
+  <rosparam file="$(find schunk_svh_driver)/cfg/$(arg name_prefix)_controllers.yaml" command="load"/>
 
   <!-- spawn controller manager with a timeout to give enough time to finger reset -->
   <node name="hand_ros_control_controller_spawner" pkg="controller_manager" type="spawner" respawn="false"

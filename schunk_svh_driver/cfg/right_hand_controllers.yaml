@@ -1,0 +1,38 @@
+# Settings for ros_control control loop
+hardware_control_loop:
+   loop_hz: 125
+
+# Settings for ros_control hardware interface
+hardware_interface:
+   joints:
+     - right_hand_Thumb_Opposition
+     - right_hand_Thumb_Flexion
+     - right_hand_Index_Finger_Proximal
+     - right_hand_Index_Finger_Distal
+     - right_hand_Middle_Finger_Proximal
+     - right_hand_Middle_Finger_Distal
+     - right_hand_Finger_Spread
+     - right_hand_Pinky
+     - right_hand_Ring_Finger
+
+# Publish all joint states ----------------------------------
+joint_state_controller:
+   type:         joint_state_controller/JointStateController
+   publish_rate: 50
+
+# Joint Trajectory Controller - position based -------------------------------
+# For detailed explanations of parameter see http://wiki.ros.org/joint_trajectory_controller
+right_hand_controller:
+   type: position_controllers/JointTrajectoryController
+   publish_rate: 50
+   allow_partial_joints_goal: True
+   joints:
+     - right_hand_Thumb_Opposition
+     - right_hand_Thumb_Flexion
+     - right_hand_Index_Finger_Proximal
+     - right_hand_Index_Finger_Distal
+     - right_hand_Middle_Finger_Proximal
+     - right_hand_Middle_Finger_Distal
+     - right_hand_Finger_Spread
+     - right_hand_Pinky
+     - right_hand_Ring_Finger

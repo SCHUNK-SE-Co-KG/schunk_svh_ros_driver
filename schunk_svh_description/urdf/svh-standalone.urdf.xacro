@@ -3,9 +3,11 @@
 
  <xacro:include filename="$(find schunk_svh_description)/urdf/svh.urdf.xacro" />
 
+ <xacro:arg name="name_prefix" default="left_hand" />
+
  <link name="base_link" />
  
- <xacro:svh parent="base_link" name="left_hand" side="-1">
+ <xacro:svh parent="base_link" name="$(arg name_prefix)" side="-1">
     <origin xyz="0 0 0"  rpy= "0 0 0" />
   </xacro:svh>
 

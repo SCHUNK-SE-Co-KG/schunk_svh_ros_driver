@@ -1,17 +1,18 @@
 <launch>
+
   <!-- global PARAMS Change here if needed -->
+  <arg name="name_prefix" default="right_hand" /> <!-- left_hand or right_hand-->
   <arg name="autostart" default="True"/>
   <arg name="serial_device" default="/dev/ttyUSB0"/>
   <arg name="simulation" default="False"/>
-  <arg name="name_prefix" default="left_hand" />
   <arg name="maximal_force" default="0.9" />
-  <arg name="trajectory_controller_name" default="pos_based_pos_traj_controller_hand" />
+  <arg name="trajectory_controller_name" default="$(arg name_prefix)_controller" />
   <arg name="debug" default="False" />
 
 
   <!-- Robot description for State publishers -->
   <param name="robot_description" command="$(find xacro)/xacro --inorder $(find
-  schunk_svh_description)/urdf/svh-standalone.urdf.xacro" />
+  schunk_svh_description)/urdf/svh-standalone.urdf.xacro name_prefix:='$(arg name_prefix)'" />
 
   <!-- Hardware interface -->
   <include unless="$(arg simulation)"  file="$(find schunk_svh_driver)/launch/svh_ros_control_hw_interface.launch">
@@ -25,7 +26,8 @@
 
   <!-- ROS_Control Controllers -->
   <include ns="svh_ros_control_node" file="$(find schunk_svh_driver)/launch/svh_ros_control_controllers.launch">
-    <arg name="trajectory_controller_name" value="$(arg trajectory_controller_name)" />
+        <arg name="trajectory_controller_name" value="$(arg trajectory_controller_name)" />
+        <arg name="name_prefix" value="$(arg name_prefix)"/>
   </include>
 
   <!-- Robot state publisher for the TFs -->

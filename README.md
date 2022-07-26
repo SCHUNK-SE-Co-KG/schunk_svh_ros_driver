@@ -32,6 +32,7 @@ You can then build everything in the root of the ROS workspace with
 
 ```bash
 cd ..
+catkin config --install
 catkin build
 ```
 If you used an existing workspace for the new Schunk components, you might need
@@ -43,10 +44,11 @@ There are a few minimal steps required before you can connect to the SVH for the
 You'll find them [here](https://github.com/fzi-forschungszentrum-informatik/schunk_svh_library).
 
 ## Getting started
-In a sourced terminal, run
+Source your local `install/setup.bash` and run
 ```bash
-roslaunch schunk_svh_driver svh_ros_control_standalone.launch
+roslaunch schunk_svh_driver svh_ros_control_standalone.launch name_prefix:=left_hand
 ```
+if you have a *left* Schunk SVH hand, else omit the `name_prefix` parameter. The default is `name_prefix:=right_hand`.
 This will start initializing the SVH.
 After calibrating each degree of freedom separately, the SVH is ready to use.
 
