@@ -1,4 +1,5 @@
 ![build badge](https://github.com/fzi-forschungszentrum-informatik/schunk_svh_ros_driver/actions/workflows/industrial_ci_foxy_action.yml/badge.svg)
+[![License](https://img.shields.io/badge/License-GPLv3-orange)](https://opensource.org/licenses/gpl-license)
 
 # Schunk SVH ROS2 Driver
 
