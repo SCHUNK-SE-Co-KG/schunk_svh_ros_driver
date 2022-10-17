@@ -10,7 +10,7 @@
 
   <maintainer email="scherzin@fzi.de">Stefan Scherzinger</maintainer>
 
-  <license>TODO</license>
+  <license>GPL-3.0-or-later</license>
 
   <author email="heppner@fzi.de">Georg Heppner</author>
   <author email="exner@fzi.de">Felix Exner</author>
