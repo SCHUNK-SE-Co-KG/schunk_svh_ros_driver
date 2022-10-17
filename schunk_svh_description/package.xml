@@ -7,7 +7,7 @@
   <version>0.0.0</version>
   <description>The schunk_svh_description package</description>
 
-  <maintainer email="keller@fzi.de">Philip Keller</maintainer>
+  <maintainer email="scherzin@fzi.de">Stefan Scherzinger</maintainer>
 
 
   <license>GPL-3.0-or-later</license>
