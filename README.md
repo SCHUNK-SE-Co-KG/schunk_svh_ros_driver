@@ -1,3 +1,5 @@
+![build badge](https://github.com/fzi-forschungszentrum-informatik/schunk_svh_ros_driver/actions/workflows/industrial_ci_foxy_action.yml/badge.svg)
+
 # Schunk SVH ROS2 Driver
 
 This is the repository for the Schunk SVH ROS2 driver.
