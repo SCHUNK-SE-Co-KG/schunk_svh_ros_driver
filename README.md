@@ -1,3 +1,6 @@
+![build badge](https://github.com/fzi-forschungszentrum-informatik/schunk_svh_ros_driver/actions/workflows/industrial_ci_melodic_action.yml/badge.svg)
+![build badge](https://github.com/fzi-forschungszentrum-informatik/schunk_svh_ros_driver/actions/workflows/industrial_ci_noetic_action.yml/badge.svg)
+
 # Schunk SVH ROS Driver
 
 This is the repository for the Schunk SVH ROS1 driver.
