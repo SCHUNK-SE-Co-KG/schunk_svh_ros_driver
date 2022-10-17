@@ -1,7 +1,24 @@
-// this is for emacs file handling -*- mode: c++; indent-tabs-mode: nil -*-
-
-// -- BEGIN LICENSE BLOCK ----------------------------------------------
-// -- END LICENSE BLOCK ------------------------------------------------
+////////////////////////////////////////////////////////////////////////////////
+//
+// © Copyright 2022 SCHUNK Mobile Greifsysteme GmbH, Lauffen/Neckar Germany
+// © Copyright 2022 FZI Forschungszentrum Informatik, Karlsruhe, Germany
+//
+// This file is part of the Schunk SVH Driver.
+//
+// The Schunk SVH Driver is free software: you can redistribute it and/or
+// modify it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or (at your
+// option) any later version.
+//
+// The Schunk SVH Driver is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+// Public License for more details.
+//
+// You should have received a copy of the GNU General Public License along with
+// Foobar. If not, see <https://www.gnu.org/licenses/>.
+//
+////////////////////////////////////////////////////////////////////////////////
 
 //----------------------------------------------------------------------
 /*!\file
@@ -18,36 +35,39 @@
 #include <ros/ros.h>
 
 #include <sensor_msgs/JointState.h>
-#include <std_msgs/Float64MultiArray.h>
 #include <std_msgs/Empty.h>
+#include <std_msgs/Float64MultiArray.h>
 #include <std_msgs/Int8.h>
 
+#include <memory>
 #include <schunk_svh_msgs/HomeAll.h>
 #include <schunk_svh_msgs/HomeWithChannels.h>
 #include <schunk_svh_msgs/SetAllChannelForceLimits.h>
 #include <schunk_svh_msgs/SetChannelForceLimit.h>
-#include <memory>
 
 // Driver Specific things
 #include <schunk_svh_library/control/SVHFingerManager.h>
 
 #include <SVHDiagnostics.h>
 
-class SVHWrapper{
+class SVHWrapper
+{
 public:
   SVHWrapper(const ros::NodeHandle& nh);
   ~SVHWrapper();
 
-  std::shared_ptr<driver_svh::SVHFingerManager> getFingerManager () const { return m_finger_manager; }
+  std::shared_ptr<driver_svh::SVHFingerManager> getFingerManager() const
+  {
+    return m_finger_manager;
+  }
 
-  std::string getNamePrefix () const { return m_name_prefix; }
+  std::string getNamePrefix() const { return m_name_prefix; }
 
   bool channelsEnabled() { return m_channels_enabled; };
 
 private:
   void initControllerParameters(const uint16_t manual_major_version,
-                                const uint16_t manual_minor_version
-                               );
+                                const uint16_t manual_minor_version);
 
   //! load parameters and try connecting
   bool connect();
@@ -76,27 +96,29 @@ private:
   //! Callback function to enable channels of SCHUNK five finger hand
   void enableChannelCallback(const std_msgs::Int8ConstPtr& channel);
 
-  bool homeAllNodes(schunk_svh_msgs::HomeAllRequest& req,
-                    schunk_svh_msgs::HomeAllResponse& resp);
+  bool homeAllNodes(schunk_svh_msgs::HomeAllRequest& req, schunk_svh_msgs::HomeAllResponse& resp);
 
   bool homeNodesChannelIds(schunk_svh_msgs::HomeWithChannelsRequest& req,
                            schunk_svh_msgs::HomeWithChannelsResponse& resp);
 
-  bool setAllForceLimits(schunk_svh_msgs::SetAllChannelForceLimits::Request &req,
-                         schunk_svh_msgs::SetAllChannelForceLimits::Response &res);
-  bool setForceLimitById(schunk_svh_msgs::SetChannelForceLimit::Request &req,
-                         schunk_svh_msgs::SetChannelForceLimit::Response &res);
+  bool setAllForceLimits(schunk_svh_msgs::SetAllChannelForceLimits::Request& req,
+                         schunk_svh_msgs::SetAllChannelForceLimits::Response& res);
+  bool setForceLimitById(schunk_svh_msgs::SetChannelForceLimit::Request& req,
+                         schunk_svh_msgs::SetChannelForceLimit::Response& res);
 
   float setChannelForceLimit(size_t channel, float force_limit);
 
 
-  //! Number of times the connect routine tries to connect in case that we receive at least one package
+  //! Number of times the connect routine tries to connect in case that we receive at least one
+  //! package
   int m_connect_retry_count;
 
-  //! Prefix for the driver to identify joint names if the Driver should expext "left_hand_Pinky" than the prefix is left_hand
+  //! Prefix for the driver to identify joint names if the Driver should expext "left_hand_Pinky"
+  //! than the prefix is left_hand
   std::string m_name_prefix;
 
-  //! firmware version, as read from the firmware or set by config. If version is 0, it hasn't been read yet.
+  //! firmware version, as read from the firmware or set by config. If version is 0, it hasn't been
+  //! read yet.
   int m_firmware_major_version;
   int m_firmware_minor_version;
 

@@ -1,7 +1,24 @@
-// this is for emacs file handling -*- mode: c++; indent-tabs-mode: nil -*-
-
-// -- BEGIN LICENSE BLOCK ----------------------------------------------
-// -- END LICENSE BLOCK ------------------------------------------------
+////////////////////////////////////////////////////////////////////////////////
+//
+// © Copyright 2022 SCHUNK Mobile Greifsysteme GmbH, Lauffen/Neckar Germany
+// © Copyright 2022 FZI Forschungszentrum Informatik, Karlsruhe, Germany
+//
+// This file is part of the Schunk SVH Driver.
+//
+// The Schunk SVH Driver is free software: you can redistribute it and/or
+// modify it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or (at your
+// option) any later version.
+//
+// The Schunk SVH Driver is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+// Public License for more details.
+//
+// You should have received a copy of the GNU General Public License along with
+// Foobar. If not, see <https://www.gnu.org/licenses/>.
+//
+////////////////////////////////////////////////////////////////////////////////
 
 //----------------------------------------------------------------------
 /*!\file
@@ -12,8 +29,8 @@
  */
 //----------------------------------------------------------------------
 
-#include "DynamicParameterClass.h"
 #include "SVHWrapper.h"
+#include "DynamicParameterClass.h"
 #include "ROSLogHandler.h"
 
 
@@ -83,9 +100,8 @@ SVHWrapper::SVHWrapper(const ros::NodeHandle& nh)
   }
   else
   {
-    ROS_INFO(
-      "SVH Driver Ready, you will need to connect and reset the fingers before you can use "
-      "the hand.");
+    ROS_INFO("SVH Driver Ready, you will need to connect and reset the fingers before you can use "
+             "the hand.");
   }
 
   // set the maximal force / current value from the parameters
@@ -98,10 +114,10 @@ SVHWrapper::SVHWrapper(const ros::NodeHandle& nh)
   enable_sub = m_priv_nh.subscribe("enable_channel", 1, &SVHWrapper::enableChannelCallback, this);
 
   // services
-  m_home_service_all = m_priv_nh.advertiseService("home_reset_offset_all",
-     &SVHWrapper::homeAllNodes, this);
-  m_home_service_joint_names = m_priv_nh.advertiseService("home_reset_offset_by_id",
-     &SVHWrapper::homeNodesChannelIds, this);
+  m_home_service_all =
+    m_priv_nh.advertiseService("home_reset_offset_all", &SVHWrapper::homeAllNodes, this);
+  m_home_service_joint_names =
+    m_priv_nh.advertiseService("home_reset_offset_by_id", &SVHWrapper::homeNodesChannelIds, this);
 
   m_setAllForceLimits_srv =
     m_priv_nh.advertiseService("set_all_force_limits", &SVHWrapper::setAllForceLimits, this);
@@ -109,10 +125,12 @@ SVHWrapper::SVHWrapper(const ros::NodeHandle& nh)
     m_priv_nh.advertiseService("set_force_limit_by_id", &SVHWrapper::setForceLimitById, this);
 
   m_svh_diagnostics.reset(new SVHDiagnostics(
-                                m_priv_nh, m_finger_manager,
-                                std::bind( &SVHWrapper::setRosControlEnable, this, std::placeholders::_1),
-                                std::bind( &SVHWrapper::initControllerParameters, this, std::placeholders::_1, std::placeholders::_2),
-                                "diagnostics_to_protocol"));
+    m_priv_nh,
+    m_finger_manager,
+    std::bind(&SVHWrapper::setRosControlEnable, this, std::placeholders::_1),
+    std::bind(
+      &SVHWrapper::initControllerParameters, this, std::placeholders::_1, std::placeholders::_2),
+    "diagnostics_to_protocol"));
 }
 
 void SVHWrapper::setRosControlEnable(bool enable)
@@ -121,8 +139,7 @@ void SVHWrapper::setRosControlEnable(bool enable)
 }
 
 void SVHWrapper::initControllerParameters(const uint16_t firmware_major_version,
-                                          const uint16_t firmware_minor_version
-                                         )
+                                          const uint16_t firmware_minor_version)
 {
   // Parameters that depend on the hardware version of the hand
   XmlRpc::XmlRpcValue dynamic_parameters;
@@ -133,7 +150,8 @@ void SVHWrapper::initControllerParameters(const uint16_t firmware_major_version,
   {
     if (!m_priv_nh.getParam(parameters_name, dynamic_parameters))
     {
-      ROS_FATAL_STREAM("Could not find controller_parameters under " << m_priv_nh.resolveName(parameters_name));
+      ROS_FATAL_STREAM("Could not find controller_parameters under "
+                       << m_priv_nh.resolveName(parameters_name));
       exit(-1);
     }
   }
@@ -163,8 +181,7 @@ void SVHWrapper::initControllerParameters(const uint16_t firmware_major_version,
       {
         m_finger_manager->setPositionSettings(
           static_cast<driver_svh::SVHChannel>(channel),
-          driver_svh::SVHPositionSettings(
-            dyn_parameters.getSettings().position_settings[channel]));
+          driver_svh::SVHPositionSettings(dyn_parameters.getSettings().position_settings[channel]));
       }
       if (dyn_parameters.getSettings().home_settings_given[channel])
       {
@@ -176,8 +193,7 @@ void SVHWrapper::initControllerParameters(const uint16_t firmware_major_version,
   }
   catch (ros::InvalidNameException e)
   {
-    ROS_ERROR(
-      "Parameter Error! While reading the controller settings. Will use default settings");
+    ROS_ERROR("Parameter Error! While reading the controller settings. Will use default settings");
   }
 }
 
@@ -202,7 +218,8 @@ bool SVHWrapper::connect()
   if (m_firmware_major_version == 0 && m_firmware_minor_version == 0)
   {
     // reads out current Firmware Version
-    driver_svh::SVHFirmwareInfo version_info = m_finger_manager->getFirmwareInfo(m_serial_device_name, m_connect_retry_count);
+    driver_svh::SVHFirmwareInfo version_info =
+      m_finger_manager->getFirmwareInfo(m_serial_device_name, m_connect_retry_count);
     ROS_INFO("Current Handversion %d.%d", version_info.version_major, version_info.version_minor);
     m_firmware_major_version = version_info.version_major;
     m_firmware_minor_version = version_info.version_minor;
@@ -211,16 +228,16 @@ bool SVHWrapper::connect()
   // Was firmware info given by the hand?
   if (m_firmware_major_version == 0 && m_firmware_minor_version == 0)
   {
-    ROS_ERROR(
-      "Could not get Version Info from SCHUNK five finger hand with serial device %s, and retry count %i",
-      m_serial_device_name.c_str(),
-      m_connect_retry_count);
+    ROS_ERROR("Could not get Version Info from SCHUNK five finger hand with serial device %s, and "
+              "retry count %i",
+              m_serial_device_name.c_str(),
+              m_connect_retry_count);
     return false;
   }
 
   // read out the operation data with the connected hand version
-  initControllerParameters( static_cast<uint16_t>(m_firmware_major_version),
-                            static_cast<uint16_t>(m_firmware_minor_version));
+  initControllerParameters(static_cast<uint16_t>(m_firmware_major_version),
+                           static_cast<uint16_t>(m_firmware_minor_version));
 
   // try connect, channels are not enabled -> have to be resetted/homed
   if (!m_finger_manager->connect(m_serial_device_name, m_connect_retry_count))
@@ -233,7 +250,6 @@ bool SVHWrapper::connect()
   }
 
   return true;
-
 }
 
 // Callback function for connecting to SCHUNK five finger hand
@@ -276,7 +292,7 @@ bool SVHWrapper::homeNodesChannelIds(schunk_svh_msgs::HomeWithChannels::Request&
   if (m_channels_enabled)
   {
     // disable flag to stop ros-control-loop
-    m_channels_enabled = false;
+    m_channels_enabled      = false;
     channels_enabled_before = true;
   }
   else
@@ -287,12 +303,13 @@ bool SVHWrapper::homeNodesChannelIds(schunk_svh_msgs::HomeWithChannels::Request&
   }
 
 
-  for (std::vector<uint8_t>::iterator it = req.channel_ids.begin(); it != req.channel_ids.end(); ++it)
+  for (std::vector<uint8_t>::iterator it = req.channel_ids.begin(); it != req.channel_ids.end();
+       ++it)
   {
     m_finger_manager->resetChannel(static_cast<driver_svh::SVHChannel>(*it));
   }
 
-  if(channels_enabled_before || m_finger_manager->isHomed(driver_svh::SVH_ALL))
+  if (channels_enabled_before || m_finger_manager->isHomed(driver_svh::SVH_ALL))
   {
     // enable flag to stop ros-control-loop
     m_channels_enabled = true;
@@ -303,8 +320,8 @@ bool SVHWrapper::homeNodesChannelIds(schunk_svh_msgs::HomeWithChannels::Request&
 }
 
 
-bool SVHWrapper::setAllForceLimits(schunk_svh_msgs::SetAllChannelForceLimits::Request &req,
-                                   schunk_svh_msgs::SetAllChannelForceLimits::Response &res)
+bool SVHWrapper::setAllForceLimits(schunk_svh_msgs::SetAllChannelForceLimits::Request& req,
+                                   schunk_svh_msgs::SetAllChannelForceLimits::Response& res)
 {
   for (size_t channel = 0; channel < driver_svh::SVH_DIMENSION; ++channel)
   {
@@ -313,8 +330,8 @@ bool SVHWrapper::setAllForceLimits(schunk_svh_msgs::SetAllChannelForceLimits::Re
   return true;
 }
 
-bool SVHWrapper::setForceLimitById(schunk_svh_msgs::SetChannelForceLimit::Request &req,
-                                   schunk_svh_msgs::SetChannelForceLimit::Response &res)
+bool SVHWrapper::setForceLimitById(schunk_svh_msgs::SetChannelForceLimit::Request& req,
+                                   schunk_svh_msgs::SetChannelForceLimit::Response& res)
 {
   res.force_limit = setChannelForceLimit(req.channel_id, req.force_limit);
   return true;
@@ -326,7 +343,8 @@ float SVHWrapper::setChannelForceLimit(size_t channel, float force_limit)
   // no force setting if ros-control-loop disabled -> no impact on diagnostic test
   if (m_channels_enabled)
   {
-    return m_finger_manager->setForceLimit(static_cast<driver_svh::SVHChannel>(channel), force_limit);
+    return m_finger_manager->setForceLimit(static_cast<driver_svh::SVHChannel>(channel),
+                                           force_limit);
   }
   else
   {

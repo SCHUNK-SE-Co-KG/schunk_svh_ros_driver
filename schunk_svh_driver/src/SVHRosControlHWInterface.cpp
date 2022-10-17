@@ -1,7 +1,24 @@
-// this is for emacs file handling -*- mode: c++; indent-tabs-mode: nil -*-
-
-// -- BEGIN LICENSE BLOCK ----------------------------------------------
-// -- END LICENSE BLOCK ------------------------------------------------
+////////////////////////////////////////////////////////////////////////////////
+//
+// © Copyright 2022 SCHUNK Mobile Greifsysteme GmbH, Lauffen/Neckar Germany
+// © Copyright 2022 FZI Forschungszentrum Informatik, Karlsruhe, Germany
+//
+// This file is part of the Schunk SVH Driver.
+//
+// The Schunk SVH Driver is free software: you can redistribute it and/or
+// modify it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or (at your
+// option) any later version.
+//
+// The Schunk SVH Driver is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+// Public License for more details.
+//
+// You should have received a copy of the GNU General Public License along with
+// Foobar. If not, see <https://www.gnu.org/licenses/>.
+//
+////////////////////////////////////////////////////////////////////////////////
 
 //----------------------------------------------------------------------
 /*!\file
@@ -29,13 +46,9 @@ PLUGINLIB_EXPORT_CLASS(SVHRosControlHWInterface, hardware_interface::RobotHW)
 
 using namespace hardware_interface;
 
-SVHRosControlHWInterface::SVHRosControlHWInterface ()
-{
-}
+SVHRosControlHWInterface::SVHRosControlHWInterface() {}
 
-SVHRosControlHWInterface::~SVHRosControlHWInterface()
-{
-}
+SVHRosControlHWInterface::~SVHRosControlHWInterface() {}
 
 
 bool SVHRosControlHWInterface::init(ros::NodeHandle& root_nh, ros::NodeHandle& robot_hw_nh)
@@ -56,9 +69,8 @@ bool SVHRosControlHWInterface::init(ros::NodeHandle& root_nh, ros::NodeHandle& r
     m_channel_names[channel] =
       m_svh->getNamePrefix() + "_" + driver_svh::SVHController::m_channel_description[channel];
 
-    ROS_DEBUG_STREAM(
-      "Controller Hardware interface: Loading joint with id " << channel << " named "
-                                                              << m_channel_names[channel]);
+    ROS_DEBUG_STREAM("Controller Hardware interface: Loading joint with id "
+                     << channel << " named " << m_channel_names[channel]);
     if (m_channel_names[channel] == "")
     {
       ROS_ERROR_STREAM("Could not find joint name for SVH device "
@@ -103,27 +115,32 @@ void SVHRosControlHWInterface::read(const ros::Time& time, const ros::Duration& 
       double cur_cur = 0.0;
       if (m_svh->getFingerManager()->isHomed(static_cast<driver_svh::SVHChannel>(channel)))
       {
-        m_svh->getFingerManager()->getPosition(static_cast<driver_svh::SVHChannel>(channel), cur_pos);
-        m_svh->getFingerManager()->getCurrent(static_cast<driver_svh::SVHChannel>(channel), cur_cur);
+        m_svh->getFingerManager()->getPosition(static_cast<driver_svh::SVHChannel>(channel),
+                                               cur_pos);
+        m_svh->getFingerManager()->getCurrent(static_cast<driver_svh::SVHChannel>(channel),
+                                              cur_cur);
       }
       else
       {
         if (isEnabled())
         {
-          ROS_WARN_STREAM_THROTTLE(0.5, "Channel " << driver_svh::SVHController::m_channel_description[channel]
-                                    << " is not Homed");
+          ROS_WARN_STREAM_THROTTLE(0.5,
+                                   "Channel "
+                                     << driver_svh::SVHController::m_channel_description[channel]
+                                     << " is not Homed");
         }
       }
       m_joint_positions[channel] = cur_pos;
-      m_joint_effort[channel] = m_svh->getFingerManager()->convertmAtoN(static_cast<driver_svh::SVHChannel>(channel), cur_cur);
+      m_joint_effort[channel]    = m_svh->getFingerManager()->convertmAtoN(
+        static_cast<driver_svh::SVHChannel>(channel), cur_cur);
     }
 
-    ROS_DEBUG_STREAM("read Position: " << m_joint_positions[0] << " " << m_joint_positions[1]
-     << " " << m_joint_positions[2] << " " << m_joint_positions[3] << " " << m_joint_positions[4]
-     << " " << m_joint_positions[5] << " " << m_joint_positions[6] << " " << m_joint_positions[7]
-     << " " << m_joint_positions[8]);
+    ROS_DEBUG_STREAM("read Position: " << m_joint_positions[0] << " " << m_joint_positions[1] << " "
+                                       << m_joint_positions[2] << " " << m_joint_positions[3] << " "
+                                       << m_joint_positions[4] << " " << m_joint_positions[5] << " "
+                                       << m_joint_positions[6] << " " << m_joint_positions[7] << " "
+                                       << m_joint_positions[8]);
   }
-
 }
 
 void SVHRosControlHWInterface::write(const ros::Time& time, const ros::Duration& period)
@@ -136,11 +153,12 @@ void SVHRosControlHWInterface::write(const ros::Time& time, const ros::Duration&
     return;
   }
 
-  ROS_DEBUG_STREAM("write Position: " << m_joint_position_commands[0] << " "
-    << m_joint_position_commands[1] << " " << m_joint_position_commands[2] << " "
-    << m_joint_position_commands[3] << " " << m_joint_position_commands[4] << " "
-    << m_joint_position_commands[5] << " " << m_joint_position_commands[6] << " "
-    << m_joint_position_commands[7] << " " << m_joint_position_commands[8]);
+  ROS_DEBUG_STREAM("write Position: "
+                   << m_joint_position_commands[0] << " " << m_joint_position_commands[1] << " "
+                   << m_joint_position_commands[2] << " " << m_joint_position_commands[3] << " "
+                   << m_joint_position_commands[4] << " " << m_joint_position_commands[5] << " "
+                   << m_joint_position_commands[6] << " " << m_joint_position_commands[7] << " "
+                   << m_joint_position_commands[8]);
 
   if (driver_svh::SVH_DIMENSION == m_joint_position_commands.size())
   {

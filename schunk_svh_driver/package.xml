@@ -10,7 +10,7 @@
 
   <maintainer email="scherzin@fzi.de">Stefan Scherzinger</maintainer>
 
-  <license>LGPL</license>
+  <license>GPL-3.0-or-later</license>
 
   <url>http://www.ros.org/wiki/schunk_svh_driver</url>
 
