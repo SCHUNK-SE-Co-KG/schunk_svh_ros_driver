@@ -34,13 +34,13 @@
 #define S5FH_DIAGNOSTICS_H
 
 // ROS includes.
-#include <ros/ros.h>
 #include <actionlib/server/simple_action_server.h>
+#include <ros/ros.h>
 
+#include <functional>
+#include <memory>
 #include <stdint.h>
 #include <string>
-#include <memory>
-#include <functional>
 
 // Date
 #include <ctime>
@@ -48,12 +48,12 @@
 #include <iostream>
 
 // Messages
-#include <std_msgs/Empty.h>
-#include <sensor_msgs/JointState.h>
-#include "std_msgs/MultiArrayLayout.h"
-#include "std_msgs/MultiArrayDimension.h"
 #include "std_msgs/Float64MultiArray.h"
+#include "std_msgs/MultiArrayDimension.h"
+#include "std_msgs/MultiArrayLayout.h"
+#include <sensor_msgs/JointState.h>
 #include <std_msgs/Bool.h>
+#include <std_msgs/Empty.h>
 #include <std_msgs/Int8.h>
 #include <std_msgs/String.h>
 
@@ -62,13 +62,13 @@
 #include "schunk_svh_msgs/SVHDiagnosticsToProtocol.h"
 
 // Driver Specific things
+#include <schunk_svh_library/SVHFirmwareInfo.h>
+#include <schunk_svh_library/control/SVHCurrentSettings.h>
 #include <schunk_svh_library/control/SVHFingerManager.h>
 #include <schunk_svh_library/control/SVHPositionSettings.h>
-#include <schunk_svh_library/control/SVHCurrentSettings.h>
-#include <schunk_svh_library/SVHFirmwareInfo.h>
 
-class SVHDiagnostics{
-
+class SVHDiagnostics
+{
 public:
   //!
   //! \brief SVHDiagnostics constructs a new node object that handles most of the functionality
@@ -78,26 +78,24 @@ public:
   //! \param init_controller_parameters function handle to get the hand parameters
   //! \param name action server name
   //!
-  SVHDiagnostics(
-    const ros::NodeHandle &nh,
-    std::shared_ptr<driver_svh::SVHFingerManager>& finger_manager,
-    std::function<void(bool)> enable_ros_contol_loop,
-    std::function<void(uint16_t, uint16_t)> init_controller_parameters,
-    std::string name);
+  SVHDiagnostics(const ros::NodeHandle& nh,
+                 std::shared_ptr<driver_svh::SVHFingerManager>& finger_manager,
+                 std::function<void(bool)> enable_ros_contol_loop,
+                 std::function<void(uint16_t, uint16_t)> init_controller_parameters,
+                 std::string name);
 
   //! Default DTOR
   ~SVHDiagnostics();
 
   //! Callback function to conduct the basic test for the SCHUNK five finger hand (msg defined in
   //! schunk_web_gui/msg/DiagnosticsMsg.msg)
-  void basicTestCallback(const schunk_svh_msgs::SVHDiagnosticsGoalConstPtr & goal);
+  void basicTestCallback(const schunk_svh_msgs::SVHDiagnosticsGoalConstPtr& goal);
 
   //! Callback function to test the subfunctions of SVHDiagnostics
   void testCallback(const std_msgs::String&);
 
 
 private:
-
   //!
   //! \brief private node handle
   //!
@@ -114,8 +112,8 @@ private:
   void debugOuput();
 
   //!
-  //! \brief evaluateBasicTest evaluates the diagnostics status of the basic test to send the hint informations to the webside
-  //! \return std_msgs::UInt8MultiArray mesg with the test results
+  //! \brief evaluateBasicTest evaluates the diagnostics status of the basic test to send the hint
+  //! informations to the webside \return std_msgs::UInt8MultiArray mesg with the test results
   //!
   schunk_svh_msgs::SVHDiagnosticsResult evaluateBasicTest();
 
@@ -151,10 +149,12 @@ private:
   //! Serial device to use for communication with hardware
   std::string m_serial_device_name;
 
-  //! Number of times the connect routine tries to connect in case that we receive at least one package
+  //! Number of times the connect routine tries to connect in case that we receive at least one
+  //! package
   int m_connect_retry_count;
 
-  //! Prefix for the driver to identify joint names if the Driver should expext "left_hand_Pinky" than the prefix is left_hand
+  //! Prefix for the driver to identify joint names if the Driver should expext "left_hand_Pinky"
+  //! than the prefix is left_hand
   std::string name_prefix;
 
   //! joint state message template
@@ -200,7 +200,8 @@ private:
   // Action server name
   std::string m_action_name;
 
-  enum diag_information{
+  enum diag_information
+  {
     zero_defect,
     board_one,
     board_two,
@@ -215,7 +216,6 @@ private:
     position_range,
     diag_information_dimension
   };
-
 };
 
 #endif // S5FH_CONTROLLER_H

@@ -38,7 +38,7 @@
 
 // other includes
 
-int main (int argc, char** argv)
+int main(int argc, char** argv)
 {
   ros::init(argc, argv, "schunk_svh");
 
@@ -53,7 +53,7 @@ int main (int argc, char** argv)
 
   controller_manager::ControllerManager cm(&svh_hw, nh);
 
-  ros::Time timestamp_now = ros::Time::now();
+  ros::Time timestamp_now  = ros::Time::now();
   ros::Time timestamp_last = ros::Time::now();
   ros::Duration period;
 
@@ -61,8 +61,8 @@ int main (int argc, char** argv)
   while (ros::ok())
   {
     // Get current time and elapsed time since last read
-    timestamp_now = ros::Time::now();
-    period = timestamp_now - timestamp_last;
+    timestamp_now  = ros::Time::now();
+    period         = timestamp_now - timestamp_last;
     timestamp_last = timestamp_now;
 
     svh_hw.read(timestamp_now, period);

@@ -40,9 +40,9 @@
 #include <hardware_interface/joint_state_interface.h>
 #include <hardware_interface/robot_hw.h>
 #include <joint_limits_interface/joint_limits.h>
+#include <memory>
 #include <ros/ros.h>
 #include <sensor_msgs/JointState.h>
-#include <memory>
 
 /*!
  * \brief This class defines a ros-control hardware interface.
@@ -51,12 +51,12 @@
 class SVHRosControlHWInterface : public hardware_interface::RobotHW
 {
 public:
-  SVHRosControlHWInterface ();
-  ~SVHRosControlHWInterface ();
+  SVHRosControlHWInterface();
+  ~SVHRosControlHWInterface();
 
   /// \brief Initialize the hardware interface
   virtual bool init(ros::NodeHandle& root_nh, ros::NodeHandle& robot_hw_nh);
-//   virtual void init();
+  //   virtual void init();
 
   /// \brief Read the state from the robot hardware.
   virtual void read(const ros::Time& time, const ros::Duration& period);
@@ -78,7 +78,7 @@ public:
   /*!
    * \brief Creates a joint_state message from the current joint angles and returns it.
    */
-//   sensor_msgs::JointState getJointMessage();
+  //   sensor_msgs::JointState getJointMessage();
 
 protected:
   ros::NodeHandle m_node_handle;
@@ -105,7 +105,6 @@ protected:
     m_joint_soft_limits; // only available through URDF, currently not used.
 
 private:
-
   bool m_hardware_ready;
 };
 

@@ -30,7 +30,6 @@
 //----------------------------------------------------------------------
 
 
-
 #include <XmlRpcException.h>
 #include <iostream>
 #include <ros/ros.h>

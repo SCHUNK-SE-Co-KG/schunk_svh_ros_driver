@@ -32,25 +32,28 @@
 #include "SVHDiagnostics.h"
 
 
-SVHDiagnostics::SVHDiagnostics(
-  const ros::NodeHandle& nh,
-  std::shared_ptr<driver_svh::SVHFingerManager>& finger_manager,
-  std::function<void(bool)> enable_ros_contol_loop,
-  std::function<void(uint16_t, uint16_t)> init_controller_parameters,
-  std::string name)
+SVHDiagnostics::SVHDiagnostics(const ros::NodeHandle& nh,
+                               std::shared_ptr<driver_svh::SVHFingerManager>& finger_manager,
+                               std::function<void(bool)> enable_ros_contol_loop,
+                               std::function<void(uint16_t, uint16_t)> init_controller_parameters,
+                               std::string name)
   : m_priv_nh(nh)
-  , m_diagnostics_action_server(m_priv_nh, name, std::bind(&SVHDiagnostics::basicTestCallback, this, std::placeholders::_1), false)
+  , m_diagnostics_action_server(
+      m_priv_nh,
+      name,
+      std::bind(&SVHDiagnostics::basicTestCallback, this, std::placeholders::_1),
+      false)
   , m_action_name(name)
   , m_finger_manager(finger_manager)
   , m_enable_ros_contol_loop(enable_ros_contol_loop)
   , m_init_controller_parameters(init_controller_parameters)
 {
-
   //!
   //! \brief m_pub_protocol_variables pubished the diagnostic results to the SVHProtocol Node
   //! to print the Test-Protocol
   //!
-  m_pub_protocol_variables = m_priv_nh.advertise<schunk_svh_msgs::SVHDiagnosticsToProtocol>("diagnostic_info_to_protocol", 1);
+  m_pub_protocol_variables = m_priv_nh.advertise<schunk_svh_msgs::SVHDiagnosticsToProtocol>(
+    "diagnostic_info_to_protocol", 1);
 
   m_basic_test_running = false;
 
@@ -92,18 +95,14 @@ void SVHDiagnostics::initTest()
     finger.encoder               = false;
     finger.motor                 = false;
 
-    m_finger_manager->getCurrentSettings(
-        static_cast<driver_svh::SVHChannel>(channel), current_settings);
-    m_finger_manager->getHomeSettings(
-        static_cast<driver_svh::SVHChannel>(channel), home_settings);
+    m_finger_manager->getCurrentSettings(static_cast<driver_svh::SVHChannel>(channel),
+                                         current_settings);
+    m_finger_manager->getHomeSettings(static_cast<driver_svh::SVHChannel>(channel), home_settings);
 
-    finger.current_max_target =
-        home_settings.reset_current_factor * current_settings.wmx;
-    finger.current_min_target =
-        home_settings.reset_current_factor * current_settings.wmn;
+    finger.current_max_target = home_settings.reset_current_factor * current_settings.wmx;
+    finger.current_min_target = home_settings.reset_current_factor * current_settings.wmn;
     finger.position_range_target =
-        abs(abs(home_settings.maximum_offset) -
-        abs(home_settings.minimum_offset));
+      abs(abs(home_settings.maximum_offset) - abs(home_settings.minimum_offset));
     finger.name = driver_svh::SVHController::m_channel_description[channel];
 
     m_action_feedback.fingers.push_back(finger);
@@ -113,7 +112,7 @@ void SVHDiagnostics::initTest()
   reset_success.resize(driver_svh::SVH_DIMENSION, false);
 }
 
-void SVHDiagnostics::basicTestCallback(const schunk_svh_msgs::SVHDiagnosticsGoalConstPtr & goal)
+void SVHDiagnostics::basicTestCallback(const schunk_svh_msgs::SVHDiagnosticsGoalConstPtr& goal)
 {
   m_msg_protocol_variable.date_as_string = goal->date_as_string;
 
@@ -134,8 +133,8 @@ void SVHDiagnostics::basicTestCallback(const schunk_svh_msgs::SVHDiagnosticsGoal
 
     m_assembly_of = goal->assembly_of;
 
-    m_execution_L = goal->execution_L;
-    m_execution_R = goal->execution_R;
+    m_execution_L   = goal->execution_L;
+    m_execution_R   = goal->execution_R;
     m_communication = goal->communication;
 
     // get current / home settings from the finger manager
@@ -159,24 +158,28 @@ void SVHDiagnostics::basicTestCallback(const schunk_svh_msgs::SVHDiagnosticsGoal
         if (!m_diagnostics_action_server.isPreemptRequested() || ros::ok())
         {
           // set the negative direction to reach the negative reset point first, than the normal one
-          m_finger_manager->getHomeSettings(static_cast<driver_svh::SVHChannel>(channel), home_settings);
+          m_finger_manager->getHomeSettings(static_cast<driver_svh::SVHChannel>(channel),
+                                            home_settings);
           home_settings.direction = home_settings.direction * (-1);
-          m_finger_manager->setHomeSettings(static_cast<driver_svh::SVHChannel>(channel), home_settings);
+          m_finger_manager->setHomeSettings(static_cast<driver_svh::SVHChannel>(channel),
+                                            home_settings);
 
           // The Heart of the program
-          reset_success[channel] = m_finger_manager->resetChannel(static_cast<driver_svh::SVHChannel>(channel));
+          reset_success[channel] =
+            m_finger_manager->resetChannel(static_cast<driver_svh::SVHChannel>(channel));
           ROS_DEBUG_STREAM("Channel " << channel << " reset success = " << reset_success[channel]
                              ? "true"
                              : "false");
 
-          m_finger_manager->getDiagnosticStatus(static_cast<driver_svh::SVHChannel>(channel), diagnostic_data);
+          m_finger_manager->getDiagnosticStatus(static_cast<driver_svh::SVHChannel>(channel),
+                                                diagnostic_data);
 
-          finger.current_max_actual = diagnostic_data.diagnostic_current_maximum;
-          finger.current_min_actual = diagnostic_data.diagnostic_current_minimum;
-          finger.encoder            = diagnostic_data.diagnostic_encoder_state;
-          finger.motor              = diagnostic_data.diagnostic_motor_state;
-          finger.position_range_actual =
-            diagnostic_data.diagnostic_position_maximum - diagnostic_data.diagnostic_position_minimum;
+          finger.current_max_actual    = diagnostic_data.diagnostic_current_maximum;
+          finger.current_min_actual    = diagnostic_data.diagnostic_current_minimum;
+          finger.encoder               = diagnostic_data.diagnostic_encoder_state;
+          finger.motor                 = diagnostic_data.diagnostic_motor_state;
+          finger.position_range_actual = diagnostic_data.diagnostic_position_maximum -
+                                         diagnostic_data.diagnostic_position_minimum;
 
           m_action_feedback.fingers[channel] = finger;
 
@@ -213,7 +216,7 @@ void SVHDiagnostics::basicTestCallback(const schunk_svh_msgs::SVHDiagnosticsGoal
   {
     schunk_svh_msgs::SVHDiagnosticsResult action_result;
 
-    action_result.result = -1;
+    action_result.result  = -1;
     action_result.channel = -1;
 
     m_diagnostics_action_server.setAborted(action_result);
@@ -222,7 +225,6 @@ void SVHDiagnostics::basicTestCallback(const schunk_svh_msgs::SVHDiagnosticsGoal
   }
 
   m_enable_ros_contol_loop(true);
-
 }
 
 schunk_svh_msgs::SVHDiagnosticsResult SVHDiagnostics::evaluateBasicTest()
@@ -231,16 +233,19 @@ schunk_svh_msgs::SVHDiagnosticsResult SVHDiagnostics::evaluateBasicTest()
 
   schunk_svh_msgs::SVHDiagnosticsResult action_result;
 
-  action_result.result = zero_defect;
+  action_result.result  = zero_defect;
   action_result.channel = -1;
 
   // failure of :
   // 1st controller board both encoder and motor
-  if (m_action_feedback.fingers[0].encoder == false && m_action_feedback.fingers[1].encoder == false &&
-      m_action_feedback.fingers[2].encoder == false && m_action_feedback.fingers[3].encoder == false &&
-      m_action_feedback.fingers[4].encoder == false && m_action_feedback.fingers[0].motor == false &&
-      m_action_feedback.fingers[1].motor == false && m_action_feedback.fingers[2].motor == false &&
-      m_action_feedback.fingers[3].motor == false && m_action_feedback.fingers[4].motor == false)
+  if (m_action_feedback.fingers[0].encoder == false &&
+      m_action_feedback.fingers[1].encoder == false &&
+      m_action_feedback.fingers[2].encoder == false &&
+      m_action_feedback.fingers[3].encoder == false &&
+      m_action_feedback.fingers[4].encoder == false &&
+      m_action_feedback.fingers[0].motor == false && m_action_feedback.fingers[1].motor == false &&
+      m_action_feedback.fingers[2].motor == false && m_action_feedback.fingers[3].motor == false &&
+      m_action_feedback.fingers[4].motor == false)
   {
     action_result.result = board_one;
     ROS_WARN_STREAM("SVHDiagnostics::evaluateBasicTest: failure of : 1nd controller board both "
@@ -249,8 +254,10 @@ schunk_svh_msgs::SVHDiagnosticsResult SVHDiagnostics::evaluateBasicTest()
   }
 
   // 2nd controller board both encoder and motor
-  if (m_action_feedback.fingers[5].encoder == false && m_action_feedback.fingers[6].encoder == false &&
-      m_action_feedback.fingers[7].encoder == false && m_action_feedback.fingers[8].encoder == false &&
+  if (m_action_feedback.fingers[5].encoder == false &&
+      m_action_feedback.fingers[6].encoder == false &&
+      m_action_feedback.fingers[7].encoder == false &&
+      m_action_feedback.fingers[8].encoder == false &&
       m_action_feedback.fingers[5].motor == false && m_action_feedback.fingers[6].motor == false &&
       m_action_feedback.fingers[7].motor == false && m_action_feedback.fingers[8].motor == false)
   {
@@ -261,8 +268,10 @@ schunk_svh_msgs::SVHDiagnosticsResult SVHDiagnostics::evaluateBasicTest()
   }
 
   // 1st controller board encoder
-  if (m_action_feedback.fingers[0].encoder == false && m_action_feedback.fingers[1].encoder == false &&
-      m_action_feedback.fingers[2].encoder == false && m_action_feedback.fingers[3].encoder == false &&
+  if (m_action_feedback.fingers[0].encoder == false &&
+      m_action_feedback.fingers[1].encoder == false &&
+      m_action_feedback.fingers[2].encoder == false &&
+      m_action_feedback.fingers[3].encoder == false &&
       m_action_feedback.fingers[4].encoder == false)
   {
     action_result.result = board_one_encoder;
@@ -281,8 +290,10 @@ schunk_svh_msgs::SVHDiagnosticsResult SVHDiagnostics::evaluateBasicTest()
   }
 
   // 2nd controller board encoder
-  if (m_action_feedback.fingers[5].encoder == false && m_action_feedback.fingers[6].encoder == false &&
-      m_action_feedback.fingers[7].encoder == false && m_action_feedback.fingers[8].encoder == false)
+  if (m_action_feedback.fingers[5].encoder == false &&
+      m_action_feedback.fingers[6].encoder == false &&
+      m_action_feedback.fingers[7].encoder == false &&
+      m_action_feedback.fingers[8].encoder == false)
   {
     action_result.result = board_two_encoder;
     ROS_WARN_STREAM("SVHDiagnostics::evaluateBasicTest: failure of : 2nd controller board encoder");
@@ -301,7 +312,8 @@ schunk_svh_msgs::SVHDiagnosticsResult SVHDiagnostics::evaluateBasicTest()
   // encoder and motor failure, any finger
   for (size_t i = 0; i < driver_svh::SVH_DIMENSION; i++)
   {
-    if (m_action_feedback.fingers[i].motor == false && m_action_feedback.fingers[i].encoder == false)
+    if (m_action_feedback.fingers[i].motor == false &&
+        m_action_feedback.fingers[i].encoder == false)
     {
       action_result.result  = encoder_motor;
       action_result.channel = i;
@@ -376,11 +388,11 @@ void SVHDiagnostics::resetDiagnosticStatus()
   for (size_t channel = 0; channel < driver_svh::SVH_DIMENSION; ++channel)
   {
     schunk_svh_msgs::SVHDiagnosticsFinger finger = m_action_feedback.fingers[channel];
-    finger.current_max_actual                          = 0;
-    finger.current_min_actual                          = 0;
-    finger.position_range_actual                       = 0;
-    finger.encoder                                     = false;
-    finger.motor                                       = false;
+    finger.current_max_actual                    = 0;
+    finger.current_min_actual                    = 0;
+    finger.position_range_actual                 = 0;
+    finger.encoder                               = false;
+    finger.motor                                 = false;
 
     m_action_feedback.fingers[channel] = finger;
   }
@@ -398,9 +410,11 @@ void SVHDiagnostics::debugOuput()
 
   for (size_t channel = 0; channel < reset_success.size(); ++channel)
   {
-    m_finger_manager->getCurrentSettings(static_cast<driver_svh::SVHChannel>(channel), current_settings);
+    m_finger_manager->getCurrentSettings(static_cast<driver_svh::SVHChannel>(channel),
+                                         current_settings);
     m_finger_manager->getHomeSettings(static_cast<driver_svh::SVHChannel>(channel), home_settings);
-    m_finger_manager->getDiagnosticStatus(static_cast<driver_svh::SVHChannel>(channel), diagnostic_data);
+    m_finger_manager->getDiagnosticStatus(static_cast<driver_svh::SVHChannel>(channel),
+                                          diagnostic_data);
 
     double desired_current_neg, desired_current_pos;
     double max_current, min_current;

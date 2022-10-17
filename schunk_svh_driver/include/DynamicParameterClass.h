@@ -55,9 +55,9 @@ public:
    * \param minor_version The minor version of the svh hardware
    * \param parameters An array of type XmlRpcValue with parsed parameter file
    */
-  DynamicParameter( const uint16_t major_version,
-                    const uint16_t minor_version,
-                    XmlRpc::XmlRpcValue& parameters);
+  DynamicParameter(const uint16_t major_version,
+                   const uint16_t minor_version,
+                   XmlRpc::XmlRpcValue& parameters);
 
 
   /*!
@@ -66,15 +66,16 @@ public:
   struct Settings
   {
     Settings()
-    : position_settings(driver_svh::SVH_DIMENSION)
-    , position_settings_given(driver_svh::SVH_DIMENSION, false)
-    , current_settings(driver_svh::SVH_DIMENSION)
-    , current_settings_given(driver_svh::SVH_DIMENSION, false)
-    , home_settings(driver_svh::SVH_DIMENSION)
-    , home_settings_given(driver_svh::SVH_DIMENSION, false)
-    , major_version(0)
-    , minor_version(0)
-    {}
+      : position_settings(driver_svh::SVH_DIMENSION)
+      , position_settings_given(driver_svh::SVH_DIMENSION, false)
+      , current_settings(driver_svh::SVH_DIMENSION)
+      , current_settings_given(driver_svh::SVH_DIMENSION, false)
+      , home_settings(driver_svh::SVH_DIMENSION)
+      , home_settings_given(driver_svh::SVH_DIMENSION, false)
+      , major_version(0)
+      , minor_version(0)
+    {
+    }
 
     std::vector<std::vector<float> > position_settings;
     std::vector<bool> position_settings_given;
@@ -89,7 +90,7 @@ public:
     uint16_t minor_version;
   };
 
-  const Settings& getSettings() const {return m_settings;}
+  const Settings& getSettings() const { return m_settings; }
 
 private:
   /*!

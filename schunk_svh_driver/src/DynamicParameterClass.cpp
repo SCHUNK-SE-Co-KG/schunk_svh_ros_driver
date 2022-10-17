@@ -31,7 +31,6 @@
 //----------------------------------------------------------------------
 
 
-
 #include <DynamicParameterClass.h>
 
 /*
@@ -68,7 +67,6 @@ DynamicParameter::DynamicParameter(const uint16_t major_version,
     ROS_ERROR("ATTENTION: YOU HAVE AN INCORRECT PARAMETER FILE!!!");
     exit(0);
   }
-
 }
 
 /*
@@ -80,7 +78,7 @@ bool DynamicParameter::xml_rpc_value_to_vector(XmlRpc::XmlRpcValue my_array,
 {
   my_vector.clear();
 
-  for (size_t i = 0; i < (unsigned) my_array.size(); ++i)
+  for (size_t i = 0; i < (unsigned)my_array.size(); ++i)
   {
     ROS_ASSERT(my_array[i].getType() == XmlRpc::XmlRpcValue::TypeDouble ||
                my_array[i].getType() == XmlRpc::XmlRpcValue::TypeInt);
@@ -104,24 +102,27 @@ bool DynamicParameter::xml_rpc_value_to_vector(XmlRpc::XmlRpcValue my_array,
  */
 
 void DynamicParameter::parse_parameters(const uint16_t major_version_target,
-                                const uint16_t minor_version_target,
-                                XmlRpc::XmlRpcValue& parameters)
+                                        const uint16_t minor_version_target,
+                                        XmlRpc::XmlRpcValue& parameters)
 {
-  ROS_INFO("Trying to search controller parameters for version: %d.%d", major_version_target, minor_version_target);
+  ROS_INFO("Trying to search controller parameters for version: %d.%d",
+           major_version_target,
+           minor_version_target);
 
   m_settings.major_version = 0;
   m_settings.minor_version = 0;
 
-  if ( 0 == major_version_target || 5 < major_version_target )
+  if (0 == major_version_target || 5 < major_version_target)
   {
-    ROS_ERROR("Could not establish connection to Schunk SVH. Please check connections and power source!");
+    ROS_ERROR(
+      "Could not establish connection to Schunk SVH. Please check connections and power source!");
     return;
   }
 
   if (0 < parameters.size())
   {
     ROS_DEBUG("There exist %d different parameter versions", parameters.size());
-    for (size_t i = 0; i < (unsigned) parameters.size(); ++i)
+    for (size_t i = 0; i < (unsigned)parameters.size(); ++i)
     {
       XmlRpc::XmlRpcValue parameter_set_yaml = parameters[i]["parameter_set"];
 
@@ -132,25 +133,23 @@ void DynamicParameter::parse_parameters(const uint16_t major_version_target,
       {
         ROS_DEBUG("Skipping version %d.%d as better matching version was already found",
                   major_version_read,
-                  minor_version_read
-        );
+                  minor_version_read);
         continue;
       }
 
-      bool is_correct_version    = major_version_read == major_version_target
-                                && minor_version_read == minor_version_target;
-      bool is_same_major_version = major_version_read == major_version_target
-                                && minor_version_read <= minor_version_target;
-      bool is_default_state      = major_version_read == 0
-                                && minor_version_read == 0;
+      bool is_correct_version =
+        major_version_read == major_version_target && minor_version_read == minor_version_target;
+      bool is_same_major_version =
+        major_version_read == major_version_target && minor_version_read <= minor_version_target;
+      bool is_default_state = major_version_read == 0 && minor_version_read == 0;
 
       if (is_correct_version || is_same_major_version || is_default_state)
       {
         ROS_DEBUG("major version: %d minor version: %d", major_version_read, minor_version_read);
 
         for (std::map<driver_svh::SVHChannel, std::string>::iterator it = m_name_to_enum.begin();
-              it != m_name_to_enum.end();
-              ++it)
+             it != m_name_to_enum.end();
+             ++it)
         {
           m_settings.major_version = major_version_read;
           m_settings.minor_version = minor_version_read;
@@ -158,10 +157,12 @@ void DynamicParameter::parse_parameters(const uint16_t major_version_target,
           {
             ROS_DEBUG("Parameter Name: %s", it->second.c_str());
 
-            m_settings.position_settings_given[it->first] = xml_rpc_value_to_vector(
-              parameter_set_yaml[it->second]["position_controller"], m_settings.position_settings[it->first]);
-            m_settings.current_settings_given[it->first] = xml_rpc_value_to_vector(
-              parameter_set_yaml[it->second]["current_controller"], m_settings.current_settings[it->first]);
+            m_settings.position_settings_given[it->first] =
+              xml_rpc_value_to_vector(parameter_set_yaml[it->second]["position_controller"],
+                                      m_settings.position_settings[it->first]);
+            m_settings.current_settings_given[it->first] =
+              xml_rpc_value_to_vector(parameter_set_yaml[it->second]["current_controller"],
+                                      m_settings.current_settings[it->first]);
             m_settings.home_settings_given[it->first] = xml_rpc_value_to_vector(
               parameter_set_yaml[it->second]["home_settings"], m_settings.home_settings[it->first]);
           }
@@ -192,8 +193,6 @@ void DynamicParameter::parse_parameters(const uint16_t major_version_target,
   }
   ROS_WARN_STREAM("DID NOT FIND EXACT VERSION: " << major_version_target << "."
                                                  << minor_version_target
-                                                 << " Falling back to: "
-                                                 << m_settings.major_version
-                                                 << "."
-                                                 << m_settings.minor_version);
+                                                 << " Falling back to: " << m_settings.major_version
+                                                 << "." << m_settings.minor_version);
 }
