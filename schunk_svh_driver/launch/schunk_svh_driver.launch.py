@@ -78,7 +78,6 @@ def generate_launch_description():
         package="controller_manager",
         executable="ros2_control_node",
         parameters=[robot_description, robot_controllers],
-        #prefix="screen -d -m gdb -command=/home/scherzin/.ros/my_debug_log --ex run --args",
         output={
             "stdout": "screen",
             "stderr": "screen",
