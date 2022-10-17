@@ -1,17 +1,24 @@
-// this is for emacs file handling -*- mode: c++; indent-tabs-mode: nil -*-
-
-// -- BEGIN LICENSE BLOCK ----------------------------------------------
-// This file is part of the SCHUNK SVH Driver suite.
+////////////////////////////////////////////////////////////////////////////////
 //
-// This program is free software licensed under the LGPL
-// (GNU LESSER GENERAL PUBLIC LICENSE Version 3).
-// You can find a copy of this license in LICENSE folder in the top
-// directory of the source code.
+// © Copyright 2022 SCHUNK Mobile Greifsysteme GmbH, Lauffen/Neckar Germany
+// © Copyright 2022 FZI Forschungszentrum Informatik, Karlsruhe, Germany
 //
-// © Copyright 2017 SCHUNK Mobile Greifsysteme GmbH, Lauffen/Neckar Germany
-// © Copyright 2017 FZI Forschungszentrum Informatik, Karlsruhe, Germany
+// This file is part of the Schunk SVH Driver.
 //
-// -- END LICENSE BLOCK ------------------------------------------------
+// The Schunk SVH Driver is free software: you can redistribute it and/or
+// modify it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or (at your
+// option) any later version.
+//
+// The Schunk SVH Driver is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+// Public License for more details.
+//
+// You should have received a copy of the GNU General Public License along with
+// Foobar. If not, see <https://www.gnu.org/licenses/>.
+//
+////////////////////////////////////////////////////////////////////////////////
 
 //----------------------------------------------------------------------
 /*!\file
