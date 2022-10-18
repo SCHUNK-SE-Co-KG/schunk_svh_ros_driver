@@ -13,7 +13,7 @@ with everything that you need to operate the five finger hand in a ROS2 context.
 Inside the `src` folder of your ROS2 workspace, get the relevant packages
 
 ```bash
-git clone -b ros2-foxy-devel git@github.com:fzi-forschungszentrum-informatik/schunk_svh_ros_driver.git
+git clone -b ros2-foxy git@github.com:fzi-forschungszentrum-informatik/schunk_svh_ros_driver.git
 git clone -b main git@github.com:fzi-forschungszentrum-informatik/schunk_svh_library.git
 rosdep install --ignore-src --from-paths ./ -y -r
 ```
