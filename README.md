@@ -45,7 +45,7 @@ previous calls to `catkin_make`.
 
 ## Connection to the SVH
 There are a few minimal steps required before you can connect to the SVH for the first time.
-You'll find them [here](https://github.com/fzi-forschungszentrum-informatik/schunk_svh_library).
+You'll find them [here](https://github.com/fzi-forschungszentrum-informatik/schunk_svh_library#connection-to-the-svh).
 
 ## Getting started
 Source your local `install/setup.bash` and run
