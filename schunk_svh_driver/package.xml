@@ -40,6 +40,7 @@
   <exec_depend condition="$ROS_PYTHON_VERSION == 3">python3-rospkg</exec_depend>
   <exec_depend>python_qt_binding</exec_depend>
   <exec_depend>qt_gui</exec_depend>
+  <exec_depend>joint_state_controller</exec_depend>
   <exec_depend>joint_state_publisher</exec_depend>
   <exec_depend>joint_trajectory_controller</exec_depend>
   <exec_depend>robot_state_publisher</exec_depend>
