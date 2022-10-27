@@ -30,7 +30,13 @@ You'll find them [here](https://github.com/fzi-forschungszentrum-informatik/schu
 
 ## Getting started
 
-In a sourced terminal, run
+In every fresh terminal, source the setup scripts in the following order
+```
+source /opt/ros/foxy/setup.bash
+source install/local_setup.bash
+```
+where `install` is the local folder within your ROS2 workspace.
+Now, run
 ```bash
 ros2 launch schunk_svh_driver schunk_svh_driver.launch.py control:=left_hand
 ```
