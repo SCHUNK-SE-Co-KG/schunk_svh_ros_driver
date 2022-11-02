@@ -29,10 +29,9 @@ def generate_test_description():
 
 
 class IntegrationTest(unittest.TestCase):
-    """ An integration test for controller initialization and startup
+    """ An integration test for the basic workflow of ROS2-control
 
-    We check if each controller successfully performs the life cycle of:
-    `initialized` - `active` - `update` - `inactive`.
+    We test if the hand controller and the joint state controller started as expected.
     """
     def __init__(self, *args):
         super().__init__(*args)
@@ -44,7 +43,6 @@ class IntegrationTest(unittest.TestCase):
         cls.setup_interfaces(cls)
 
         cls.our_controllers = [
-            'left_hand',
             'right_hand',
             'joint_state_controller',
         ]
@@ -67,15 +65,15 @@ class IntegrationTest(unittest.TestCase):
         if not self.switch_controller.wait_for_service(timeout.nanoseconds/1e9):
             self.fail("Service switch_controllers not available")
 
-    def test_controller_initialization(self):
-        """ Test whether every controller got initialized correctly
+    def test_controller_startup(self):
+        """ Test whether every controller started correctly
 
         We check if the list of all controllers currently managed by the
         controller manager contains our controllers and if they have `state:
-        inactive`.
+        active`.
         """
         for name in self.our_controllers:
-            self.assertTrue(self.check_state(name, 'inactive'), f"{name} is initialized correctly")
+            self.assertTrue(self.check_state(name, 'active'), f"{name} is started correctly")
 
     def check_state(self, controller, state):
         """ Check the controller's state
