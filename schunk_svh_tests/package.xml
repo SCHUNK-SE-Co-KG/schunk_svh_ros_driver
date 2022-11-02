@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>schunk_svh_tests</name>
+  <version>0.0.0</version>
+  <description>Integration tests for the Schunk SVH ROS2 driver</description>
+  <maintainer email="scherzin@fzi.de">Stefan Scherzinger</maintainer>
+  <license>GPL-3.0-or-later</license>
+
+  <test_depend>controller_manager_msgs</test_depend>
+  <test_depend>launch</test_depend>
+  <test_depend>launch_ros</test_depend>
+  <test_depend>launch_testing_ament_cmake</test_depend>
+  <test_depend>schunk_svh_driver</test_depend>
+
+
+</package>
