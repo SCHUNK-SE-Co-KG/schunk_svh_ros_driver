@@ -62,7 +62,7 @@ You can send trajectory goals to its action server for controlling groups of joi
 An easy access is provided with `rqt`'s joint trajectory controller plugin.
 You might need to install that first with e.g.
 ```bash
-sudo apt install ros-noetic-rqt-joint-trajectory-controller
+sudo apt install ros-$ROS_DISTRO-rqt-joint-trajectory-controller
 ```
 In a sourced terminal, call `rqt` and navigate to `Plugins` -> `Robot Tools` -> `Joint trajectory controller`.
 You can then move individual fingers with sliders.
