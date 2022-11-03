@@ -95,7 +95,7 @@ Luckily, that's all handled automatically by recent Ubuntu versions in a simple 
    where `user` is what you chose as credentials when setting up the *RP4* image from above.
    On the *RP4* get the latest updates with
    ```bash
-   sudo apt update & sudo apt upgrade
+   sudo apt update && sudo apt upgrade
    ```
    Reboot the system with
    ```bash
