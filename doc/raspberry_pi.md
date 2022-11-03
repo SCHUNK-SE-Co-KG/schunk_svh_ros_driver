@@ -2,7 +2,14 @@
 
 This is a step-by-step tutorial for setting-up the Schunk SVH ROS2 driver on a freshly formatted Raspberry Pi 4.
 
-## Prerequisites
+1. [Prerequisites](#prerequisites)
+2. [Create the Raspberry Pi 4 image](#create-image)
+3. [Connect to the Raspberry Pi 4](#connect-to-rp4)
+4. [Install ROS2 on the Raspberry Pi 4](#install-ros2)
+4. [Install the Schunk SVH ROS2 driver](#install-schunk-driver)
+4. [Test the Schunk SVH](#test-schunk-driver)
+
+## Prerequisites <a name="prerequisites"></a>
 You will need the following equipment:
   - A PC with Ubuntu 20.04. You'll also need *sudo* privileges and internet via Wifi. We refer to this PC as *laptop* in the following.
   - A Raspberry Pi 4, which we refer to as *RP4* in the following.
@@ -12,7 +19,7 @@ You will need the following equipment:
 
 In this tutorial, we assume that you do not have a micro HDMI cable for the *RP4* and that you operate the *RP4* on the command line via `ssh` from the *laptop*.
 
-## Create the Raspberry Pi 4 image
+## Create the Raspberry Pi 4 image <a name="create-image"></a>
 1. We use the very handy tool `rpi-imager` for setting-up the *RP4*'s SD card. It has an intuitive GUI and directly downloads suitable images for us.
    Install it via
    ```bash
@@ -46,7 +53,7 @@ In this tutorial, we assume that you do not have a micro HDMI cable for the *RP4
    Now power the *RP4* with the USBC cable via the *laptop*.
 
 
-## Connect to the Raspberry Pi 4
+## Connect to the Raspberry Pi 4 <a name="connect-to-rp4"></a>
 Directly connect the *laptop* with the *RP4* via the Ethernet cable. The
 *RP4*'s LAN port should have DHCP as default config. Normally, we thus would
 need to setup a DHCP server on our *laptop*'s LAN port and pass internet downlink to the *RP4*.
@@ -98,7 +105,7 @@ Luckily, that's all handled automatically by recent Ubuntu versions in a simple 
 
 
 
-## Install ROS2 on the Raspberry Pi 4
+## Install ROS2 on the Raspberry Pi 4 <a name="install-ros2"></a>
 1. Back on the *RP4* in a terminal, install ROS2 according to the [official documentation](https://docs.ros.org/en/foxy/Installation/Ubuntu-Install-Debians.html)
    and choose the `Desktop Install (Recommended)` version.
 
@@ -126,14 +133,14 @@ Luckily, that's all handled automatically by recent Ubuntu versions in a simple 
 
 6. As a final step, install `Colcon` for a ROS2 context according to [these](https://colcon.readthedocs.io/en/released/user/installation.html#in-the-context-of-the-ros-project) instructions.
 
-## Install the Schunk SVH ROS2 driver
+## Install the Schunk SVH ROS2 driver <a name="install-schunk-driver"></a>
 Setup a new workspace with
 ```bash
 mkdir -p $HOME/ros2_foxy_ws/src && cd "$_"
 ```
 and follow the installation instructions from [here](https://github.com/fzi-forschungszentrum-informatik/schunk_svh_ros_driver/tree/ros2-foxy#installation).
 
-## Control the Schunk SVH with sliders
+## Test the Schunk SVH <a name="test-schunk-driver"></a>
 In this tutorial, we'll control the hand via a script on the *laptop* and assume that you have both ROS2 Foxy *and* the Schunk SVH driver installed here as well.
 As an alternative, you could, of course, control the hand directly on the *RP4*.
 
