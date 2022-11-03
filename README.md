@@ -66,3 +66,6 @@ sudo apt install ros-noetic-rqt-joint-trajectory-controller
 ```
 In a sourced terminal, call `rqt` and navigate to `Plugins` -> `Robot Tools` -> `Joint trajectory controller`.
 You can then move individual fingers with sliders.
+
+## Setup on a Raspberry Pi
+Here's a [step-by-step tutorial](doc/raspberry_pi.md) of how to setup the Schunk SVH ROS driver on a Raspberry Pi 4.
