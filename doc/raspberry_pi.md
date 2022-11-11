@@ -46,10 +46,10 @@ In this tutorial, we assume that you do not have a micro HDMI cable for the *RP4
    - set a hostname, e.g. `schunk`
    - enable SSH with `Use password authentication`
    - Set username and password as desired. You will be using these credentials later for ssh from the *laptop* to the *RP4*.
-   - Set locale settings according to your preference, e.g. `Europe/Berlin` and `ge` as Keyboard layout.
+   - Set locale settings and keyboard layout according to your preference.
 
 6. Now click `SAVE`, then `WRITE` and confirm to proceed with erasing the SD card.
-   The imager is no writing the image. When finished, remove the SD card from the *laptop* and insert it back into the *RP4*.
+   The imager is now writing the image. When finished, remove the SD card from the *laptop* and insert it back into the *RP4*.
    Now power the *RP4* with the USBC cable via the *laptop*.
 
 
