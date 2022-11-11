@@ -20,8 +20,8 @@ or use an existing one.
 Inside the `src` folder of that ROS workspace, get the relevant ROS packages
 
 ```bash
-git clone -b main git@github.com:fzi-forschungszentrum-informatik/schunk_svh_ros_driver.git
-git clone -b main git@github.com:fzi-forschungszentrum-informatik/schunk_svh_library.git
+git clone -b main https://github.com/fzi-forschungszentrum-informatik/schunk_svh_ros_driver.git
+git clone -b main https://github.com/fzi-forschungszentrum-informatik/schunk_svh_library.git
 rosdep install --ignore-src --from-paths ./ -y -r
 ```
 
