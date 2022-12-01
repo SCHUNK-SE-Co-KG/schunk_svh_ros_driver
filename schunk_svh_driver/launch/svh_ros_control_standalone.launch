@@ -18,7 +18,6 @@
         <arg name="serial_device" value="$(arg serial_device)" />
         <arg name="maximal_force" value="$(arg maximal_force)" />
         <arg name="autostart" value="$(arg autostart)"/>
-        <arg name="trajectory_controller_name" value="$(arg trajectory_controller_name)" />
         <arg name="debug" value="$(arg debug)"/>
         <arg name="name_prefix" value="$(arg name_prefix)"/>
   </include>
