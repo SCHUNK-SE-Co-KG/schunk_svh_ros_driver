@@ -167,6 +167,7 @@ install(
     svh_robot_hw
     svh_ros
     svh_ros_control_node
+    svh_dynamic_parameter_test
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
@@ -189,4 +190,3 @@ install(
     robot_hw_plugin.xml
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 )
-
