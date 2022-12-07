@@ -16,3 +16,15 @@ left_hand_controller:
      - left_hand_Finger_Spread
      - left_hand_Pinky
      - left_hand_Ring_Finger
+
+gazebo_ros_control:
+  pid_gains:
+    left_hand_Thumb_Opposition:         {p: 100,  d: 1, i: 1, i_clamp: 1}
+    left_hand_Thumb_Flexion:            {p: 100,  d: 1, i: 1, i_clamp: 1}
+    left_hand_Index_Finger_Proximal:    {p: 100,  d: 1, i: 1, i_clamp: 1}
+    left_hand_Index_Finger_Distal:      {p: 100,  d: 1, i: 1, i_clamp: 1}
+    left_hand_Middle_Finger_Proximal:   {p: 100,  d: 1, i: 1, i_clamp: 1}
+    left_hand_Middle_Finger_Distal:     {p: 100,  d: 1, i: 1, i_clamp: 1}
+    left_hand_Finger_Spread:            {p: 100,  d: 1, i: 1, i_clamp: 1}
+    left_hand_Pinky:                    {p: 100,  d: 1, i: 1, i_clamp: 1}
+    left_hand_Ring_Finger:              {p: 100,  d: 1, i: 1, i_clamp: 1}
