@@ -1,0 +1,18 @@
+joint_state_controller:
+   type:         joint_state_controller/JointStateController
+   publish_rate: 50
+
+left_hand_controller:
+   type: position_controllers/JointTrajectoryController
+   publish_rate: 50
+   allow_partial_joints_goal: True
+   joints:
+     - left_hand_Thumb_Opposition
+     - left_hand_Thumb_Flexion
+     - left_hand_Index_Finger_Proximal
+     - left_hand_Index_Finger_Distal
+     - left_hand_Middle_Finger_Proximal
+     - left_hand_Middle_Finger_Distal
+     - left_hand_Finger_Spread
+     - left_hand_Pinky
+     - left_hand_Ring_Finger

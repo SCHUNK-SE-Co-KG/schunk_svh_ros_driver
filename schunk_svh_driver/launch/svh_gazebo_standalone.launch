@@ -14,7 +14,7 @@
         args="-z 0.1 -urdf -model robot -param robot_description" respawn="false" output="screen" />
 
   <!-- Load controller configurations -->
-  <rosparam file="$(find schunk_svh_driver)/cfg/left_hand_controllers.yaml" command="load"/>
+  <rosparam file="$(find schunk_svh_driver)/cfg/gazebo_controllers.yaml" command="load"/>
 
   <!-- Load and start the controllers for the SVH  -->
   <node name="spawner" pkg="controller_manager" type="spawner" respawn="false"
