@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+<robot name="svh" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
   <xacro:include filename="$(find schunk_svh_description)/urdf/common.xacro" />
   <xacro:include filename="$(find schunk_svh_description)/urdf/svh.transmission.xacro" />
@@ -538,7 +538,7 @@
       <origin xyz="0 0 0" rpy="0 0 ${side*(-0.9704)}" />
       <axis xyz="0 0 ${side*(1)}" />
     </joint>
-    
+
     <joint name="${name}_Thumb_Helper" type="fixed">
       <parent link="${name}_z" />
       <child link="${name}_virtual_a" />
@@ -694,7 +694,7 @@
       <origin xyz="0 0 0" rpy="1.5707 0 0" />
       <axis xyz="0 0 1" />
     </joint>
-    
+
     <joint name="${name}_j12" type="revolute">
       <parent link="${name}_j" />
       <child link="${name}_n" />
@@ -771,11 +771,10 @@
       <limit effort="1000.0" lower="0.0" upper="0.5829" velocity="1" />
       <origin xyz="${side*(0.025355)} 0 0.056" rpy="-1.5707 -1.5707 0" />
       <axis xyz="0 0 ${side*(1)}" />
-    </joint>    
+    </joint>
 
     <xacro:svh_transmission name="${name}" />
     <xacro:svh_gazebo name="${name}" robot_namespace="${robot_namespace}" />
 
-</xacro:macro>
+  </xacro:macro>
 </robot>
-

@@ -1,0 +1,23 @@
+<launch>
+
+  <!-- Open an empty Gazebo world -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="use_sim_time" value="true"/>
+    <arg name="gui" value="true"/>
+  </include>
+
+  <!-- Load the URDF robot description -->
+  <param name="robot_description" command="$(find xacro)/xacro $(find schunk_svh_description)/urdf/svh-standalone.urdf.xacro" />
+
+  <!-- Spawn the SVH in gazebo -->
+  <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model"
+        args="-z 0.1 -urdf -model robot -param robot_description" respawn="false" output="screen" />
+
+  <!-- Load controller configurations -->
+  <rosparam file="$(find schunk_svh_driver)/cfg/left_hand_controllers.yaml" command="load"/>
+
+  <!-- Load and start the controllers for the SVH  -->
+  <node name="spawner" pkg="controller_manager" type="spawner" respawn="false"
+    output="screen" args="joint_state_controller left_hand_controller" />
+
+</launch>

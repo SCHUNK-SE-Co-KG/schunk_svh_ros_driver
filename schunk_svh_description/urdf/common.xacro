@@ -49,24 +49,24 @@
       <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001" />
     </inertial>
   </xacro:macro>
-  
+
   <xacro:macro name="default_transmission" params="jname">
     <transmission name="${jname}_trans">
       <type>transmission_interface/SimpleTransmission</type>
       <joint name="${jname}">
-      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-<!--         <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface> -->
-<!--         <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface> -->
+      <!-- <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface> -->
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+      <!-- <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface> -->
       </joint>
       <actuator name="${jname}_motor">
         <mechanicalReduction>1</mechanicalReduction>
-      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-<!--         <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface> -->
-<!--         <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface> -->
+        <!-- <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface> -->
+        <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        <!-- <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface> -->
       </actuator>
     </transmission>
   </xacro:macro>
-  
+
   <xacro:macro name="mimic_joint_plugin_gazebo" params="name_prefix parent_joint mimic_joint has_pid:=false multiplier:=1.0 offset:=0 sensitiveness:=0.0 max_effort:=1.0 robot_namespace:=''">
     <gazebo>
       <plugin name="${name_prefix}_mimic_joint_plugin" filename="libroboticsgroup_gazebo_mimic_joint_plugin.so">
