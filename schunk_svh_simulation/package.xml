@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<?xml-model
+  href="http://download.ros.org/schema/package_format3.xsd"
+  schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+
+  <name>schunk_svh_simulation</name>
+  <version>0.0.1</version>
+  <description>A Gazebo-based simulation environment for the Schunk SVH</description>
+
+  <maintainer email="scherzin@fzi.de">Stefan Scherzinger</maintainer>
+
+  <license>GPL-3.0-or-later</license>
+
+  <author email="scherzin@fzi.de">Stefan Scherzinger</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <exec_depend>schunk_svh_description</exec_depend>
+
+  <export>
+  </export>
+
+</package>
