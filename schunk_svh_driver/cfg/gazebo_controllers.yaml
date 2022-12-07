@@ -28,3 +28,14 @@ gazebo_ros_control:
     left_hand_Finger_Spread:            {p: 100,  d: 1, i: 1, i_clamp: 1}
     left_hand_Pinky:                    {p: 100,  d: 1, i: 1, i_clamp: 1}
     left_hand_Ring_Finger:              {p: 100,  d: 1, i: 1, i_clamp: 1}
+
+    left_hand_j3:               {p: 10,  d: 0.1, i: 0.1, i_clamp: 1}
+    left_hand_j4:               {p: 10,  d: 0.1, i: 0.1, i_clamp: 1}
+    left_hand_j14:              {p: 10,  d: 0.1, i: 0.1, i_clamp: 1}
+    left_hand_j15:              {p: 10,  d: 0.1, i: 0.1, i_clamp: 1}
+    left_hand_j12:              {p: 10,  d: 0.1, i: 0.1, i_clamp: 1}
+    left_hand_j16:              {p: 10,  d: 0.1, i: 0.1, i_clamp: 1}
+    left_hand_j13:              {p: 10,  d: 0.1, i: 0.1, i_clamp: 1}
+    left_hand_j17:              {p: 10,  d: 0.1, i: 0.1, i_clamp: 1}
+    left_hand_index_spread:     {p: 10,  d: 0.1, i: 0.1, i_clamp: 1}
+    left_hand_ring_spread:      {p: 10,  d: 0.1, i: 0.1, i_clamp: 1}
