@@ -35,12 +35,13 @@
 #include <memory>
 #include <thread>
 
-#include "hardware_interface/base_interface.hpp"
 #include "hardware_interface/handle.hpp"
 #include "hardware_interface/hardware_info.hpp"
 #include "hardware_interface/system_interface.hpp"
 #include "rclcpp/macros.hpp"
 #include "rclcpp/rclcpp.hpp"
+#include "rclcpp_lifecycle/node_interfaces/lifecycle_node_interface.hpp"
+#include "rclcpp_lifecycle/state.hpp"
 #include "schunk_svh_library/control/SVHFingerManager.h"
 
 namespace schunk_svh_driver
@@ -57,15 +58,16 @@ constexpr char HW_IF_CURRENT[] = "current";
    * relevant hardware_interfaces as exposed by the schunk_svh_library.
    *
    */
-class SystemInterface
-: public hardware_interface::BaseInterface<hardware_interface::SystemInterface>
+class SystemInterface : public hardware_interface::SystemInterface
 {
 public:
   using return_type = hardware_interface::return_type;
 
   RCLCPP_SHARED_PTR_DEFINITIONS(SystemInterface)
 
-  return_type configure(const hardware_interface::HardwareInfo & info) override;
+  CallbackReturn on_init(const hardware_interface::HardwareInfo & info) override;
+  CallbackReturn on_activate(const rclcpp_lifecycle::State & previous_state) override;
+  CallbackReturn on_shutdown(const rclcpp_lifecycle::State & previous_state) override;
 
   std::vector<hardware_interface::StateInterface> export_state_interfaces() override;
 
@@ -75,13 +77,8 @@ public:
     const std::vector<std::string> & start_interfaces,
     const std::vector<std::string> & stop_interfaces) override;
 
-  return_type start() override;
-
-  return_type stop() override;
-
-  return_type read() override;
-
-  return_type write() override;
+  return_type read(const rclcpp::Time & time, const rclcpp::Duration & period) override;
+  return_type write(const rclcpp::Time & time, const rclcpp::Duration & period) override;
 
 private:
   // Initialization of the SVH in a separate thread to meet ROS2-control's

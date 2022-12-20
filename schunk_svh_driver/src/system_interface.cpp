@@ -50,12 +50,14 @@
 
 namespace schunk_svh_driver
 {
-SystemInterface::return_type SystemInterface::configure(
+SystemInterface::CallbackReturn SystemInterface::on_init(
   const hardware_interface::HardwareInfo & info)
 {
   // Keep an internal copy of the given configuration
-  if (configure_default(info) != return_type::OK) {
-    return return_type::ERROR;
+  if (
+    hardware_interface::SystemInterface::on_init(info) !=
+    SystemInterface::CallbackReturn::SUCCESS) {
+    return SystemInterface::CallbackReturn::ERROR;
   }
 
   m_device_file = info_.hardware_parameters["device_file"];
@@ -71,21 +73,21 @@ SystemInterface::return_type SystemInterface::configure(
       RCLCPP_ERROR(
         rclcpp::get_logger("SystemInterface"), "Joint '%s' needs a command interface.",
         joint.name.c_str());
-      return return_type::ERROR;
+      return CallbackReturn::ERROR;
     }
 
     if (joint.command_interfaces[0].name != hardware_interface::HW_IF_POSITION) {
       RCLCPP_ERROR(
         rclcpp::get_logger("SystemInterface"), "Joint '%s' needs a %s command interface.",
         joint.name.c_str(), hardware_interface::HW_IF_POSITION);
-      return return_type::ERROR;
+      return CallbackReturn::ERROR;
     }
 
     if (joint.state_interfaces.size() != 4) {
       RCLCPP_ERROR(
         rclcpp::get_logger("SystemInterface"), "Joint '%s' uses 4 state interfaces.",
         joint.name.c_str());
-      return return_type::ERROR;
+      return CallbackReturn::ERROR;
     }
 
     if (!(joint.state_interfaces[0].name == hardware_interface::HW_IF_POSITION ||
@@ -97,7 +99,7 @@ SystemInterface::return_type SystemInterface::configure(
         "Joint '%s' needs the following state interfaces in this order: %s, %s, %s, and %s.",
         joint.name.c_str(), hardware_interface::HW_IF_POSITION, hardware_interface::HW_IF_VELOCITY,
         hardware_interface::HW_IF_EFFORT, schunk_svh_driver::HW_IF_CURRENT);
-      return return_type::ERROR;
+      return CallbackReturn::ERROR;
     }
   }
 
@@ -110,8 +112,7 @@ SystemInterface::return_type SystemInterface::configure(
   m_init_thread = std::thread(&SystemInterface::init, this);
   m_init_thread.detach();
 
-  this->status_ = hardware_interface::status::CONFIGURED;
-  return return_type::OK;
+  return CallbackReturn::SUCCESS;
 }
 
 std::vector<hardware_interface::StateInterface> SystemInterface::export_state_interfaces()
@@ -150,23 +151,24 @@ SystemInterface::return_type SystemInterface::prepare_command_mode_switch(
   return return_type::OK;
 }
 
-SystemInterface::return_type SystemInterface::start()
+SystemInterface::CallbackReturn SystemInterface::on_activate(
+  [[maybe_unused]] const rclcpp_lifecycle::State & previous_state)
 {
-  this->status_ = hardware_interface::status::STARTED;
   RCLCPP_INFO(rclcpp::get_logger("SystemInterface"), "Started SVH driver");
-  return return_type::OK;
+  return CallbackReturn::SUCCESS;
 }
 
-SystemInterface::return_type SystemInterface::stop()
+SystemInterface::CallbackReturn SystemInterface::on_shutdown(
+  [[maybe_unused]] const rclcpp_lifecycle::State & previous_state)
 {
   m_svh->disconnect();
 
-  this->status_ = hardware_interface::status::STOPPED;
   RCLCPP_INFO(rclcpp::get_logger("SystemInterface"), "Stopped SVH driver");
-  return return_type::OK;
+  return CallbackReturn::SUCCESS;
 }
 
-SystemInterface::return_type SystemInterface::read()
+SystemInterface::return_type SystemInterface::read(
+  [[maybe_unused]] const rclcpp::Time & time, [[maybe_unused]] const rclcpp::Duration & period)
 {
   if (m_svh->isConnected()) {
     for (size_t channel = 0; channel < driver_svh::SVH_DIMENSION; ++channel) {
@@ -187,7 +189,8 @@ SystemInterface::return_type SystemInterface::read()
   return return_type::OK;
 }
 
-SystemInterface::return_type SystemInterface::write()
+SystemInterface::return_type SystemInterface::write(
+  [[maybe_unused]] const rclcpp::Time & time, [[maybe_unused]] const rclcpp::Duration & period)
 {
   if (m_initialized) {
     m_svh->setAllTargetPositions(m_position_commands);  // Does all plausibility checks
