@@ -234,19 +234,19 @@ void SystemInterface::init()
       current_settings = info_.joints[i].parameters["0.0.current_controller"];
       RCLCPP_WARN(
         rclcpp::get_logger("SystemInterface"),
-        "Channel %i parameters for motor currents not available. Using defaults.", i);
+        "Channel %zu parameters for motor currents not available. Using defaults.", i);
     }
     if (position_settings.empty()) {
       position_settings = info_.joints[i].parameters["0.0.position_controller"];
       RCLCPP_WARN(
         rclcpp::get_logger("SystemInterface"),
-        "Channel %i parameters for position controllers not available. Using defaults.", i);
+        "Channel %zu parameters for position controllers not available. Using defaults.", i);
     }
     if (home_settings.empty()) {
       home_settings = info_.joints[i].parameters["0.0.home_settings"];
       RCLCPP_WARN(
         rclcpp::get_logger("SystemInterface"),
-        "Channel %i parameters for home settings not available. Using defaults.", i);
+        "Channel %zu parameters for home settings not available. Using defaults.", i);
     }
 
     m_svh->setCurrentSettings(
