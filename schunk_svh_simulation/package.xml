@@ -5,7 +5,7 @@
 <package format="3">
 
   <name>schunk_svh_simulation</name>
-  <version>0.1.0</version>
+  <version>0.1.1</version>
   <description>A Gazebo-based simulation environment for the Schunk SVH</description>
 
   <maintainer email="scherzin@fzi.de">Stefan Scherzinger</maintainer>

@@ -2,8 +2,8 @@
 Changelog for package schunk_svh_driver
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.1.1 (2022-12-20)
+------------------
 * Update the plugin to mimic joints
   The new plugin is now maintained
   `here <https://github.com/roboticsgroup/roboticsgroup_upatras_gazebo_plugins>`_.

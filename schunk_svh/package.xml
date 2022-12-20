@@ -1,6 +1,6 @@
 <package>
   <name>schunk_svh</name>
-  <version>0.1.0</version>
+  <version>0.1.1</version>
   <description>ROS1 specific packages for the Schunk SVH five finger hand</description>
 
   <author email="scherzin@fzi.de">Stefan Scherzinger</author>
