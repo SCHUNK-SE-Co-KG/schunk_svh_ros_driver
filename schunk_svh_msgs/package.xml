@@ -5,7 +5,7 @@
 <package format="3">
 
   <name>schunk_svh_msgs</name>
-  <version>0.0.1</version>
+  <version>0.1.0</version>
   <description>ROS1 messages, services, and actions for the Schunk SVH five finger hand</description>
 
   <maintainer email="scherzin@fzi.de">Stefan Scherzinger</maintainer>
