@@ -18,7 +18,7 @@ schematypens="http://www.w3.org/2001/XMLSchema"?>
 
         <exec_depend>schunk_svh_description</exec_depend>
         <exec_depend>controller_manager</exec_depend>
-        <exec_depend>joint_state_controller</exec_depend>
+        <exec_depend>joint_state_broadcaster</exec_depend>
         <exec_depend>joint_trajectory_controller</exec_depend>
         <exec_depend>launch</exec_depend>
         <exec_depend>launch_ros</exec_depend>
