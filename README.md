@@ -1,4 +1,4 @@
-![build badge](https://github.com/fzi-forschungszentrum-informatik/schunk_svh_ros_driver/actions/workflows/industrial_ci_foxy_action.yml/badge.svg)
+![build badge](https://github.com/fzi-forschungszentrum-informatik/schunk_svh_ros_driver/actions/workflows/industrial_ci_humble_action.yml/badge.svg)
 [![License](https://img.shields.io/badge/License-GPLv3-orange)](https://opensource.org/licenses/gpl-license)
 
 # Schunk SVH ROS2 Driver
@@ -13,7 +13,7 @@ with everything that you need to operate the five finger hand in a ROS2 context.
 Inside the `src` folder of your ROS2 workspace, get the relevant packages
 
 ```bash
-git clone -b ros2-foxy https://github.com/fzi-forschungszentrum-informatik/schunk_svh_ros_driver.git
+git clone -b ros2-humble https://github.com/fzi-forschungszentrum-informatik/schunk_svh_ros_driver.git
 git clone -b main https://github.com/fzi-forschungszentrum-informatik/schunk_svh_library.git
 rosdep install --ignore-src --from-paths ./ -y -r
 ```
@@ -32,7 +32,7 @@ You'll find them [here](https://github.com/fzi-forschungszentrum-informatik/schu
 
 In every fresh terminal, source the setup scripts in the following order
 ```
-source /opt/ros/foxy/setup.bash
+source /opt/ros/humble/setup.bash
 source install/local_setup.bash
 ```
 where `install` is the local folder within your ROS2 workspace.

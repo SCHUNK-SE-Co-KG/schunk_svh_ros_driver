@@ -1,4 +1,4 @@
-name: Foxy
+name: Humble
 
 on: [push, pull_request]
 
@@ -9,11 +9,11 @@ jobs:
       fail-fast: false
       matrix:
         env:
-          - ROS_DISTRO: foxy
+          - ROS_DISTRO: humble
             ROS_REPO: testing
             UPSTREAM_WORKSPACE: 'github:fzi-forschungszentrum-informatik/schunk_svh_library#main'
             ROSDEP_SKIP_KEYS: 'schunk_svh_library'
-          - ROS_DISTRO: foxy
+          - ROS_DISTRO: humble
             ROS_REPO: main
             UPSTREAM_WORKSPACE: 'github:fzi-forschungszentrum-informatik/schunk_svh_library#main'
             ROSDEP_SKIP_KEYS: 'schunk_svh_library'

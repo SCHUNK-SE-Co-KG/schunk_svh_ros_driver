@@ -1,9 +1,0 @@
-variables:
-  UPLOAD_BRANCH_NAME: ros2-foxy-devel
-  # Current API is only foxy-compatible
-  BUILD_GALACTIC: "false"
-  BUILD_ROLLING: "false"
-include:
-  - project: 'continuous_integration/ci_scripts'
-    ref: master
-    file: '/gitlab-ci-yml/ros2_pipeline.yml'
