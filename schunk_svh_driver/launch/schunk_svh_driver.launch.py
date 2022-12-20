@@ -92,21 +92,21 @@ def generate_launch_description():
     )
 
     # Spawn additional nodes for control and visualization
-    joint_state_controller_spawner = Node(
+    joint_state_broadcaster_spawner = Node(
         package="controller_manager",
-        executable="spawner.py",
-        arguments=["joint_state_controller", "-c", "/controller_manager"],
+        executable="spawner",
+        arguments=["joint_state_broadcaster", "-c", "/controller_manager"],
     )
     hand_controller_spawner = Node(
         package="controller_manager",
-        executable="spawner.py",
+        executable="spawner",
         arguments=[control, "-c", "/controller_manager"],
     )
 
     # List all nodes that we want to start
     nodes = [
         control_node,
-        joint_state_controller_spawner,
+        joint_state_broadcaster_spawner,
         hand_controller_spawner
     ]
 

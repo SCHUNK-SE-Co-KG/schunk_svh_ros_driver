@@ -44,7 +44,7 @@ class IntegrationTest(unittest.TestCase):
 
         cls.our_controllers = [
             'right_hand',
-            'joint_state_controller',
+            'joint_state_broadcaster',
         ]
 
 
