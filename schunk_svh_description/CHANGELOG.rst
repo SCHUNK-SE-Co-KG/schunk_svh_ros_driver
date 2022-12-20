@@ -8,7 +8,7 @@ Forthcoming
   Add an example setup for Gazebo
 * Update the plugin to mimic joints
   The new plugin is now maintained
-  [here](https://github.com/roboticsgroup/roboticsgroup_upatras_gazebo_plugins).
+  `here <https://github.com/roboticsgroup/roboticsgroup_upatras_gazebo_plugins>`_.
   Also add suitable `PID` gains for the mimicked joints.
 * Add a minimal Gazebo example
 * Update maintainer info
@@ -25,7 +25,7 @@ Forthcoming
   CMake 3.10 is Bionic's (Ubuntu 18.04) shipping version.
 * Update SPDX license indicator in package.xml
   This is according to
-  [here](https://www.gnu.org/licenses/identify-licenses-clearly.html)
+  `here <https://www.gnu.org/licenses/identify-licenses-clearly.html>`_.
 * Support left and right hands through launch parameters
   We now load the correct ROS-control configuration depending on whether
   users start a `right_hand` or a `left_hand`.
