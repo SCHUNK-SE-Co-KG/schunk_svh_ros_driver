@@ -2,8 +2,8 @@
 Changelog for package schunk_svh_description
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+2.0.1 (2023-01-02)
+------------------
 * Unify version numbers
   The version convention is as follows:
   `0.1.x` for ROS1 Melodic and Noetic
