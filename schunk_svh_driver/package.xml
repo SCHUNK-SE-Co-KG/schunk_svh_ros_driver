@@ -4,7 +4,7 @@ href="http://download.ros.org/schema/package_format3.xsd"
 schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
         <name>schunk_svh_driver</name>
-        <version>0.0.0</version>
+        <version>2.1.0</version>
         <description>ROS2-control system interface for the Schunk SVH</description>
         <maintainer email="scherzin@fzi.de">Stefan Scherzinger</maintainer>
         <license>GPL-3.0-or-later</license>
