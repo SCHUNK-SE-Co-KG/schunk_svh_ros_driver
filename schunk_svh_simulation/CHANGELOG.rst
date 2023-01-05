@@ -2,8 +2,8 @@
 Changelog for package schunk_svh_simulation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.1.2 (2023-01-05)
+------------------
 * Correctly depend on `schunk_svh_description`
   We only need that as an execution dependency.
 * Contributors: Stefan Scherzinger

@@ -4,7 +4,7 @@
   schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="2">
   <name>schunk_svh_description</name>
-  <version>0.1.1</version>
+  <version>0.1.2</version>
   <description>The schunk_svh_description package</description>
 
   <maintainer email="scherzin@fzi.de">Stefan Scherzinger</maintainer>

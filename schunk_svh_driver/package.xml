@@ -5,7 +5,7 @@
 <package format="3">
 
   <name>schunk_svh_driver</name>
-  <version>0.1.1</version>
+  <version>0.1.2</version>
   <description>ROS1 driver for the Schunk SVH five finger hand</description>
 
   <maintainer email="scherzin@fzi.de">Stefan Scherzinger</maintainer>
