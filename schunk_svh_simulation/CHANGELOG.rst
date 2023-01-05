@@ -2,6 +2,12 @@
 Changelog for package schunk_svh_simulation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Correctly depend on `schunk_svh_description`
+  We only need that as an execution dependency.
+* Contributors: Stefan Scherzinger
+
 0.1.1 (2022-12-20)
 ------------------
 * Merge pull request `#18 <https://github.com/fzi-forschungszentrum-informatik/schunk_svh_ros_driver/issues/18>`_ from fzi-forschungszentrum-informatik/add-gazebo-example

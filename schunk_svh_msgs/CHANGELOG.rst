@@ -2,6 +2,9 @@
 Changelog for package schunk_svh_msgs
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+
 0.1.1 (2022-12-20)
 ------------------
 * Merge branch 'update-license-ros1' into 'update-and-upgrade'
