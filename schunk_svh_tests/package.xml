@@ -5,6 +5,7 @@
   <version>2.0.1</version>
   <description>Integration tests for the Schunk SVH ROS2 driver</description>
   <maintainer email="scherzin@fzi.de">Stefan Scherzinger</maintainer>
+  <maintainer email="Harry.Arnst@de.schunk.com">Harry Arnst</maintainer>
   <license>GPL-3.0-or-later</license>
 
   <test_depend>controller_manager_msgs</test_depend>
