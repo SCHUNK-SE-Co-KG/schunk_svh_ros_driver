@@ -7,6 +7,7 @@ schematypens="http://www.w3.org/2001/XMLSchema"?>
         <version>2.0.1</version>
         <description>Kinematic and visual descriptions of the Schunk SVH</description>
         <maintainer email="scherzin@fzi.de">Stefan Scherzinger</maintainer>
+        <maintainer email="Harry.Arnst@de.schunk.com">Harry Arnst</maintainer>
         <license>GPL-3.0-or-later</license>
 
         <buildtool_depend>ament_cmake</buildtool_depend>
