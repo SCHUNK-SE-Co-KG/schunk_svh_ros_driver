@@ -8,6 +8,7 @@
   <description>The schunk_svh_description package</description>
 
   <maintainer email="scherzin@fzi.de">Stefan Scherzinger</maintainer>
+  <maintainer email="Harry.Arnst@de.schunk.com">Harry Arnst</maintainer>
 
 
   <license>GPL-3.0-or-later</license>
