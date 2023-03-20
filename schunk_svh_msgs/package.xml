@@ -9,6 +9,7 @@
   <description>ROS1 messages, services, and actions for the Schunk SVH five finger hand</description>
 
   <maintainer email="scherzin@fzi.de">Stefan Scherzinger</maintainer>
+  <maintainer email="Harry.Arnst@de.schunk.com">Harry Arnst</maintainer>
 
   <license>GPL-3.0-or-later</license>
 
