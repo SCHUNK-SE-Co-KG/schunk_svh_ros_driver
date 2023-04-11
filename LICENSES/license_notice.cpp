@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-// © Copyright 2022 SCHUNK Mobile Greifsysteme GmbH, Lauffen/Neckar Germany
+// © Copyright 2023 SCHUNK GmbH & Co. KG, Lauffen/Neckar Germany
 // © Copyright 2022 FZI Forschungszentrum Informatik, Karlsruhe, Germany
 //
 // This file is part of the Schunk SVH Driver.
