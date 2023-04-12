@@ -5,7 +5,7 @@
 
 This is the repository for the Schunk SVH ROS2 driver.
 It completes the [standalone
-library](https://github.com/fzi-forschungszentrum-informatik/schunk_svh_library)
+library](https://github.com/SCHUNK-GmbH-Co-KG/schunk_svh_library.git)
 with everything that you need to operate the five finger hand in a ROS2 context.
 
 
@@ -13,8 +13,8 @@ with everything that you need to operate the five finger hand in a ROS2 context.
 Inside the `src` folder of your ROS2 workspace, get the relevant packages
 
 ```bash
-git clone -b ros2-foxy https://github.com/fzi-forschungszentrum-informatik/schunk_svh_ros_driver.git
-git clone -b main https://github.com/fzi-forschungszentrum-informatik/schunk_svh_library.git
+git clone -b ros2-foxy https://github.com/SCHUNK-GmbH-Co-KG/schunk_svh_ros_driver.git
+git clone -b main https://github.com/SCHUNK-GmbH-Co-KG/schunk_svh_library.git
 rosdep install --ignore-src --from-paths ./ -y -r
 ```
 
@@ -26,7 +26,7 @@ colcon build
 
 ## Connection to the SVH
 There are a few minimal steps required before you can connect to the SVH for the first time.
-You'll find them [here](https://github.com/fzi-forschungszentrum-informatik/schunk_svh_library#connection-to-the-svh).
+You'll find them [here](https://github.com/SCHUNK-GmbH-Co-KG/schunk_svh_library#connection-to-the-svh).
 
 ## Getting started
 
