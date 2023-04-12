@@ -7,7 +7,7 @@
 This is the repository for the Schunk SVH ROS1 driver.
 It completes the [standalone
 library](https://github.com/fzi-forschungszentrum-informatik/schunk_svh_library)
-with everything that you need to operate the five finger hand in a ROS1 context. Here's the [ROS2 version](https://github.com/fzi-forschungszentrum-informatik/schunk_svh_ros_driver/tree/ros2-foxy). You'll also find more information about the ROS API and hardware-related details on the [wikipage](http://wiki.ros.org/schunk_svh_ros_driver).
+with everything that you need to operate the five finger hand in a ROS1 context. Here's the [ROS2 version](https://github.com/SCHUNK-GmbH-Co-KG/schunk_svh_ros_driver/tree/ros2-humble). You'll also find more information about the ROS API and hardware-related details on the [wikipage](http://wiki.ros.org/schunk_svh_ros_driver).
 
 
 ## Installation
