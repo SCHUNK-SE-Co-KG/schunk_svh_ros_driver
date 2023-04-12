@@ -6,7 +6,7 @@
 
 This is the repository for the Schunk SVH ROS1 driver.
 It completes the [standalone
-library](https://github.com/fzi-forschungszentrum-informatik/schunk_svh_library)
+library](https://github.com/SCHUNK-GmbH-Co-KG/schunk_svh_library.git)
 with everything that you need to operate the five finger hand in a ROS1 context. Here's the [ROS2 version](https://github.com/SCHUNK-GmbH-Co-KG/schunk_svh_ros_driver/tree/ros2-humble). You'll also find more information about the ROS API and hardware-related details on the [wikipage](http://wiki.ros.org/schunk_svh_ros_driver).
 
 
@@ -20,8 +20,8 @@ or use an existing one.
 Inside the `src` folder of that ROS workspace, get the relevant ROS packages
 
 ```bash
-git clone -b main https://github.com/fzi-forschungszentrum-informatik/schunk_svh_ros_driver.git
-git clone -b main https://github.com/fzi-forschungszentrum-informatik/schunk_svh_library.git
+git clone -b main https://github.com/SCHUNK-GmbH-Co-KG/schunk_svh_ros_driver.git
+git clone -b main https://github.com/SCHUNK-GmbH-Co-KG/schunk_svh_library.git
 rosdep install --ignore-src --from-paths ./ -y -r
 ```
 
@@ -45,7 +45,7 @@ previous calls to `catkin_make`.
 
 ## Connection to the SVH
 There are a few minimal steps required before you can connect to the SVH for the first time.
-You'll find them [here](https://github.com/fzi-forschungszentrum-informatik/schunk_svh_library#connection-to-the-svh).
+You'll find them [here](https://github.com/SCHUNK-GmbH-Co-KG/schunk_svh_library#connection-to-the-svh).
 
 ## Getting started
 Source your local `install/setup.bash` and run
