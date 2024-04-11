@@ -39,10 +39,12 @@
 #include "hardware_interface/hardware_info.hpp"
 #include "hardware_interface/system_interface.hpp"
 #include "rclcpp/macros.hpp"
+#include "rclcpp/publisher.hpp"
 #include "rclcpp/rclcpp.hpp"
 #include "rclcpp_lifecycle/node_interfaces/lifecycle_node_interface.hpp"
 #include "rclcpp_lifecycle/state.hpp"
 #include "schunk_svh_library/control/SVHFingerManager.h"
+#include "std_msgs/msg/bool.hpp"
 
 namespace schunk_svh_driver
 {
@@ -86,6 +88,8 @@ private:
   void init();
   std::atomic<bool> m_initialized{false};
   std::thread m_init_thread;
+  std::shared_ptr<rclcpp::Node> m_node;
+  rclcpp::Publisher<std_msgs::msg::Bool>::SharedPtr m_svh_initialized_publisher;
 
   // Handle to the SVH driver library
   std::unique_ptr<driver_svh::SVHFingerManager> m_svh;
