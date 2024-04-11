@@ -106,6 +106,11 @@ SystemInterface::CallbackReturn SystemInterface::on_init(
   // Activate logging in the library
   driver_svh::setupROSLogHandler();
 
+  // Feedback on initialization
+  m_node = std::make_shared<rclcpp::Node>("svh", rclcpp::NodeOptions());
+  m_svh_initialized_publisher = m_node->create_publisher<std_msgs::msg::Bool>(
+    m_node->get_name() + std::string("/initialized"), 3);
+
   // Initialize SVH in parallel.
   // Detach the thread to die cleanly with the controller manager node.
   m_svh = std::make_unique<driver_svh::SVHFingerManager>();
@@ -204,6 +209,10 @@ void SystemInterface::init()
     RCLCPP_ERROR(
       rclcpp::get_logger("SystemInterface"), "No connection to the Schunk SVH under %s",
       m_device_file.c_str());
+
+    auto msg = std_msgs::msg::Bool();
+    msg.data = false;
+    m_svh_initialized_publisher->publish(msg);
     return;
   }
   auto firmware = m_svh->getFirmwareInfo(m_device_file);
@@ -265,8 +274,15 @@ void SystemInterface::init()
   m_initialized = m_svh->resetChannel(driver_svh::SVH_ALL);
   if (!m_initialized) {
     RCLCPP_ERROR(rclcpp::get_logger("SystemInterface"), "Could not initialize the Schunk SVH");
+    auto msg = std_msgs::msg::Bool();
+    msg.data = false;
+    m_svh_initialized_publisher->publish(msg);
     return;
   }
+
+  auto msg = std_msgs::msg::Bool();
+  msg.data = true;
+  m_svh_initialized_publisher->publish(msg);
 }
 
 }  // namespace schunk_svh_driver
