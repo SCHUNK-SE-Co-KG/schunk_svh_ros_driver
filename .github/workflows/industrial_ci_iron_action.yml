@@ -10,6 +10,9 @@ on:
 
 jobs:
   industrial_ci:
+    env:
+      UPSTREAM_WORKSPACE: 'github:SCHUNK-SE-Co-KG/schunk_svh_library#main'
+      ROSDEP_SKIP_KEYS: 'schunk_svh_library'
     strategy:
       fail-fast: false
       matrix:
