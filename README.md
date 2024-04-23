@@ -1,9 +1,24 @@
-[![License](https://img.shields.io/badge/License-GPLv3-orange)](https://opensource.org/licenses/gpl-license)
-![build badge](https://github.com/SCHUNK-SE-Co-KG/schunk_svh_ros_driver/actions/workflows/industrial_ci_humble_action.yml/badge.svg)
-![build badge](https://github.com/SCHUNK-SE-Co-KG/schunk_svh_ros_driver/actions/workflows/industrial_ci_iron_action.yml/badge.svg)
-![build badge](https://github.com/SCHUNK-SE-Co-KG/schunk_svh_ros_driver/actions/workflows/industrial_ci_rolling_action.yml/badge.svg)
 
-# Schunk SVH ROS2 Driver
+<div align="center">
+  <img src="resources/images/svh.jpg" alt="Schunk SVH" style="width: 100%;"/>
+  <h1 align="center">Schunk SVH ROS2 Driver</h1>
+</div>
+
+<p align="center">
+  <a href="https://github.com/SCHUNK-SE-Co-KG/schunk_svh_ros_driver/actions">
+    <img src="https://github.com/SCHUNK-SE-Co-KG/schunk_svh_ros_driver/actions/workflows/industrial_ci_humble_action.yml/badge.svg" alt="build badge humble">
+  </a>
+  <a href="https://github.com/SCHUNK-SE-Co-KG/schunk_svh_ros_driver/actions">
+    <img src="https://github.com/SCHUNK-SE-Co-KG/schunk_svh_ros_driver/actions/workflows/industrial_ci_iron_action.yml/badge.svg" alt="build badge iron">
+  </a>
+  <a href="https://github.com/SCHUNK-SE-Co-KG/schunk_svh_ros_driver/actions">
+    <img src="https://github.com/SCHUNK-SE-Co-KG/schunk_svh_ros_driver/actions/workflows/industrial_ci_rolling_action.yml/badge.svg" alt="build badge rolling">
+  </a>
+  <a href="https://opensource.org/licenses/gpl-license">
+    <img src="https://img.shields.io/badge/License-GPLv3-orange.svg" alt="License">
+  </a>
+</p>
+
 
 This is the repository for the Schunk SVH ROS2 driver.
 It completes the [standalone
