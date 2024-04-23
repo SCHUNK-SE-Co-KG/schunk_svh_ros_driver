@@ -1,5 +1,7 @@
-![build badge](https://github.com/fzi-forschungszentrum-informatik/schunk_svh_ros_driver/actions/workflows/industrial_ci_humble_action.yml/badge.svg)
 [![License](https://img.shields.io/badge/License-GPLv3-orange)](https://opensource.org/licenses/gpl-license)
+![build badge](https://github.com/SCHUNK-SE-Co-KG/schunk_svh_ros_driver/actions/workflows/industrial_ci_humble_action.yml/badge.svg)
+![build badge](https://github.com/SCHUNK-SE-Co-KG/schunk_svh_ros_driver/actions/workflows/industrial_ci_iron_action.yml/badge.svg)
+![build badge](https://github.com/SCHUNK-SE-Co-KG/schunk_svh_ros_driver/actions/workflows/industrial_ci_rolling_action.yml/badge.svg)
 
 # Schunk SVH ROS2 Driver
 
