@@ -4,7 +4,7 @@
   <xacro:include filename="$(find schunk_svh_description)/urdf/common.xacro" />
 
   <xacro:macro name="svh_transmission" params="name">
-    
+
     <xacro:default_transmission jname="${name}_Thumb_Opposition"/>
     <xacro:default_transmission jname="${name}_Thumb_Flexion"/>
     <xacro:default_transmission jname="${name}_Index_Finger_Proximal"/>
