@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 ################################################################################
 #
-# © Copyright 2022 SCHUNK Mobile Greifsysteme GmbH, Lauffen/Neckar Germany
-# © Copyright 2022 FZI Forschungszentrum Informatik, Karlsruhe, Germany
+# Copyright 2024 SCHUNK SE & Co. KG, Lauffen/Neckar Germany
+# Copyright 2022 FZI Forschungszentrum Informatik, Karlsruhe, Germany
 #
 # This file is part of the Schunk SVH Driver.
 #
