@@ -1,4 +1,4 @@
-name: Humble
+name: Iron
 
 on:
   push:
@@ -14,7 +14,7 @@ jobs:
       fail-fast: false
       matrix:
         env:
-          - {ROS_DISTRO: humble, ROS_REPO: main}
+          - {ROS_DISTRO: iron, ROS_REPO: main}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
