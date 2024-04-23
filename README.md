@@ -1,3 +1,9 @@
+# ++ Deprecation Notice ++
+
+_ROS2 Foxy_ has reached its [EOL](https://docs.ros.org/en/iron/Releases/End-of-Life.html). This branch is no longer maintained. Please switch to the [ros2](https://github.com/SCHUNK-SE-Co-KG/schunk_svh_ros_driver/tree/ros2) branch instead.
+
+---
+
 ![build badge](https://github.com/fzi-forschungszentrum-informatik/schunk_svh_ros_driver/actions/workflows/industrial_ci_foxy_action.yml/badge.svg)
 [![License](https://img.shields.io/badge/License-GPLv3-orange)](https://opensource.org/licenses/gpl-license)
 
