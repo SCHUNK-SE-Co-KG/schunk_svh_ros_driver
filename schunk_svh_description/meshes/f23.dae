@@ -72,7 +72,7 @@
     </profile_COMMON>
     <extra><technique profile="MAX3D"><double_sided>1</double_sided></technique></extra>
   </effect>
-  
+
 <effect id="Gummi-effect">
     <profile_COMMON>
       <technique sid="common">
@@ -105,7 +105,7 @@
     </profile_COMMON>
     <extra><technique profile="MAX3D"><double_sided>1</double_sided></technique></extra>
   </effect>
-    
+
 <effect id="Metall_goeldlich-effect">
       <profile_COMMON>
         <technique sid="common">
@@ -138,7 +138,7 @@
       </profile_COMMON>
 <extra><technique profile="MAX3D"><double_sided>1</double_sided></technique></extra>
     </effect>
-    
+
 <effect id="Metall_Daumen-effect">
       <profile_COMMON>
         <technique sid="common">
@@ -248,8 +248,8 @@
 
 
 
-  
- 
+
+
   <library_materials>
     <material id="Kunststoff_druckteile_006-material" name="Kunststoff_druckteile_006">
       <instance_effect url="#Kunststoff_druckteile-effect"/>
