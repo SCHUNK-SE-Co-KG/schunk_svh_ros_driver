@@ -113,6 +113,14 @@ Simulator::CallbackReturn Simulator::on_init(const hardware_interface::HardwareI
     }
   }
 
+  // Feedback on initialization
+  m_node = std::make_shared<rclcpp::Node>("svh", rclcpp::NodeOptions());
+  m_svh_initialized_publisher = m_node->create_publisher<std_msgs::msg::Bool>(
+    m_node->get_name() + std::string("/initialized"), 3);
+
+  auto msg = std_msgs::msg::Bool();
+  msg.data = true;
+  m_svh_initialized_publisher->publish(msg);
   return Simulator::CallbackReturn::SUCCESS;
 }
 

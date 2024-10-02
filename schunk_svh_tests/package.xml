@@ -4,15 +4,20 @@
   <name>schunk_svh_tests</name>
   <version>2.1.1</version>
   <description>Integration tests for the Schunk SVH ROS2 driver</description>
-  <maintainer email="scherzin@fzi.de">Stefan Scherzinger</maintainer>
+  <maintainer email="stefan.scherzinger@de.schunk.com">Stefan Scherzinger</maintainer>
   <maintainer email="Harry.Arnst@de.schunk.com">Harry Arnst</maintainer>
   <license>GPL-3.0-or-later</license>
 
-  <test_depend>controller_manager_msgs</test_depend>
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <test_depend>ament_lint_auto</test_depend>
   <test_depend>launch</test_depend>
   <test_depend>launch_ros</test_depend>
-  <test_depend>launch_testing_ament_cmake</test_depend>
-  <test_depend>schunk_svh_driver</test_depend>
+  <test_depend>launch_pytest</test_depend>
+  <test_depend>ament_cmake_pytest</test_depend>
 
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
 
 </package>

@@ -33,8 +33,10 @@
 #include "hardware_interface/system.hpp"
 #include "hardware_interface/system_interface.hpp"
 #include "rclcpp/macros.hpp"
+#include "rclcpp/rclcpp.hpp"
 #include "rclcpp_lifecycle/node_interfaces/lifecycle_node_interface.hpp"
 #include "schunk_svh_simulation/mujoco_simulator.h"
+#include "std_msgs/msg/bool.hpp"
 
 namespace schunk_svh_simulation
 {
@@ -88,6 +90,10 @@ private:
 
   // Run MuJoCo's solver in a separate thread
   std::thread m_simulation;
+
+  // Make this a ROS2 node
+  std::shared_ptr<rclcpp::Node> m_node;
+  rclcpp::Publisher<std_msgs::msg::Bool>::SharedPtr m_svh_initialized_publisher;
 
   // Parameters
   std::string m_mujoco_model;
