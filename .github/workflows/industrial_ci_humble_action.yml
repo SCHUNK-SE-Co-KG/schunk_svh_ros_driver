@@ -12,6 +12,7 @@ jobs:
   industrial_ci:
     env:
       BEFORE_BUILD_TARGET_WORKSPACE: '.github/script/install_mujoco.sh'
+      AFTER_RUN_TARGET_TEST: 'cd /root/target_ws && cat log/latest_test/schunk_svh_tests/streams.log'
     strategy:
       fail-fast: false
       matrix:
