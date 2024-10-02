@@ -10,6 +10,8 @@ on:
 
 jobs:
   industrial_ci:
+    env:
+      BEFORE_BUILD_TARGET_WORKSPACE: '.github/script/install_mujoco.sh'
     strategy:
       fail-fast: false
       matrix:
