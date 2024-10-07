@@ -79,11 +79,20 @@ def generate_launch_description():
     control_node = Node(
         package="controller_manager",
         executable="ros2_control_node",
-        parameters=[robot_description, robot_controllers],
+        parameters=[robot_controllers],
         output={
             "stdout": "screen",
             "stderr": "screen",
         },
+        remappings=[("~/robot_description", "/robot_description"),],
+    )
+
+    # TF tree
+    robot_state_publisher = Node(
+        package="robot_state_publisher",
+        executable="robot_state_publisher",
+        output="both",
+        parameters=[robot_description],
     )
 
     # Spawn additional nodes for control and visualization
@@ -101,6 +110,7 @@ def generate_launch_description():
     # List all nodes that we want to start
     nodes = [
         control_node,
+        robot_state_publisher,
         joint_state_broadcaster_spawner,
         hand_controller_spawner
     ]
