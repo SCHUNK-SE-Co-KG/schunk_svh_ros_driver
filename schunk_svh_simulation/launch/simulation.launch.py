@@ -32,14 +32,6 @@ from launch.substitutions import (
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 
-import os
-
-distro = os.environ["ROS_DISTRO"]
-if distro in ["galactic", "humble", "iron"]:
-    spawner = "spawner"
-else:  # foxy
-    spawner = "spawner.py"
-
 
 def generate_launch_description():
     # Declare arguments
@@ -93,7 +85,7 @@ def generate_launch_description():
     def controller_spawner(name, *args):
         return Node(
             package="controller_manager",
-            executable=spawner,
+            executable="spawner",
             output="screen",
             arguments=[name] + [a for a in args],
         )
@@ -108,7 +100,7 @@ def generate_launch_description():
     inactive_list = [
         "joint_trajectory_controller",
     ]
-    state = "--inactive" if distro in ["humble", "iron"] else "--stopped"
+    state = "--inactive"
     inactive_spawners = [
         controller_spawner(controller, state) for controller in inactive_list
     ]
