@@ -19,6 +19,14 @@ find_package(hardware_interface REQUIRED)
 find_package(pluginlib REQUIRED)
 find_package(rclcpp REQUIRED)
 
+# GLFW
+# With PkgConfig is the official way: https://www.glfw.org/docs/3.0/build.html#build_link_cmake_pkgconfig
+find_package(PkgConfig REQUIRED)
+pkg_search_module(GLFW REQUIRED glfw3)
+
+# GLEW
+find_package(GLEW REQUIRED)
+
 # Mujoco comes as a pre-built library package.
 # Extract this package somewhere and point CMake towards it during the build process.
 if(NOT DEFINED MUJOCO_DIR)
@@ -80,11 +88,14 @@ target_include_directories(mujoco_simulator PUBLIC
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
         $<INSTALL_INTERFACE:include>
         ${MUJOCO_INCLUDE_DIRS}
+        ${GLFW_INCLUDE_DIRS}
 )
 
 # X11 OpenGL: link with libmujoco210.so, libglew.so, libGL.so
 target_link_libraries(mujoco_simulator PUBLIC
         ${MUJOCO_LIBRARIES}
+        ${GLFW_LIBRARIES}
+        GLEW::GLEW
 )
 
 

@@ -31,6 +31,7 @@
 #include <string>
 #include <vector>
 
+#include "GLFW/glfw3.h"
 #include "mujoco/mujoco.h"
 
 namespace schunk_svh_simulation
@@ -71,6 +72,17 @@ public:
   // MuJoCo data structures
   mjModel * m = NULL;  // MuJoCo model
   mjData * d = NULL;   // MuJoCo data
+  mjvCamera cam;       // abstract camera
+  mjvOption opt;       // visualization options
+  mjvScene scn;        // abstract scene
+  mjrContext con;      // custom GPU context
+
+  // mouse interaction
+  bool button_left = false;
+  bool button_middle = false;
+  bool button_right = false;
+  double lastx = 0;
+  double lasty = 0;
 
   // Buffers for data exchange with ROS2-control
   std::vector<double> pos_cmd;
@@ -84,6 +96,22 @@ public:
   // Safety guards for buffers
   std::mutex state_mutex;
   std::mutex command_mutex;
+
+  // Keyboard callback
+  static void keyboardCB(GLFWwindow * window, int key, int scancode, int act, int mods);
+  void keyboardCBImpl(GLFWwindow * window, int key, int scancode, int act, int mods);
+
+  // Mouse button callback
+  static void mouseButtonCB(GLFWwindow * window, int button, int act, int mods);
+  void mouseButtonCBImpl(GLFWwindow * window, int button, int act, int mods);
+
+  // Mouse move callback
+  static void mouseMoveCB(GLFWwindow * window, double xpos, double ypos);
+  void mouseMoveCBImpl(GLFWwindow * window, double xpos, double ypos);
+
+  // Scroll callback
+  static void scrollCB(GLFWwindow * window, double xoffset, double yoffset);
+  void scrollCBImpl(GLFWwindow * window, double xoffset, double yoffset);
 
   // Control input callback for the solver
   static void controlCB(const mjModel * m, mjData * d);
