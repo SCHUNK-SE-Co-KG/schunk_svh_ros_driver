@@ -76,12 +76,12 @@
 
         <!-- Keep the order of joint creation from above. That's crucial for equally indexing joint state vectors and actuator torque vectors in the solver -->
         <actuator>
-                <motor name="joint1" gear="1" joint="joint1"/>
-                <motor name="joint2" gear="1" joint="joint2"/>
-                <motor name="joint3" gear="1" joint="joint3"/>
-                <motor name="joint4" gear="1" joint="joint4"/>
-                <motor name="joint5" gear="1" joint="joint5"/>
-                <motor name="joint6" gear="1" joint="joint6"/>
+                <position name="joint1" ctrlrange="-6.2831 6.2831" kp="1000" dampratio="1" joint="joint1"/>
+                <position name="joint2" ctrlrange="-6.2831 6.2831" kp="1000" dampratio="1" joint="joint2"/>
+                <position name="joint3" ctrlrange="-6.2831 6.2831" kp="1000" dampratio="1" joint="joint3"/>
+                <position name="joint4" ctrlrange="-6.2831 6.2831" kp="1000" dampratio="1" joint="joint4"/>
+                <position name="joint5" ctrlrange="-6.2831 6.2831" kp="1000" dampratio="1" joint="joint5"/>
+                <position name="joint6" ctrlrange="-6.2831 6.2831" kp="1000" dampratio="1" joint="joint6"/>
         </actuator>
 
         <!-- Initial joint states for simulation -->

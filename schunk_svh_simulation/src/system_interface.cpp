@@ -61,33 +61,20 @@ Simulator::CallbackReturn Simulator::on_init(const hardware_interface::HardwareI
   m_velocities.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
   m_efforts.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
   m_position_commands.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
-  m_velocity_commands.resize(info_.joints.size(), 0.0);
-
-  // Default gains
-  m_stiffness.resize(info_.joints.size(), 0);
-  m_damping.resize(info_.joints.size(), 0);
-
-  // Initialize joint gains for the simulator
-  for (size_t i = 0; i < info_.joints.size(); ++i) {
-    m_stiffness[i] = std::stod(info_.joints[i].parameters.at("p"));
-    m_damping[i] = std::stod(info_.joints[i].parameters.at("d"));
-  }
 
   for (const hardware_interface::ComponentInfo & joint : info_.joints) {
-    if (joint.command_interfaces.size() != 2) {
+    if (joint.command_interfaces.size() != 1) {
       RCLCPP_ERROR(
-        rclcpp::get_logger("Simulator"), "Joint '%s' needs two possible command interfaces.",
+        rclcpp::get_logger("Simulator"), "Joint '%s' needs a command interface.",
         joint.name.c_str());
 
       return Simulator::CallbackReturn::ERROR;
     }
 
-    if (!(joint.command_interfaces[0].name == hardware_interface::HW_IF_POSITION ||
-          joint.command_interfaces[1].name == hardware_interface::HW_IF_VELOCITY)) {
+    if (joint.command_interfaces[0].name != hardware_interface::HW_IF_POSITION) {
       RCLCPP_ERROR(
-        rclcpp::get_logger("Simulator"),
-        "Joint '%s' needs the following command interfaces in that order: %s, %s.",
-        joint.name.c_str(), hardware_interface::HW_IF_POSITION, hardware_interface::HW_IF_VELOCITY);
+        rclcpp::get_logger("Simulator"), "Joint '%s' needs the following command interfaces: %s",
+        joint.name.c_str(), hardware_interface::HW_IF_POSITION);
 
       return Simulator::CallbackReturn::ERROR;
     }
@@ -145,12 +132,6 @@ std::vector<hardware_interface::CommandInterface> Simulator::export_command_inte
   for (std::size_t i = 0; i < info_.joints.size(); i++) {
     command_interfaces.emplace_back(hardware_interface::CommandInterface(
       info_.joints[i].name, hardware_interface::HW_IF_POSITION, &m_position_commands[i]));
-    command_interfaces.emplace_back(hardware_interface::CommandInterface(
-      info_.joints[i].name, hardware_interface::HW_IF_VELOCITY, &m_velocity_commands[i]));
-    command_interfaces.emplace_back(hardware_interface::CommandInterface(
-      info_.joints[i].name, schunk_svh_simulation::HW_IF_STIFFNESS, &m_stiffness[i]));
-    command_interfaces.emplace_back(hardware_interface::CommandInterface(
-      info_.joints[i].name, schunk_svh_simulation::HW_IF_DAMPING, &m_damping[i]));
   }
 
   return command_interfaces;
@@ -178,11 +159,8 @@ Simulator::return_type Simulator::read(
     m_position_commands = m_positions;
   }
 
-  // TODO: Reconnect the MuJoCo simulator once we have implemented joint control with
-  // - Gravity compensation
-  // - integral gains for steady state accuracy
-  m_positions = m_position_commands;
-  m_velocities = m_velocity_commands;
+  MuJoCoSimulator::getInstance().read(m_positions, m_velocities, m_efforts);
+  m_positions = m_position_commands;  // Open-loop control
 
   return return_type::OK;
 }
@@ -190,8 +168,7 @@ Simulator::return_type Simulator::read(
 Simulator::return_type Simulator::write(
   [[maybe_unused]] const rclcpp::Time & time, [[maybe_unused]] const rclcpp::Duration & period)
 {
-  MuJoCoSimulator::getInstance().write(
-    m_position_commands, m_velocity_commands, m_stiffness, m_damping);
+  MuJoCoSimulator::getInstance().write(m_position_commands);
   return return_type::OK;
 }
 

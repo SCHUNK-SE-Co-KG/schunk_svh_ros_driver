@@ -10,12 +10,12 @@
 
         <!-- ROS2 control interfaces -->
         <ros2_control name="schunk_svh_simulation" type="system">
-                <xacro:joint_interface name="joint1" p="1000" d="0.5" />
-                <xacro:joint_interface name="joint2" p="1000" d="0.5" />
-                <xacro:joint_interface name="joint3" p="500" d="0.5" />
-                <xacro:joint_interface name="joint4" p="100" d="0.5" />
-                <xacro:joint_interface name="joint5" p="10" d="0.5" />
-                <xacro:joint_interface name="joint6" p="10" d="0.5" />
+                <xacro:joint_interface name="joint1"/>
+                <xacro:joint_interface name="joint2"/>
+                <xacro:joint_interface name="joint3"/>
+                <xacro:joint_interface name="joint4"/>
+                <xacro:joint_interface name="joint5"/>
+                <xacro:joint_interface name="joint6"/>
                 <hardware>
                         <plugin>schunk_svh_simulation/Simulator</plugin>
                         <param name="mujoco_model">$(arg mujoco_model)</param>

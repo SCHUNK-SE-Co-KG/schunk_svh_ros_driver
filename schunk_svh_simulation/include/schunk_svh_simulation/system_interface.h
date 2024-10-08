@@ -40,10 +40,6 @@
 
 namespace schunk_svh_simulation
 {
-// Two custom hardware interfaces for torque-actuated robots:
-// proportional gain (stiffness) and derivative gain (damping).
-constexpr char HW_IF_STIFFNESS[] = "stiffness";
-constexpr char HW_IF_DAMPING[] = "damping";
 
 /**
  * @brief A MuJoCo-based, standalone simulator for the SCHUNK SVH and ROS2-control
@@ -77,16 +73,11 @@ public:
 private:
   // Command buffers for the controllers
   std::vector<double> m_position_commands;
-  std::vector<double> m_velocity_commands;
 
   // State buffers for the controllers
   std::vector<double> m_positions;
   std::vector<double> m_velocities;
   std::vector<double> m_efforts;
-
-  // Anydrive gains
-  std::vector<double> m_stiffness;
-  std::vector<double> m_damping;
 
   // Run MuJoCo's solver in a separate thread
   std::thread m_simulation;

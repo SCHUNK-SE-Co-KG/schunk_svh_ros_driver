@@ -86,12 +86,9 @@ public:
 
   // Buffers for data exchange with ROS2-control
   std::vector<double> pos_cmd;
-  std::vector<double> vel_cmd;
   std::vector<double> pos_state;
   std::vector<double> vel_state;
   std::vector<double> eff_state;
-  std::vector<double> stiff;  // Proportional gain
-  std::vector<double> damp;   // Derivative gain
 
   // Safety guards for buffers
   std::mutex state_mutex;
@@ -123,9 +120,7 @@ public:
 
   // Non-blocking
   void read(std::vector<double> & pos, std::vector<double> & vel, std::vector<double> & eff);
-  void write(
-    const std::vector<double> & pos, const std::vector<double> & vel,
-    const std::vector<double> & stiff, const std::vector<double> & damp);
+  void write(const std::vector<double> & pos);
 };
 
 }  // namespace schunk_svh_simulation

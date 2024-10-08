@@ -132,9 +132,7 @@ void MuJoCoSimulator::controlCBImpl([[maybe_unused]] const mjModel * m, mjData *
   command_mutex.lock();
 
   for (size_t i = 0; i < pos_cmd.size(); ++i) {
-    // Joint-level impedance control
-    d->ctrl[i] = stiff[i] * (pos_cmd[i] - d->qpos[i]) +             // stiffness
-                 damp[i] * (vel_cmd[i] - d->actuator_velocity[i]);  // damping
+    d->ctrl[i] = pos_cmd[i];
   }
   command_mutex.unlock();
 }
@@ -167,9 +165,6 @@ int MuJoCoSimulator::simulateImpl(const std::string & model_xml)
   vel_state.resize(m->nu);
   eff_state.resize(m->nu);
   pos_cmd.resize(m->nu);
-  vel_cmd.resize(m->nu);
-  stiff.resize(m->nu);
-  damp.resize(m->nu);
 
   // Start where we are
   syncStates();
@@ -259,16 +254,11 @@ void MuJoCoSimulator::read(
   }
 }
 
-void MuJoCoSimulator::write(
-  const std::vector<double> & pos, const std::vector<double> & vel,
-  const std::vector<double> & stiff, const std::vector<double> & damp)
+void MuJoCoSimulator::write(const std::vector<double> & pos)
 {
   // Realtime in ROS2-control is more important than fresh data exchange.
   if (command_mutex.try_lock()) {
     pos_cmd = pos;
-    vel_cmd = vel;
-    this->stiff = stiff;
-    this->damp = damp;
     command_mutex.unlock();
   }
 }
