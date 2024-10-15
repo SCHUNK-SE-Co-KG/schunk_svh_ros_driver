@@ -25,6 +25,7 @@
 
 #include "schunk_svh_simulation/mujoco_simulator.h"
 
+#include <filesystem>
 #include <memory>
 
 namespace schunk_svh_simulation
@@ -137,20 +138,34 @@ void MuJoCoSimulator::controlCBImpl([[maybe_unused]] const mjModel * m, mjData *
   command_mutex.unlock();
 }
 
-int MuJoCoSimulator::simulate(const std::string & model_xml)
+int MuJoCoSimulator::simulate(const std::string & model_xml, const std::string & mesh_dir)
 {
-  return getInstance().simulateImpl(model_xml);
+  return getInstance().simulateImpl(model_xml, mesh_dir);
 }
 
-int MuJoCoSimulator::simulateImpl(const std::string & model_xml)
+int MuJoCoSimulator::simulateImpl(const std::string & model_xml, const std::string & mesh_dir)
 {
   // Make sure that the ROS2-control system_interface only gets valid data in read().
   // We lock until we are done with simulation setup.
   state_mutex.lock();
 
+  // Load mesh files into a virtual file system.
+  // MuJoCo's xml compiler will look there first when creating the model.
+  auto mj_vfs = std::make_unique<mjVFS>();
+  mj_defaultVFS(mj_vfs.get());
+
+  for (const auto & entry : std::filesystem::directory_iterator(mesh_dir)) {
+    mj_addFileVFS(
+      mj_vfs.get(),
+      // Append a forward slash for MuJoCo if non-existent
+      (std::string(mesh_dir).back() == '/') ? mesh_dir.c_str()
+                                            : std::string(mesh_dir + '/').c_str(),
+      entry.path().filename().c_str());
+  }
+
   // load and compile model
   char error[1000] = "Could not load binary model";
-  m = mj_loadXML(model_xml.c_str(), nullptr, error, 1000);
+  m = mj_loadXML(model_xml.c_str(), mj_vfs.get(), error, 1000);
   if (!m) {
     mju_error_s("Load model error: %s", error);
     return 1;
@@ -164,6 +179,7 @@ int MuJoCoSimulator::simulateImpl(const std::string & model_xml)
   pos_state.resize(m->nu);
   vel_state.resize(m->nu);
   eff_state.resize(m->nu);
+  curr_state.resize(m->nu);
   pos_cmd.resize(m->nu);
 
   // Start where we are
@@ -243,13 +259,15 @@ int MuJoCoSimulator::simulateImpl(const std::string & model_xml)
 }
 
 void MuJoCoSimulator::read(
-  std::vector<double> & pos, std::vector<double> & vel, std::vector<double> & eff)
+  std::vector<double> & pos, std::vector<double> & vel, std::vector<double> & eff,
+  std::vector<double> & curr)
 {
   // Realtime in ROS2-control is more important than fresh data exchange.
   if (state_mutex.try_lock()) {
     pos = pos_state;
     vel = vel_state;
     eff = eff_state;
+    curr = curr_state;
     state_mutex.unlock();
   }
 }
@@ -269,6 +287,7 @@ void MuJoCoSimulator::syncStates()
     pos_state[i] = d->qpos[i];
     vel_state[i] = d->actuator_velocity[i];
     eff_state[i] = d->actuator_force[i];
+    curr_state[i] = d->actuator_force[i];
   }
 }
 

@@ -41,6 +41,9 @@
 namespace schunk_svh_simulation
 {
 
+// Additional hardware interfaces for the SVH:
+constexpr char HW_IF_CURRENT[] = "current";
+
 /**
  * @brief A MuJoCo-based, standalone simulator for the SCHUNK SVH and ROS2-control
  *
@@ -78,6 +81,7 @@ private:
   std::vector<double> m_positions;
   std::vector<double> m_velocities;
   std::vector<double> m_efforts;
+  std::vector<double> m_currents;
 
   // Run MuJoCo's solver in a separate thread
   std::thread m_simulation;
@@ -88,6 +92,7 @@ private:
 
   // Parameters
   std::string m_mujoco_model;
+  std::string m_mesh_dir;
 };
 
 }  // namespace schunk_svh_simulation

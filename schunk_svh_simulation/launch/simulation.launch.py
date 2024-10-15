@@ -44,19 +44,29 @@ def generate_launch_description():
             PathJoinSubstitution([FindExecutable(name="xacro")]),
             " ",
             PathJoinSubstitution(
-                [
-                    FindPackageShare("schunk_svh_simulation"),
-                    "urdf",
-                    "robot.urdf.xacro",
-                ]
+                [FindPackageShare("schunk_svh_driver"), "urdf", "schunk_svh_driver.xacro"]
             ),
+            " ",
+            "control:=right_hand",
+            " ",
+            "plugin:=schunk_svh_simulation/Simulator",
+            " ",
+            "device_file:=unused",
             " ",
             "mujoco_model:=",
             PathJoinSubstitution(
                 [
                     FindPackageShare("schunk_svh_simulation"),
                     "etc",
-                    "robot_mujoco.xml",
+                    "svh_mujoco.xml",
+                ]
+            ),
+            " ",
+            "mesh_directory:=",
+            PathJoinSubstitution(
+                [
+                    FindPackageShare("schunk_svh_simulation"),
+                    "meshes",
                 ]
             ),
         ]
@@ -79,6 +89,7 @@ def generate_launch_description():
         parameters=[robot_controllers],
         output="both",
         remappings=[("~/robot_description", "/robot_description"),],
+        #prefix="screen -d -m gdb -command=/home/stefan/.gdb_debug_config --ex run --args",  # noqa E501
     )
 
     # TF tree

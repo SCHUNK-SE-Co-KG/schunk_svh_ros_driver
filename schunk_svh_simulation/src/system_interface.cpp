@@ -54,12 +54,14 @@ Simulator::CallbackReturn Simulator::on_init(const hardware_interface::HardwareI
   // Let the thread's destructor clean-up all resources
   // once users close the simulation window.
   m_mujoco_model = info_.hardware_parameters["mujoco_model"];
-  m_simulation = std::thread(MuJoCoSimulator::simulate, m_mujoco_model);
+  m_mesh_dir = info_.hardware_parameters["mesh_directory"];
+  m_simulation = std::thread(MuJoCoSimulator::simulate, m_mujoco_model, m_mesh_dir);
   m_simulation.detach();
 
   m_positions.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
   m_velocities.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
   m_efforts.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
+  m_currents.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
   m_position_commands.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
 
   for (const hardware_interface::ComponentInfo & joint : info_.joints) {
@@ -79,22 +81,23 @@ Simulator::CallbackReturn Simulator::on_init(const hardware_interface::HardwareI
       return Simulator::CallbackReturn::ERROR;
     }
 
-    if (joint.state_interfaces.size() != 3) {
+    if (joint.state_interfaces.size() != 4) {
       RCLCPP_ERROR(
-        rclcpp::get_logger("Simulator"), "Joint '%s' needs 3 state interfaces.",
+        rclcpp::get_logger("Simulator"), "Joint '%s' needs 4 state interfaces.",
         joint.name.c_str());
 
       return Simulator::CallbackReturn::ERROR;
     }
 
     if (!(joint.state_interfaces[0].name == hardware_interface::HW_IF_POSITION ||
-          joint.state_interfaces[0].name == hardware_interface::HW_IF_VELOCITY ||
-          joint.state_interfaces[0].name == hardware_interface::HW_IF_EFFORT)) {
+          joint.state_interfaces[1].name == hardware_interface::HW_IF_VELOCITY ||
+          joint.state_interfaces[2].name == hardware_interface::HW_IF_EFFORT ||
+          joint.state_interfaces[3].name == schunk_svh_simulation::HW_IF_CURRENT)) {
       RCLCPP_ERROR(
         rclcpp::get_logger("Simulator"),
-        "Joint '%s' needs the following state interfaces in that order: %s, %s, and %s.",
+        "Joint '%s' needs the following state interfaces in that order: %s, %s, %s, and %s.",
         joint.name.c_str(), hardware_interface::HW_IF_POSITION, hardware_interface::HW_IF_VELOCITY,
-        hardware_interface::HW_IF_EFFORT);
+        hardware_interface::HW_IF_EFFORT, schunk_svh_simulation::HW_IF_CURRENT);
 
       return Simulator::CallbackReturn::ERROR;
     }
@@ -121,6 +124,8 @@ std::vector<hardware_interface::StateInterface> Simulator::export_state_interfac
       info_.joints[i].name, hardware_interface::HW_IF_VELOCITY, &m_velocities[i]));
     state_interfaces.emplace_back(hardware_interface::StateInterface(
       info_.joints[i].name, hardware_interface::HW_IF_EFFORT, &m_efforts[i]));
+    state_interfaces.emplace_back(hardware_interface::StateInterface(
+      info_.joints[i].name, schunk_svh_simulation::HW_IF_CURRENT, &m_currents[i]));
   }
 
   return state_interfaces;
@@ -149,7 +154,7 @@ Simulator::return_type Simulator::prepare_command_mode_switch(
 Simulator::return_type Simulator::read(
   [[maybe_unused]] const rclcpp::Time & time, [[maybe_unused]] const rclcpp::Duration & period)
 {
-  MuJoCoSimulator::getInstance().read(m_positions, m_velocities, m_efforts);
+  MuJoCoSimulator::getInstance().read(m_positions, m_velocities, m_efforts, m_currents);
 
   // Start with the current positions as safe default, but let active
   // controllers overrride them in each cycle.
@@ -159,7 +164,7 @@ Simulator::return_type Simulator::read(
     m_position_commands = m_positions;
   }
 
-  MuJoCoSimulator::getInstance().read(m_positions, m_velocities, m_efforts);
+  MuJoCoSimulator::getInstance().read(m_positions, m_velocities, m_efforts, m_currents);
   m_positions = m_position_commands;  // Open-loop control
 
   return return_type::OK;

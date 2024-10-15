@@ -89,6 +89,7 @@ public:
   std::vector<double> pos_state;
   std::vector<double> vel_state;
   std::vector<double> eff_state;
+  std::vector<double> curr_state;
 
   // Safety guards for buffers
   std::mutex state_mutex;
@@ -115,11 +116,13 @@ public:
   void controlCBImpl(const mjModel * m, mjData * d);
 
   // Call this in a separate thread
-  static int simulate(const std::string & model_xml);
-  int simulateImpl(const std::string & model_xml);
+  static int simulate(const std::string & model_xml, const std::string & mesh_dir);
+  int simulateImpl(const std::string & model_xml, const std::string & mesh_dir);
 
   // Non-blocking
-  void read(std::vector<double> & pos, std::vector<double> & vel, std::vector<double> & eff);
+  void read(
+    std::vector<double> & pos, std::vector<double> & vel, std::vector<double> & eff,
+    std::vector<double> & curr);
   void write(const std::vector<double> & pos);
 };
 
