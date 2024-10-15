@@ -11,6 +11,7 @@ on:
 jobs:
   industrial_ci:
     env:
+      BEFORE_BUILD_TARGET_WORKSPACE: '.github/script/install_mujoco.sh'
       UPSTREAM_WORKSPACE: 'github:SCHUNK-SE-Co-KG/schunk_svh_library#main'
       ROSDEP_SKIP_KEYS: 'schunk_svh_library'
     strategy:

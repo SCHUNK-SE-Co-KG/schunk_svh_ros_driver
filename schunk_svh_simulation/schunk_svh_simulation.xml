@@ -1,0 +1,9 @@
+<library path="schunk_svh_simulation">
+  <class name="schunk_svh_simulation/Simulator"
+         type="schunk_svh_simulation::Simulator"
+         base_class_type="hardware_interface::SystemInterface">
+    <description>
+        A simulation environment for SCHUNK's SVH 5-finger hand
+    </description>
+  </class>
+</library>
