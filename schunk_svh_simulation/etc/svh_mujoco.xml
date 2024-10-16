@@ -168,25 +168,25 @@
 
   <!-- Keep the order of joint creation from above. That's crucial for equally indexing joint state vectors and actuator torque vectors in the solver -->
   <actuator>
-    <position name="Right_Hand_Thumb_Opposition"       ctrlrange="-3.141 3.141" kp="1000" dampratio="1" joint="Right_Hand_Thumb_Opposition"      />
-    <position name="Right_Hand_Thumb_Flexion"          ctrlrange="-3.141 3.141" kp="1000" dampratio="1" joint="Right_Hand_Thumb_Flexion"         />
-    <position name="Right_Hand_j3"                     ctrlrange="-3.141 3.141" kp="1000" dampratio="1" joint="Right_Hand_j3"                    />
-    <position name="Right_Hand_j4"                     ctrlrange="-3.141 3.141" kp="1000" dampratio="1" joint="Right_Hand_j4"                    />
-    <position name="Right_Hand_index_spread"           ctrlrange="-3.141 3.141" kp="1000" dampratio="1" joint="Right_Hand_index_spread"          />
-    <position name="Right_Hand_Index_Finger_Proximal"  ctrlrange="-3.141 3.141" kp="1000" dampratio="1" joint="Right_Hand_Index_Finger_Proximal" />
-    <position name="Right_Hand_Index_Finger_Distal"    ctrlrange="-3.141 3.141" kp="1000" dampratio="1" joint="Right_Hand_Index_Finger_Distal"   />
-    <position name="Right_Hand_j14"                    ctrlrange="-3.141 3.141" kp="1000" dampratio="1" joint="Right_Hand_j14"                   />
-    <position name="Right_Hand_Middle_Finger_Proximal" ctrlrange="-3.141 3.141" kp="1000" dampratio="1" joint="Right_Hand_Middle_Finger_Proximal"/>
-    <position name="Right_Hand_Middle_Finger_Distal"   ctrlrange="-3.141 3.141" kp="1000" dampratio="1" joint="Right_Hand_Middle_Finger_Distal"  />
-    <position name="Right_Hand_j15"                    ctrlrange="-3.141 3.141" kp="1000" dampratio="1" joint="Right_Hand_j15"                   />
-    <position name="Right_Hand_Finger_Spread"          ctrlrange="-3.141 3.141" kp="1000" dampratio="1" joint="Right_Hand_Finger_Spread"         />
-    <position name="Right_Hand_Pinky"                  ctrlrange="-3.141 3.141" kp="1000" dampratio="1" joint="Right_Hand_Pinky"                 />
-    <position name="Right_Hand_j13"                    ctrlrange="-3.141 3.141" kp="1000" dampratio="1" joint="Right_Hand_j13"                   />
-    <position name="Right_Hand_j17"                    ctrlrange="-3.141 3.141" kp="1000" dampratio="1" joint="Right_Hand_j17"                   />
-    <position name="Right_Hand_ring_spread"            ctrlrange="-3.141 3.141" kp="1000" dampratio="1" joint="Right_Hand_ring_spread"           />
-    <position name="Right_Hand_Ring_Finger"            ctrlrange="-3.141 3.141" kp="1000" dampratio="1" joint="Right_Hand_Ring_Finger"           />
-    <position name="Right_Hand_j12"                    ctrlrange="-3.141 3.141" kp="1000" dampratio="1" joint="Right_Hand_j12"                   />
-    <position name="Right_Hand_j16"                    ctrlrange="-3.141 3.141" kp="1000" dampratio="1" joint="Right_Hand_j16"                   />
+    <position name="Right_Hand_Thumb_Opposition"       ctrlrange="-3.141 3.141" kp="10" dampratio="1" joint="Right_Hand_Thumb_Opposition"      />
+    <position name="Right_Hand_Thumb_Flexion"          ctrlrange="-3.141 3.141" kp="10" dampratio="1" joint="Right_Hand_Thumb_Flexion"         />
+    <position name="Right_Hand_j3"                     ctrlrange="-3.141 3.141" kp="10" dampratio="1" joint="Right_Hand_j3"                    />
+    <position name="Right_Hand_j4"                     ctrlrange="-3.141 3.141" kp="10" dampratio="1" joint="Right_Hand_j4"                    />
+    <position name="Right_Hand_index_spread"           ctrlrange="-3.141 3.141" kp="10" dampratio="1" joint="Right_Hand_index_spread"          />
+    <position name="Right_Hand_Index_Finger_Proximal"  ctrlrange="-3.141 3.141" kp="10" dampratio="1" joint="Right_Hand_Index_Finger_Proximal" />
+    <position name="Right_Hand_Index_Finger_Distal"    ctrlrange="-3.141 3.141" kp="10" dampratio="1" joint="Right_Hand_Index_Finger_Distal"   />
+    <position name="Right_Hand_j14"                    ctrlrange="-3.141 3.141" kp="10" dampratio="1" joint="Right_Hand_j14"                   />
+    <position name="Right_Hand_Middle_Finger_Proximal" ctrlrange="-3.141 3.141" kp="10" dampratio="1" joint="Right_Hand_Middle_Finger_Proximal"/>
+    <position name="Right_Hand_Middle_Finger_Distal"   ctrlrange="-3.141 3.141" kp="10" dampratio="1" joint="Right_Hand_Middle_Finger_Distal"  />
+    <position name="Right_Hand_j15"                    ctrlrange="-3.141 3.141" kp="10" dampratio="1" joint="Right_Hand_j15"                   />
+    <position name="Right_Hand_Finger_Spread"          ctrlrange="-3.141 3.141" kp="10" dampratio="1" joint="Right_Hand_Finger_Spread"         />
+    <position name="Right_Hand_Pinky"                  ctrlrange="-3.141 3.141" kp="10" dampratio="1" joint="Right_Hand_Pinky"                 />
+    <position name="Right_Hand_j13"                    ctrlrange="-3.141 3.141" kp="10" dampratio="1" joint="Right_Hand_j13"                   />
+    <position name="Right_Hand_j17"                    ctrlrange="-3.141 3.141" kp="10" dampratio="1" joint="Right_Hand_j17"                   />
+    <position name="Right_Hand_ring_spread"            ctrlrange="-3.141 3.141" kp="10" dampratio="1" joint="Right_Hand_ring_spread"           />
+    <position name="Right_Hand_Ring_Finger"            ctrlrange="-3.141 3.141" kp="10" dampratio="1" joint="Right_Hand_Ring_Finger"           />
+    <position name="Right_Hand_j12"                    ctrlrange="-3.141 3.141" kp="10" dampratio="1" joint="Right_Hand_j12"                   />
+    <position name="Right_Hand_j16"                    ctrlrange="-3.141 3.141" kp="10" dampratio="1" joint="Right_Hand_j16"                   />
   </actuator>
 
     <!-- Initial joint states for simulation -->
