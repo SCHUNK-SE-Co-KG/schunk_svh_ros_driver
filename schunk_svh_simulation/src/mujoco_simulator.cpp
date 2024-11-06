@@ -135,6 +135,20 @@ void MuJoCoSimulator::controlCBImpl([[maybe_unused]] const mjModel * m, mjData *
   for (size_t i = 0; i < pos_cmd.size(); ++i) {
     d->ctrl[i] = pos_cmd[i];
   }
+
+  // Copy positions for coupled joints
+  // See the svh_mujoco.xml file for the transmission values
+  d->qpos[2] = 1.01511 * d->qpos[1];
+  d->qpos[3] = 1.44889 * d->qpos[1];
+  d->qpos[4] = 0.5 * d->qpos[11];
+  d->qpos[7] = 1.0450 * d->qpos[6];
+  d->qpos[10] = 1.0454 * d->qpos[9];
+  d->qpos[13] = 1.35880 * d->qpos[12];
+  d->qpos[14] = 1.42307 * d->qpos[12];
+  d->qpos[15] = 0.5 * d->qpos[11];
+  d->qpos[17] = 1.3588 * d->qpos[16];
+  d->qpos[18] = 1.42093 * d->qpos[16];
+
   command_mutex.unlock();
 }
 
