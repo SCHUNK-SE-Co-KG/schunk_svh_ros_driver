@@ -30,7 +30,14 @@
 
 namespace schunk_svh_simulation
 {
-MuJoCoSimulator::MuJoCoSimulator() {}
+MuJoCoSimulator::MuJoCoSimulator()
+: pos_cmd(svh_dof, 0.0),
+  pos_state(svh_dof, 0.0),
+  vel_state(svh_dof, 0.0),
+  eff_state(svh_dof, 0.0),
+  curr_state(svh_dof, 0.0)
+{
+}
 
 void MuJoCoSimulator::keyboardCB(GLFWwindow * window, int key, int scancode, int act, int mods)
 {
@@ -131,24 +138,9 @@ void MuJoCoSimulator::controlCB(const mjModel * m, mjData * d)
 void MuJoCoSimulator::controlCBImpl([[maybe_unused]] const mjModel * m, mjData * d)
 {
   command_mutex.lock();
-
-  for (size_t i = 0; i < pos_cmd.size(); ++i) {
-    d->ctrl[i] = pos_cmd[i];
+  for (auto i = 0; i < m->nq; ++i) {
+    d->ctrl[i] = transmissions[i].first * pos_cmd[transmissions[i].second];
   }
-
-  // Copy positions for coupled joints
-  // See the svh_mujoco.xml file for the transmission values
-  d->qpos[2] = 1.01511 * d->qpos[1];
-  d->qpos[3] = 1.44889 * d->qpos[1];
-  d->qpos[4] = 0.5 * d->qpos[11];
-  d->qpos[7] = 1.0450 * d->qpos[6];
-  d->qpos[10] = 1.0454 * d->qpos[9];
-  d->qpos[13] = 1.35880 * d->qpos[12];
-  d->qpos[14] = 1.42307 * d->qpos[12];
-  d->qpos[15] = 0.5 * d->qpos[11];
-  d->qpos[17] = 1.3588 * d->qpos[16];
-  d->qpos[18] = 1.42093 * d->qpos[16];
-
   command_mutex.unlock();
 }
 
@@ -188,13 +180,6 @@ int MuJoCoSimulator::simulateImpl(const std::string & model_xml, const std::stri
   // Set initial state with the keyframe mechanism from xml
   d = mj_makeData(m);
   mju_copy(d->qpos, m->key_qpos, m->nq);
-
-  // Initialize buffers for ROS2-control.
-  pos_state.resize(m->nu);
-  vel_state.resize(m->nu);
-  eff_state.resize(m->nu);
-  curr_state.resize(m->nu);
-  pos_cmd.resize(m->nu);
 
   // Start where we are
   syncStates();
@@ -290,18 +275,20 @@ void MuJoCoSimulator::write(const std::vector<double> & pos)
 {
   // Realtime in ROS2-control is more important than fresh data exchange.
   if (command_mutex.try_lock()) {
-    pos_cmd = pos;
+    for (auto i = 0; i < svh_dof; ++i) {
+      pos_cmd[i] = pos[i];
+    }
     command_mutex.unlock();
   }
 }
 
 void MuJoCoSimulator::syncStates()
 {
-  for (auto i = 0; i < m->nu; ++i) {
-    pos_state[i] = d->qpos[i];
-    vel_state[i] = d->actuator_velocity[i];
-    eff_state[i] = d->actuator_force[i];
-    curr_state[i] = d->actuator_force[i];
+  for (auto i = 0; i < svh_dof; ++i) {
+    pos_state[i] = d->qpos[mujoco_idx[i]];
+    vel_state[i] = d->actuator_velocity[mujoco_idx[i]];
+    eff_state[i] = d->actuator_force[mujoco_idx[i]];
+    curr_state[i] = d->actuator_force[mujoco_idx[i]];
   }
 }
 

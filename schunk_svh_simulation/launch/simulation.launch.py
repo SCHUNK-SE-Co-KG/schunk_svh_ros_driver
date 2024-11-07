@@ -75,9 +75,9 @@ def generate_launch_description():
 
     robot_controllers = PathJoinSubstitution(
         [
-            FindPackageShare("schunk_svh_simulation"),
-            "config",
-            "controller_manager.yaml",
+            FindPackageShare("schunk_svh_driver"),
+            "cfg",
+            "schunk_svh_driver.yaml",
         ]
     )
 
@@ -112,16 +112,16 @@ def generate_launch_description():
     # Active controllers
     active_list = [
         "joint_state_broadcaster",
+        "right_hand"
     ]
     active_spawners = [controller_spawner(controller) for controller in active_list]
 
     # Inactive controllers
     inactive_list = [
-        "joint_trajectory_controller",
+        "left_hand",
     ]
-    state = "--inactive"
     inactive_spawners = [
-        controller_spawner(controller, state) for controller in inactive_list
+        controller_spawner(controller, "--inactive") for controller in inactive_list
     ]
 
     # Nodes to start

@@ -58,11 +58,11 @@ Simulator::CallbackReturn Simulator::on_init(const hardware_interface::HardwareI
   m_simulation = std::thread(MuJoCoSimulator::simulate, m_mujoco_model, m_mesh_dir);
   m_simulation.detach();
 
-  m_positions.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
-  m_velocities.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
-  m_efforts.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
-  m_currents.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
-  m_position_commands.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
+  m_positions.resize(info_.joints.size(), 0.0);
+  m_velocities.resize(info_.joints.size(), 0.0);
+  m_efforts.resize(info_.joints.size(), 0.0);
+  m_currents.resize(info_.joints.size(), 0.0);
+  m_position_commands.resize(info_.joints.size(), 0.0);
 
   for (const hardware_interface::ComponentInfo & joint : info_.joints) {
     if (joint.command_interfaces.size() != 1) {
@@ -146,8 +146,6 @@ Simulator::return_type Simulator::prepare_command_mode_switch(
   [[maybe_unused]] const std::vector<std::string> & start_interfaces,
   [[maybe_unused]] const std::vector<std::string> & stop_interfaces)
 {
-  // TODO: Exclusive OR for position and velocity commands
-
   return return_type::OK;
 }
 
@@ -155,25 +153,18 @@ Simulator::return_type Simulator::read(
   [[maybe_unused]] const rclcpp::Time & time, [[maybe_unused]] const rclcpp::Duration & period)
 {
   MuJoCoSimulator::getInstance().read(m_positions, m_velocities, m_efforts, m_currents);
-
-  // Start with the current positions as safe default, but let active
-  // controllers overrride them in each cycle.
-  if (std::any_of(m_position_commands.begin(), m_position_commands.end(), [](double i) {
-        return std::isnan(i);
-      })) {
-    m_position_commands = m_positions;
-  }
-
-  MuJoCoSimulator::getInstance().read(m_positions, m_velocities, m_efforts, m_currents);
   m_positions = m_position_commands;  // Open-loop control
-
   return return_type::OK;
 }
 
 Simulator::return_type Simulator::write(
   [[maybe_unused]] const rclcpp::Time & time, [[maybe_unused]] const rclcpp::Duration & period)
 {
-  MuJoCoSimulator::getInstance().write(m_position_commands);
+  if (std::none_of(m_position_commands.begin(), m_position_commands.end(), [](double i) {
+        return std::isnan(i);
+      })) {
+    MuJoCoSimulator::getInstance().write(m_position_commands);
+  }
   return return_type::OK;
 }
 

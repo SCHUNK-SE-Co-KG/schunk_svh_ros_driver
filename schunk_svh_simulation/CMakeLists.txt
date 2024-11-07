@@ -109,7 +109,7 @@ install(
 )
 
 install(
-  DIRECTORY config etc launch meshes
+  DIRECTORY etc launch meshes
   DESTINATION share/${PROJECT_NAME}
 )
 

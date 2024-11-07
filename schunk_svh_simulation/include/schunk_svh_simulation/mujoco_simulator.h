@@ -27,8 +27,10 @@
 
 #include <cstdio>
 #include <cstring>
+#include <map>
 #include <mutex>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "GLFW/glfw3.h"
@@ -85,11 +87,85 @@ public:
   double lasty = 0;
 
   // Buffers for data exchange with ROS2-control
+  const int svh_dof = 9;
   std::vector<double> pos_cmd;
   std::vector<double> pos_state;
   std::vector<double> vel_state;
   std::vector<double> eff_state;
   std::vector<double> curr_state;
+
+  // Joint order and transmissions in the MuJoCo model:
+  // --------------------------------------------------
+  //  0  : Thumb_Opposition
+  //  1  : Thumb_Flexion
+  //  2  : j3  = 1.01511 * Thumb_Flexion
+  //  3  : j4  = 1.44889 * Thumb_Flexion
+  //  4  : Index_spread  = 0.5 * Finger_Spread
+  //  5  : Index_Finger_Proximal
+  //  6  : Index_Finger_Distal
+  //  7  : j14  = 1.0450 * Index_Finger_Distal
+  //  8  : Middle_Finger_Proximal
+  //  9  : Middle_Finger_Distal
+  //  10 : j15  = 1.0454 * Middle_Finger_Distal
+  //  11 : Finger_Spread
+  //  12 : Pinky
+  //  13 : j13  = 1.35880 * Pinky
+  //  14 : j17  = 1.42307 * Pinky
+  //  15 : Ring_spread  = 0.5 * Finger_Spread
+  //  16 : Ring_Finger
+  //  17 : j12  = 1.3588 * Ring_Finger
+  //  18 : j16  = 1.42093 * Ring_Finger
+
+  // Joint order in the SVH model:
+  // -----------------------------
+  // 0  : Thumb_Flexion
+  // 1  : Thumb_Opposition
+  // 2  : Index_Finger_Distal
+  // 3  : Index_Finger_Proximal
+  // 4  : Middle_Finger_Distal
+  // 5  : Middle_Finger_Proximal
+  // 6  : Ring_Finger
+  // 7  : Pinky
+  // 8  : Finger_Spread
+
+  std::map<int, int> mujoco_idx = {
+    // clang-format off
+    {0, 1},
+    {1, 0},
+    {2, 6},
+    {3, 5},
+    {4, 9},
+    {5, 8},
+    {6, 16},
+    {7, 12},
+    {8, 11},
+    // clang-format on
+  };
+
+  std::map<int, std::pair<double, int>> transmissions = {
+    // clang-format off
+    // mujoco idx, transmission, ros2 joint idx.
+    {0, {1.0, 1}},
+    {1, {1.0, 0}},
+    {2, {1.01511, 0}},
+    {3, {1.44889, 0}},
+    {4, {0.5, 8}},
+    {5, {1.0, 3}},
+    {6, {1.0, 2}},
+    {7, {1.0450, 2}},
+    {8, {1.0, 5}},
+    {9, {1.0, 4}},
+    {10, {1.0454, 4}},
+    {11, {1.0, 8}},
+    {12, {1.0, 7}},
+    {13, {1.35880, 7}},
+    {14, {1.42307, 7}},
+    {15, {0.5, 8}},
+    {16, {1.0, 6}},
+    {17, {1.3588, 6}},
+    {18, {1.42093, 6}},
+    // clang-format on
+  };
 
   // Safety guards for buffers
   std::mutex state_mutex;
