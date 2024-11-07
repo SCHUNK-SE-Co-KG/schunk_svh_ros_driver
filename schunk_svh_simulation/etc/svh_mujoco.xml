@@ -45,7 +45,6 @@
     <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="base10"/>
     <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="h10"/>
     <geom pos="-1.27248e-06 -0.02634 0.110001" quat="0.500048 0.499952 -0.5 0.5" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="f20"/>
-    <geom pos="0.0177 -0.00713 0.02748" quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="h11"/>
     <body name="Right_Hand_z" pos="-0.0169 0.01313 0" quat="0.700986 -0.0923056 0.0922868 0.701129">
       <inertial pos="0 0.00178276 0.162822" quat="0.70685 0.0190682 -0.0190682 0.70685" mass="0.0839" diaginertia="0.00280708 0.00218508 0.002108"/>
       <joint name="Right_Hand_Thumb_Opposition" pos="0 0 0" axis="0 0 -1" range="0 0.9879" actuatorfrcrange="-1000 1000"/>
@@ -101,42 +100,47 @@
         </body>
       </body>
     </body>
-    <body name="Right_Hand_virtual_i" pos="0.043755 -0.01313 0.0935" quat="0.500048 -0.5 -0.5 -0.499952">
-      <inertial pos="0.003653 4.4e-05 0.100085" quat="0.69352 0.69352 -0.13795 0.13795" mass="0.02377" diaginertia="0.000214142 0.000185858 0.00011"/>
-      <joint name="Right_Hand_Finger_Spread" pos="0 0 0" axis="0 0 1" range="0 0.5829" actuatorfrcrange="-1000 1000"/>
-      <geom pos="0 0 -0.01321" quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="f40"/>
-      <body name="Right_Hand_i" quat="0.707141 0.707073 0 0">
-        <inertial pos="0.232293 0.00622 0" quat="0.00793951 0.707062 -0.00793951 0.707062" mass="0.12544" diaginertia="0.00328 0.00316135 0.000488652"/>
-        <joint name="Right_Hand_Pinky" pos="0 0 0" axis="0 0 1" range="0 0.98175" actuatorfrcrange="-1000 1000"/>
-        <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="f41"/>
-        <body name="Right_Hand_m" pos="0.04454 0 0">
-          <inertial pos="0.119665 -0.009328 0" quat="0.5 0.5 0.5 0.5" mass="0.02488" diaginertia="0.00023 0.00016 0.00013"/>
-          <joint name="Right_Hand_j13" pos="0 0 0" axis="0 0 1" range="0 1.334" actuatorfrcrange="-1000 1000"/>
-          <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="f42"/>
-          <body name="Right_Hand_q" pos="0.022 0 0">
-            <inertial pos="0.102896 0.000307 0" quat="0.468459 0.468459 0.529666 0.529666" mass="0.03234" diaginertia="0.000171231 0.00017 8.87689e-05"/>
-            <joint name="Right_Hand_j17" pos="0 0 0" axis="0 0 1" range="0 1.3971" actuatorfrcrange="-1000 1000"/>
-            <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="f43"/>
+    <body name="Right_Hand_e2" pos="0.0184 -0.00713 0.0375">
+      <inertial pos="0.136222 -0.0359242 0.30372" quat="0.942326 0.0996959 0.0767266 -0.310155" mass="0.49184" diaginertia="0.0261995 0.0233028 0.0113749"/>
+      <joint name="Right_Hand_j5" pos="0 0 0" axis="0 0 1" range="0 0.98786" actuatorfrcrange="-1000 1000"/>
+      <geom pos="-0.0007 0 -0.01002" quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="h11"/>
+      <body name="Right_Hand_virtual_i" pos="0.025355 -0.006 0.056" quat="0.500048 -0.5 -0.5 -0.499952">
+        <inertial pos="0.003653 4.4e-05 0.100085" quat="0.69352 0.69352 -0.13795 0.13795" mass="0.02377" diaginertia="0.000214142 0.000185858 0.00011"/>
+        <joint name="Right_Hand_Finger_Spread" pos="0 0 0" axis="0 0 1" range="0 0.5829" actuatorfrcrange="-1000 1000"/>
+        <geom pos="0 0 -0.01321" quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="f40"/>
+        <body name="Right_Hand_i" quat="0.707141 0.707073 0 0">
+          <inertial pos="0.232293 0.00622 0" quat="0.00793951 0.707062 -0.00793951 0.707062" mass="0.12544" diaginertia="0.00328 0.00316135 0.000488652"/>
+          <joint name="Right_Hand_Pinky" pos="0 0 0" axis="0 0 1" range="0 0.98175" actuatorfrcrange="-1000 1000"/>
+          <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="f41"/>
+          <body name="Right_Hand_m" pos="0.04454 0 0">
+            <inertial pos="0.119665 -0.009328 0" quat="0.5 0.5 0.5 0.5" mass="0.02488" diaginertia="0.00023 0.00016 0.00013"/>
+            <joint name="Right_Hand_j13" pos="0 0 0" axis="0 0 1" range="0 1.334" actuatorfrcrange="-1000 1000"/>
+            <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="f42"/>
+            <body name="Right_Hand_q" pos="0.022 0 0">
+              <inertial pos="0.102896 0.000307 0" quat="0.468459 0.468459 0.529666 0.529666" mass="0.03234" diaginertia="0.000171231 0.00017 8.87689e-05"/>
+              <joint name="Right_Hand_j17" pos="0 0 0" axis="0 0 1" range="0 1.3971" actuatorfrcrange="-1000 1000"/>
+              <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="f43"/>
+            </body>
           </body>
         </body>
       </body>
-    </body>
-    <body name="Right_Hand_virtual_j" pos="0.022255 -0.01313 0.103" quat="0.500048 -0.5 -0.5 -0.499952">
-      <inertial pos="0.003805 0.000386 0.100079" quat="0.69352 0.69352 -0.13795 0.13795" mass="0.02377" diaginertia="0.000214142 0.000185858 0.00011"/>
-      <joint name="Right_Hand_ring_spread" pos="0 0 0" axis="0 0 1" range="0 0.28833" actuatorfrcrange="-1000 1000"/>
-      <geom pos="0 0 -0.01321" quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="f30"/>
-      <body name="Right_Hand_j" quat="0.707141 0.707073 0 0">
-        <inertial pos="0.258283 -0.00154 0" quat="0.0178138 0.706882 -0.0178138 0.706882" mass="0.1377" diaginertia="0.00426 0.00411908 0.000540922"/>
-        <joint name="Right_Hand_Ring_Finger" pos="0 0 0" axis="0 0 1" range="0 0.98175" actuatorfrcrange="-1000 1000"/>
-        <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="f31"/>
-        <body name="Right_Hand_n" pos="0.05004 0 0">
-          <inertial pos="0.166851 -0.00362 0" quat="0.5 0.5 0.5 0.5" mass="0.04207" diaginertia="0.00047 0.0004 0.00019"/>
-          <joint name="Right_Hand_j12" pos="0 0 0" axis="0 0 1" range="0 1.334" actuatorfrcrange="-1000 1000"/>
-          <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="f32"/>
-          <body name="Right_Hand_r" pos="0.032 0 0">
-            <inertial pos="0.102676 0.000301 0" quat="0.468459 0.468459 0.529666 0.529666" mass="0.03229" diaginertia="0.000171231 0.00017 8.87689e-05"/>
-            <joint name="Right_Hand_j16" pos="0 0 0" axis="0 0 1" range="0 1.395" actuatorfrcrange="-1000 1000"/>
-            <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="f33"/>
+      <body name="Right_Hand_virtual_j" pos="0.003855 -0.006 0.0655" quat="0.500048 -0.5 -0.5 -0.499952">
+        <inertial pos="0.003805 0.000386 0.100079" quat="0.69352 0.69352 -0.13795 0.13795" mass="0.02377" diaginertia="0.000214142 0.000185858 0.00011"/>
+        <joint name="Right_Hand_ring_spread" pos="0 0 0" axis="0 0 1" range="0 0.28833" actuatorfrcrange="-1000 1000"/>
+        <geom pos="0 0 -0.01321" quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="f30"/>
+        <body name="Right_Hand_j" quat="0.707141 0.707073 0 0">
+          <inertial pos="0.258283 -0.00154 0" quat="0.0178138 0.706882 -0.0178138 0.706882" mass="0.1377" diaginertia="0.00426 0.00411908 0.000540922"/>
+          <joint name="Right_Hand_Ring_Finger" pos="0 0 0" axis="0 0 1" range="0 0.98175" actuatorfrcrange="-1000 1000"/>
+          <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="f31"/>
+          <body name="Right_Hand_n" pos="0.05004 0 0">
+            <inertial pos="0.166851 -0.00362 0" quat="0.5 0.5 0.5 0.5" mass="0.04207" diaginertia="0.00047 0.0004 0.00019"/>
+            <joint name="Right_Hand_j12" pos="0 0 0" axis="0 0 1" range="0 1.334" actuatorfrcrange="-1000 1000"/>
+            <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="f32"/>
+            <body name="Right_Hand_r" pos="0.032 0 0">
+              <inertial pos="0.102676 0.000301 0" quat="0.468459 0.468459 0.529666 0.529666" mass="0.03229" diaginertia="0.000171231 0.00017 8.87689e-05"/>
+              <joint name="Right_Hand_j16" pos="0 0 0" axis="0 0 1" range="0 1.395" actuatorfrcrange="-1000 1000"/>
+              <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="f33"/>
+            </body>
           </body>
         </body>
       </body>
@@ -156,6 +160,7 @@
     <position name="Right_Hand_Middle_Finger_Proximal" ctrlrange="-3.141 3.141" kp="10" dampratio="1" joint="Right_Hand_Middle_Finger_Proximal"/>
     <position name="Right_Hand_Middle_Finger_Distal"   ctrlrange="-3.141 3.141" kp="10" dampratio="1" joint="Right_Hand_Middle_Finger_Distal"  />
     <position name="Right_Hand_j15"                    ctrlrange="-3.141 3.141" kp="10" dampratio="1" joint="Right_Hand_j15"                   />
+    <position name="Right_Hand_j5"                     ctrlrange="-3.141 3.141" kp="10" dampratio="1" joint="Right_Hand_j5"                   />
     <position name="Right_Hand_Finger_Spread"          ctrlrange="-3.141 3.141" kp="10" dampratio="1" joint="Right_Hand_Finger_Spread"         />
     <position name="Right_Hand_Pinky"                  ctrlrange="-3.141 3.141" kp="10" dampratio="1" joint="Right_Hand_Pinky"                 />
     <position name="Right_Hand_j13"                    ctrlrange="-3.141 3.141" kp="10" dampratio="1" joint="Right_Hand_j13"                   />

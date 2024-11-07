@@ -580,14 +580,14 @@
       <child link="${name}_e1" />
       <origin xyz="0 -0.01313 0" rpy="0 0 0" />
     </joint>
-    <!-- J5 JOINTS is set to fixed temporarily due to defective DH algo -->
-    <joint name="${name}_j5" type="fixed">
+
+    <joint name="${name}_j5" type="revolute">
       <parent link="${name}_e1"/>
       <child link="${name}_e2"/>
-      <!--limit effort="1000.0" lower="0.0" upper="0.98786" velocity="1"/-->
+      <limit effort="1000.0" lower="0.0" upper="0.98786" velocity="1"/>
       <origin xyz="${side*(0.01840)} 0.006 0.0375" rpy="0 0 0" />
-      <!--axis xyz="0 0 ${side*(1)}"/-->
-      <!--mimic joint="${name}_Thumb_Opposition" multiplier="1" offset="0"/-->
+      <axis xyz="0 0 ${side*(1)}"/>
+      <mimic joint="${name}_Thumb_Opposition" multiplier="1" offset="0"/>
     </joint>
 
     <joint name="${name}_f5" type="fixed">
