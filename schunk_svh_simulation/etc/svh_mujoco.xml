@@ -1,20 +1,28 @@
 <mujoco model="schunk_svh">
   <compiler angle="radian"/>
 
+  <visual>
+    <headlight diffuse="0.6 0.6 0.6" ambient="0.1 0.1 0.1" specular="0 0 0"/>
+    <rgba haze="0.15 0.25 0.35 1"/>
+    <global azimuth="120" elevation="-20"/>
+  </visual>
+
   <asset>
     <texture type="skybox" builtin="gradient" rgb1="0.9 0.9 0.9" rgb2="0.5 0.5 0.5" width="512" height="512"/>
-    <texture name="texplane" type="2d" builtin="checker" rgb1=".25 .25 .25" rgb2=".3 .3 .3" width="512" height="512" mark="cross" markrgb=".8 .8 .8"/>
-    <material name="matplane" reflectance="0.2" texture="texplane" texrepeat="1 1" texuniform="true"/>
-    <material name="joint_part1" rgba="0.525 0.713 0.662 1.0"/>
-    <material name="joint_part2" rgba="0.462 0.196 0.411 1.0"/>
-    <material name="base" rgba="0.956863 0.796078 0.631373 1.0"/>
-    <material name="tip" rgba="0.956 0.450 0.243 1.0"/>
-    <material name="link1" rgba="0.949 0.631 0.823 1.0"/>
-    <material name="link2" rgba="0.133 0.827 0.435 1.0"/>
-    <material name="link3" rgba="0.968 0.721 0.313 1.0"/>
-    <material name="link4" rgba="0.52549 0.529412 0.647059 1.0"/>
-    <material name="link5" rgba="0.478431 0.415686 0.662745 1.0"/>
-    <material name="link6" rgba="0.988 0.580 0.450 1.0"/>
+    <texture type="2d" name="groundplane" builtin="checker" mark="edge" rgb1="0.2 0.3 0.4" rgb2="0.1 0.2 0.3"
+      markrgb="0.8 0.8 0.8" width="300" height="300"/>
+    <material name="groundplane" texture="groundplane" texuniform="true" texrepeat="5 5" reflectance="0.2"/>
+
+    <material name="mat1" rgba="0.525 0.713 0.662 1.0"/>
+    <material name="mat2" rgba="0.462 0.196 0.411 1.0"/>
+    <material name="mat3" rgba="0.956863 0.796078 0.631373 1.0"/>
+    <material name="mat4" rgba="0.956 0.450 0.243 1.0"/>
+    <material name="mat5" rgba="0.949 0.631 0.823 1.0"/>
+    <material name="mat6" rgba="0.133 0.827 0.435 1.0"/>
+    <material name="mat7" rgba="0.968 0.721 0.313 1.0"/>
+    <material name="mat8" rgba="0.52549 0.529412 0.647059 1.0"/>
+    <material name="mat9" rgba="0.478431 0.415686 0.662745 1.0"/>
+    <material name="mat10" rgba="0.988 0.580 0.450 1.0"/>
 
     <mesh name="base10" file="base10.stl"/>
     <mesh name="h10" file="h10.stl"/>
@@ -42,6 +50,8 @@
   </asset>
 
   <worldbody>
+    <light pos="0 0 1.5" dir="0 0 -1" directional="true" castshadow="false"/>
+    <geom name="floor" pos="0 0 -0.05" size="0 0 0.05" type="plane" material="groundplane"/>
     <geom pos="0 0 -0.015" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="base10"/>
     <geom pos="0 0 0" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="h10"/>
     <geom pos="-1.27248e-06 -0.02634 0.110001" quat="0.500048 0.499952 -0.5 0.5" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="f20"/>
