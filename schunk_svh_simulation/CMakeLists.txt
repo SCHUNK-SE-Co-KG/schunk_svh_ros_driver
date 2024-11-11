@@ -109,7 +109,7 @@ install(
 )
 
 install(
-  DIRECTORY etc launch meshes
+  DIRECTORY etc launch meshes urdf
   DESTINATION share/${PROJECT_NAME}
 )
 

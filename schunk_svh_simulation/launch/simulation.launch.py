@@ -44,14 +44,8 @@ def generate_launch_description():
             PathJoinSubstitution([FindExecutable(name="xacro")]),
             " ",
             PathJoinSubstitution(
-                [FindPackageShare("schunk_svh_driver"), "urdf", "schunk_svh_driver.xacro"]
+                [FindPackageShare("schunk_svh_simulation"), "urdf", "schunk_svh_simulation.xacro"]
             ),
-            " ",
-            "control:=right_hand",
-            " ",
-            "plugin:=schunk_svh_simulation/Simulator",
-            " ",
-            "device_file:=unused",
             " ",
             "mujoco_model:=",
             PathJoinSubstitution(
