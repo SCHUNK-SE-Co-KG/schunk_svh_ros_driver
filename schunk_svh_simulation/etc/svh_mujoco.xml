@@ -7,22 +7,36 @@
     <global azimuth="120" elevation="-20"/>
   </visual>
 
+  <!-- Material classes -->
+  <default class="main">
+    <default class="turquoise">
+      <geom material="turquoise"/>
+    </default>
+    <default class="berry">
+      <geom material="berry"/>
+    </default>
+    <default class="orange">
+      <geom material="orange"/>
+    </default>
+    <default class="pink">
+      <geom material="pink"/>
+    </default>
+    <default class="yellow">
+      <geom material="yellow"/>
+    </default>
+  </default>
+
   <asset>
     <texture type="skybox" builtin="gradient" rgb1="0.9 0.9 0.9" rgb2="0.5 0.5 0.5" width="512" height="512"/>
     <texture type="2d" name="groundplane" builtin="checker" mark="edge" rgb1="0.2 0.3 0.4" rgb2="0.1 0.2 0.3"
       markrgb="0.8 0.8 0.8" width="300" height="300"/>
     <material name="groundplane" texture="groundplane" texuniform="true" texrepeat="5 5" reflectance="0.2"/>
 
-    <material name="mat1" rgba="0.525 0.713 0.662 1.0"/>
-    <material name="mat2" rgba="0.462 0.196 0.411 1.0"/>
-    <material name="mat3" rgba="0.956863 0.796078 0.631373 1.0"/>
-    <material name="mat4" rgba="0.956 0.450 0.243 1.0"/>
-    <material name="mat5" rgba="0.949 0.631 0.823 1.0"/>
-    <material name="mat6" rgba="0.133 0.827 0.435 1.0"/>
-    <material name="mat7" rgba="0.968 0.721 0.313 1.0"/>
-    <material name="mat8" rgba="0.52549 0.529412 0.647059 1.0"/>
-    <material name="mat9" rgba="0.478431 0.415686 0.662745 1.0"/>
-    <material name="mat10" rgba="0.988 0.580 0.450 1.0"/>
+    <material name="turquoise" rgba="0.325 0.513 0.562 1.0"/>
+    <material name="berry" rgba="0.462 0.196 0.411 1.0"/>
+    <material name="orange" rgba="0.956 0.450 0.243 1.0"/>
+    <material name="pink" rgba="0.478431 0.415686 0.662745 1.0"/>
+    <material name="yellow" rgba="0.868 0.621 0.213 1.0"/>
 
     <mesh name="base10" file="base10.stl"/>
     <mesh name="h10" file="h10.stl"/>
@@ -54,8 +68,8 @@
     <geom name="floor" pos="0 0 -0.05" size="0 0 0.05" type="plane" material="groundplane"/>
     <geom pos="0 0 -0.015" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="base10"/>
     <geom pos="0 0 0" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="h10"/>
-    <geom pos="-1.27248e-06 -0.02634 0.110001" quat="0.500048 0.499952 -0.5 0.5" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="f20"/>
-    <body name="Right_Hand_z" pos="-0.0169 0.01313 0" quat="0.700986 -0.0923056 0.0922868 0.701129">
+    <geom pos="-1.27248e-06 -0.02634 0.110001" quat="0.500048 0.499952 -0.5 0.5" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="f20" material="yellow"/>
+    <body name="Right_Hand_z" pos="-0.0169 0.01313 0" quat="0.700986 -0.0923056 0.0922868 0.701129" childclass="turquoise">
       <inertial pos="0 0.00178276 0.162822" quat="0.70685 0.0190682 -0.0190682 0.70685" mass="0.0839" diaginertia="0.00280708 0.00218508 0.002108"/>
       <joint name="Right_Hand_Thumb_Opposition" pos="0 0 0" axis="0 0 -1" range="0 0.9879" actuatorfrcrange="-1000 1000"/>
       <geom pos="0 0 0.02442" quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="d10"/>
@@ -75,7 +89,7 @@
         </body>
       </body>
     </body>
-    <body name="Right_Hand_virtual_l" pos="-0.025 -0.01313 0.11" quat="0.500048 0.499952 -0.5 0.5">
+    <body name="Right_Hand_virtual_l" pos="-0.025 -0.01313 0.11" quat="0.500048 0.499952 -0.5 0.5" childclass="berry">
       <inertial pos="0.003634 0.000206 -0.09885" quat="0.69352 0.69352 0.13795 -0.13795" mass="0.02383" diaginertia="0.000214142 0.000185858 0.00011"/>
       <joint name="Right_Hand_index_spread" pos="0 0 0" axis="0 0 1" range="0 0.28833" actuatorfrcrange="-1000 1000"/>
       <geom pos="0 0 0.01321" quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="f10"/>
@@ -95,7 +109,7 @@
         </body>
       </body>
     </body>
-    <body name="Right_Hand_k" pos="0 -0.01313 0.11" quat="0.707107 -3.40567e-05 -0.707107 3.40567e-05">
+    <body name="Right_Hand_k" pos="0 -0.01313 0.11" quat="0.707107 -3.40567e-05 -0.707107 3.40567e-05" childclass="yellow">
       <inertial pos="0.271122 0.00413 0" quat="-0.003335 0.707099 0.003335 0.707099" mass="0.13474" diaginertia="0.0038 0.00370028 0.000519717"/>
       <joint name="Right_Hand_Middle_Finger_Proximal" pos="0 0 0" axis="0 0 1" range="0 0.79849" actuatorfrcrange="-1000 1000"/>
       <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="f21"/>
@@ -114,7 +128,7 @@
       <inertial pos="0.136222 -0.0359242 0.30372" quat="0.942326 0.0996959 0.0767266 -0.310155" mass="0.49184" diaginertia="0.0261995 0.0233028 0.0113749"/>
       <joint name="Right_Hand_j5" pos="0 0 0" axis="0 0 1" range="0 0.98786" actuatorfrcrange="-1000 1000"/>
       <geom pos="-0.0007 0 -0.01002" quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="h11"/>
-      <body name="Right_Hand_virtual_i" pos="0.025355 -0.006 0.056" quat="0.500048 -0.5 -0.5 -0.499952">
+      <body name="Right_Hand_virtual_i" pos="0.025355 -0.006 0.056" quat="0.500048 -0.5 -0.5 -0.499952" childclass="orange">
         <inertial pos="0.003653 4.4e-05 0.100085" quat="0.69352 0.69352 -0.13795 0.13795" mass="0.02377" diaginertia="0.000214142 0.000185858 0.00011"/>
         <joint name="Right_Hand_Finger_Spread" pos="0 0 0" axis="0 0 1" range="0 0.5829" actuatorfrcrange="-1000 1000"/>
         <geom pos="0 0 -0.01321" quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="f40"/>
@@ -134,7 +148,7 @@
           </body>
         </body>
       </body>
-      <body name="Right_Hand_virtual_j" pos="0.003855 -0.006 0.0655" quat="0.500048 -0.5 -0.5 -0.499952">
+      <body name="Right_Hand_virtual_j" pos="0.003855 -0.006 0.0655" quat="0.500048 -0.5 -0.5 -0.499952" childclass="pink">
         <inertial pos="0.003805 0.000386 0.100079" quat="0.69352 0.69352 -0.13795 0.13795" mass="0.02377" diaginertia="0.000214142 0.000185858 0.00011"/>
         <joint name="Right_Hand_ring_spread" pos="0 0 0" axis="0 0 1" range="0 0.28833" actuatorfrcrange="-1000 1000"/>
         <geom pos="0 0 -0.01321" quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="f30"/>
