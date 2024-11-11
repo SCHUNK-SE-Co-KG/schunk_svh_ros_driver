@@ -1,16 +1,12 @@
 #!/usr/bin/env python3
 import unittest
 
-import launch
-import launch.actions
-import launch_testing.actions
 from launch import LaunchDescription
 from launch.actions import IncludeLaunchDescription, TimerAction
 from launch.substitutions import PathJoinSubstitution
 from launch_ros.substitutions import FindPackageShare
+import launch_pytest
 
-import os
-import time
 import rclpy
 from rclpy.node import Node
 from controller_manager_msgs.srv import ListControllers
@@ -25,7 +21,7 @@ def generate_test_description():
         )
     )
     until_ready = 10.0 # sec
-    return LaunchDescription([setup, TimerAction(period=until_ready, actions=[launch_testing.actions.ReadyToTest()])])
+    return LaunchDescription([setup, TimerAction(period=until_ready, actions=[launch_pytest.actions.ReadyToTest()])])
 
 
 class IntegrationTest(unittest.TestCase):
