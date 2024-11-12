@@ -41,7 +41,7 @@ rosdep install --ignore-src --from-paths ./ -y -r
 You can then navigate back (`cd ..`) and build everything in the root of your ROS2 workspace with
 
 ```bash
-colcon build
+colcon build  --packages-ignore schunk_svh_simulation
 ```
 
 ## Connection to the SVH
@@ -69,6 +69,9 @@ You can send trajectory goals to its action server for controlling groups of joi
 
 An easy example is provided with the `schunk_svh_driver/scripts/example.py` script.
 Call that in a sourced terminal and you can move individual fingers with sliders in a minimalistic GUI.
+
+## Simulation
+There's a _MuJoCo_-based [simulation environment](schunk_svh_simulation) for controller development and testing.
 
 ## Setup on a Raspberry Pi
 Here's a [step-by-step tutorial](doc/raspberry_pi.md) of how to setup the Schunk SVH ROS2 driver on a Raspberry Pi 4.
