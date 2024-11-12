@@ -1,3 +1,7 @@
+<div align="center">
+  <img src="doc/svh_simulation.png" alt="Schunk SVH" style="width: 50%;"/>
+</div>
+
 # SCHUNK SVH Simulation
 This package provides a simulated SVH for controller development and testing.
 
@@ -36,6 +40,21 @@ ros2 launch schunk_svh_simulation simulation.launch.py
 ```
 
 This will start a simulated world with the SCHUNK SVH.
+
+The simulated SVH exposes the same `hardware_interfaces` like a real right hand does.
+For instance, you can use a `joint_trajectory_controller` to move each joint for easy testing.
+
+```bash
+source install/setup.bash
+rqt --clear-config
+```
+Inside `rqt`, navigate to `Plugins`, `Robot Tools`, `joint trajectory controller`.
+You might need to install the `rqt_joint_trajectory_controller` if that's not part of your default rqt installation:
+```bash
+sudo apt-get install ros-<version>-rqt-joint-trajectory-controller
+```
+Select the appropriate `/controller_manager` and `right_hand` as controller.
+You can now control each of the SVH's joints with sliders.
 
 
 ## Interaction with the simulator
