@@ -1,6 +1,6 @@
 
 from launch import LaunchDescription
-from launch.actions import IncludeLaunchDescription
+from launch.actions import IncludeLaunchDescription, TimerAction
 from launch.substitutions import PathJoinSubstitution
 from launch_ros.substitutions import FindPackageShare
 import launch_pytest
@@ -32,3 +32,14 @@ def launch_simulator():
         ),
     )
     return LaunchDescription([setup, launch_pytest.actions.ReadyToTest()])
+
+
+@launch_pytest.fixture(scope="module")
+def launch_driver():
+    setup = IncludeLaunchDescription(
+        PathJoinSubstitution(
+            [FindPackageShare("schunk_svh_driver"), "launch", "schunk_svh_driver.launch.py"]
+        )
+    )
+    until_ready = 10.0 # sec
+    return LaunchDescription([setup, TimerAction(period=until_ready, actions=[launch_pytest.actions.ReadyToTest()])])
