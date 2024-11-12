@@ -4,6 +4,9 @@
         <xacro:include filename="$(find schunk_svh_description)/urdf/svh.urdf.xacro" />
 
         <link name="base_link" />
+        <xacro:svh parent="base_link" name="Right_Hand" side="1">
+                <origin xyz="0 0 0"  rpy="0 0 0" />
+        </xacro:svh>
 
         <!-- Individual joint configuration -->
         <xacro:macro name="joint_ros2_control" params="name">
