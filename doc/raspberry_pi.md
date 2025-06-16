@@ -37,7 +37,7 @@ In this tutorial, we assume that you do not have a micro HDMI cable for the *RP4
 3. In the GUI, click on `CHOOSE STORAGE` and select the *RP4*'s SD card.
 
 4. Click on `CHOOSE OS` and select `Other general-purpose OS` -> `Ubuntu` -> `Ubuntu Server 20.04.5 LTS (64Bit)`.
-   We use `Ubuntu 20.04` because that gives us native support for ROS Noetic *and* ROS2 Foxy.
+   We use `Ubuntu 20.04` because that gives us native support for ROS Noetic *and* ROS2 humble.
    Note that there's no special Ubuntu *Desktop* image available for the RP4 as discussed [here](https://askubuntu.com/questions/1348560). Instead, the process is to install the *Server* version
    and later install `ubuntu-desktop` on top if required. We'll be using only the Ubuntu *Server* in this tutorial.
 
@@ -106,12 +106,12 @@ Luckily, that's all handled automatically by recent Ubuntu versions in a simple 
 
 
 ## Install ROS2 on the Raspberry Pi 4 <a name="install-ros2"></a>
-1. Back on the *RP4* in a terminal, install ROS2 according to the [official documentation](https://docs.ros.org/en/foxy/Installation/Ubuntu-Install-Debians.html)
+1. Back on the *RP4* in a terminal, install ROS2 according to the [official documentation](https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debians.html)
    and choose the `Desktop Install (Recommended)` version.
 
 2. When the installation is finished, source the ROS2 installation with
    ```bash
-   source /opt/ros/foxy/setup.bash
+   source /opt/ros/humble/setup.bash
    ```
 3. In the same terminal, install `rosdep` with
    ```bash
@@ -136,12 +136,12 @@ Luckily, that's all handled automatically by recent Ubuntu versions in a simple 
 ## Install the Schunk SVH ROS2 driver <a name="install-schunk-driver"></a>
 Setup a new workspace with
 ```bash
-mkdir -p $HOME/ros2_foxy_ws/src && cd "$_"
+mkdir -p $HOME/ros2_humble_ws/src && cd "$_"
 ```
-and follow the installation instructions from [here](https://github.com/fzi-forschungszentrum-informatik/schunk_svh_ros_driver/tree/ros2-foxy#installation).
+and follow the installation instructions from [here](https://github.com/SCHUNK-SE-Co-KG/schunk_svh_ros_driver#installation).
 
 ## Test the Schunk SVH <a name="test-schunk-driver"></a>
-In this tutorial, we'll control the hand via a script on the *laptop* and assume that you have both ROS2 Foxy *and* the Schunk SVH driver installed here as well.
+In this tutorial, we'll control the hand via a script on the *laptop* and assume that you have both ROS2 humble *and* the Schunk SVH driver installed here as well.
 As an alternative, you could, of course, control the hand directly on the *RP4*.
 
 1. On the *RP4*, open a terminal and set your `ROS_IP` with
@@ -151,12 +151,12 @@ As an alternative, you could, of course, control the hand directly on the *RP4*.
    Make sure to use the `RP4`'s IP address as it appeared on the network from above.
    This environment variable is important for ROS2 so that messages coming from the *RP4* are received correctly.
 
-2. In the same terminal, follow the getting started steps from [here](https://github.com/fzi-forschungszentrum-informatik/schunk_svh_ros_driver/tree/ros2-foxy#getting-started) for starting the driver.
+2. In the same terminal, follow the getting started steps from [here](https://github.com/SCHUNK-SE-Co-KG/schunk_svh_ros_driver#getting-started) for starting the driver.
 
 3. The Schunk SVH driver now runs on the *RP4*.
    On the *laptop*, open a terminal, navigate to your ROS2 workspace and
    ```bash
-   source /opt/ros/foxy/setup.bash
+   source /opt/ros/humble/setup.bash
    source install/local_setup.bash
    export ROS_MASTER_URI=http://10.42.0.166:11311  # the RP4's IP
    export ROS_IP=10.42.0.1  # the laptop's IP
