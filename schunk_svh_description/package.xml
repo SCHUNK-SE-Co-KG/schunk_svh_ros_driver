@@ -6,7 +6,7 @@ schematypens="http://www.w3.org/2001/XMLSchema"?>
         <name>schunk_svh_description</name>
         <version>2.1.1</version>
         <description>Kinematic and visual descriptions of the Schunk SVH</description>
-        <maintainer email="scherzin@fzi.de">Stefan Scherzinger</maintainer>
+        <maintainer email="stefan.scherzinger@de.schunk.com">Stefan Scherzinger</maintainer>
         <maintainer email="Harry.Arnst@de.schunk.com">Harry Arnst</maintainer>
         <license>GPL-3.0-or-later</license>
 
