@@ -113,6 +113,7 @@ def generate_launch_description():
     # Inactive controllers
     inactive_list = [
         "left_hand",
+        "streaming_controller",
     ]
     inactive_spawners = [
         controller_spawner(controller, "--inactive") for controller in inactive_list
