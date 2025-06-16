@@ -138,7 +138,7 @@ Setup a new workspace with
 ```bash
 mkdir -p $HOME/ros2_foxy_ws/src && cd "$_"
 ```
-and follow the installation instructions from [here](https://github.com/fzi-forschungszentrum-informatik/schunk_svh_ros_driver/tree/ros2-foxy#installation).
+and follow the installation instructions from [here](https://github.com/SCHUNK-SE-Co-KG/schunk_svh_ros_driver#installation).
 
 ## Test the Schunk SVH <a name="test-schunk-driver"></a>
 In this tutorial, we'll control the hand via a script on the *laptop* and assume that you have both ROS2 Foxy *and* the Schunk SVH driver installed here as well.
@@ -151,7 +151,7 @@ As an alternative, you could, of course, control the hand directly on the *RP4*.
    Make sure to use the `RP4`'s IP address as it appeared on the network from above.
    This environment variable is important for ROS2 so that messages coming from the *RP4* are received correctly.
 
-2. In the same terminal, follow the getting started steps from [here](https://github.com/fzi-forschungszentrum-informatik/schunk_svh_ros_driver/tree/ros2-foxy#getting-started) for starting the driver.
+2. In the same terminal, follow the getting started steps from [here](https://github.com/SCHUNK-SE-Co-KG/schunk_svh_ros_driver#getting-started) for starting the driver.
 
 3. The Schunk SVH driver now runs on the *RP4*.
    On the *laptop*, open a terminal, navigate to your ROS2 workspace and
