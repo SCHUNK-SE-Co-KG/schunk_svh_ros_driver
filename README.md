@@ -28,6 +28,26 @@ It completes the [standalone
 library](https://github.com/SCHUNK-SE-Co-KG/schunk_svh_library)
 with everything that you need to operate the five finger hand in a ROS2 context.
 
+## Communication
+The Hand is controlled vie RS485 (Full Duplex)  
+•	Baudrate: 921600  
+•	Parity: None  
+•	Data Bytes: 8  
+•	Stop Bits: 1  
+•	All packets are sent with little endian encoding.
+
+To connect the hand to the control pc it is recommended to use the provided RS485 / USB serial adapter and the provided connection cable.   
+<img src="resources/images/PinLayout-JST.png" alt="Pin-Layout on the manual tool changer system FWS115" style="width: 50%;"/>
+
+JST Pinout  
+| JST-Pin | Standard Cable Colour | Function |   
+|------------|--------------|-----------|  
+|1           | Yellow       | RXD-|  
+|2           | Brown        | RXD+|
+|3           | Green        | TXD+|
+|4           | White        | TXD-|  
+
+
 
 ## Installation
 Inside the `src` folder of your ROS2 workspace, get the relevant packages
@@ -69,6 +89,14 @@ You can send trajectory goals to its action server for controlling groups of joi
 
 An easy example is provided with the `schunk_svh_driver/scripts/example.py` script.
 Call that in a sourced terminal and you can move individual fingers with sliders in a minimalistic GUI.
+
+## Controller parameter and joint specific hardware configuration
+Controller parameters like the control frequency as well as joint specific hardware paramters like homing current can be set in configuration files located in [cfg](/schunk_svh_driver/cfg/) and [urdf](/schunk_svh_driver/urdf/parameters/).  
+[Open documentation](/doc/launch_parameters.md)
+
+## Topics, Services and Actions
+API reference for driver interactions.  
+[Open documentation](doc/ros2_interfaces.md)
 
 ## Simulation
 There's a _MuJoCo_-based [simulation environment](schunk_svh_simulation) for controller development and testing.
