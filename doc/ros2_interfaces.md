@@ -162,4 +162,4 @@ ros2 control list_controllers
 - The driver uses the `joint_trajectory_controller` which supports partial joint goals (`allow_partial_joints_goal: True`), allowing control of individual fingers without specifying all joints.
 - The controller update rate is 125 Hz. The update rate can be configured in `schunk_svh_driver.yaml`.
 - Joint efforts are estimated from motor currents using internal conversion factors.
-- The `/svh/initialized` topic is nor published continuously but once during initialization.
+- The `/svh/initialized` topic is not published continuously but once during initialization.

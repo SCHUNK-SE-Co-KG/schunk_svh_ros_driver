@@ -29,7 +29,7 @@ library](https://github.com/SCHUNK-SE-Co-KG/schunk_svh_library)
 with everything that you need to operate the five finger hand in a ROS2 context.
 
 ## Communication
-The Hand is controlled vie RS485 (Full Duplex)  
+The Hand is controlled via RS485 (Full Duplex)  
 •	Baudrate: 921600  
 •	Parity: None  
 •	Data Bytes: 8  
