@@ -1,99 +1,99 @@
 {
-  "timestamp": "2026-02-18T13:25:07Z",
+  "timestamp": "2026-02-18T13:27:49Z",
   "repository": "SCHUNK-SE-Co-KG/schunk_svh_ros_driver",
   "dependencies_scanned": 13,
   "vulnerabilities_found": 0,
   "high_severity_count": 0,
   "dependencies": [
     {
-      "name": "hardware_interface",
-      "version": "",
-      "ecosystem": "ROS",
-      "source": "schunk_svh_driver\\package.xml",
-      "upstream_repo": "ros-controls/ros2_control"
-    },
-    {
-      "name": "pluginlib",
-      "version": "",
-      "ecosystem": "ROS",
-      "source": "schunk_svh_driver\\package.xml",
-      "upstream_repo": "ros/pluginlib"
-    },
-    {
-      "name": "rclcpp",
-      "version": "",
-      "ecosystem": "ROS",
-      "source": "schunk_svh_driver\\package.xml",
-      "upstream_repo": "ros2/rclcpp"
-    },
-    {
-      "name": "controller_manager",
-      "version": "",
-      "ecosystem": "ROS",
-      "source": "schunk_svh_driver\\package.xml",
-      "upstream_repo": "ros-controls/ros2_control"
-    },
-    {
-      "name": "joint_state_broadcaster",
-      "version": "",
-      "ecosystem": "ROS",
-      "source": "schunk_svh_driver\\package.xml",
-      "upstream_repo": "ros-controls/ros2_controllers"
-    },
-    {
-      "name": "joint_trajectory_controller",
-      "version": "",
-      "ecosystem": "ROS",
-      "source": "schunk_svh_driver\\package.xml",
-      "upstream_repo": "ros-controls/ros2_controllers"
-    },
-    {
       "name": "launch",
       "version": "",
       "ecosystem": "ROS",
-      "source": "schunk_svh_driver\\package.xml",
+      "source": "schunk_svh_tests/package.xml",
       "upstream_repo": "ros2/launch"
     },
     {
       "name": "launch_ros",
       "version": "",
       "ecosystem": "ROS",
-      "source": "schunk_svh_driver\\package.xml",
+      "source": "schunk_svh_tests/package.xml",
       "upstream_repo": "ros2/launch_ros"
+    },
+    {
+      "name": "hardware_interface",
+      "version": "",
+      "ecosystem": "ROS",
+      "source": "schunk_svh_driver/package.xml",
+      "upstream_repo": "ros-controls/ros2_control"
+    },
+    {
+      "name": "pluginlib",
+      "version": "",
+      "ecosystem": "ROS",
+      "source": "schunk_svh_driver/package.xml",
+      "upstream_repo": "ros/pluginlib"
+    },
+    {
+      "name": "rclcpp",
+      "version": "",
+      "ecosystem": "ROS",
+      "source": "schunk_svh_driver/package.xml",
+      "upstream_repo": "ros2/rclcpp"
+    },
+    {
+      "name": "controller_manager",
+      "version": "",
+      "ecosystem": "ROS",
+      "source": "schunk_svh_driver/package.xml",
+      "upstream_repo": "ros-controls/ros2_control"
+    },
+    {
+      "name": "joint_state_broadcaster",
+      "version": "",
+      "ecosystem": "ROS",
+      "source": "schunk_svh_driver/package.xml",
+      "upstream_repo": "ros-controls/ros2_controllers"
+    },
+    {
+      "name": "joint_trajectory_controller",
+      "version": "",
+      "ecosystem": "ROS",
+      "source": "schunk_svh_driver/package.xml",
+      "upstream_repo": "ros-controls/ros2_controllers"
     },
     {
       "name": "robot_state_publisher",
       "version": "",
       "ecosystem": "ROS",
-      "source": "schunk_svh_driver\\package.xml",
+      "source": "schunk_svh_driver/package.xml",
       "upstream_repo": "ros/robot_state_publisher"
     },
     {
       "name": "xacro",
       "version": "",
       "ecosystem": "ROS",
-      "source": "schunk_svh_driver\\package.xml",
+      "source": "schunk_svh_driver/package.xml",
       "upstream_repo": "ros/xacro"
     },
     {
       "name": "rviz2",
       "version": "",
       "ecosystem": "ROS",
-      "source": "schunk_svh_simulation\\package.xml",
+      "source": "schunk_svh_simulation/package.xml",
       "upstream_repo": "ros2/rviz"
     },
     {
       "name": "glew",
       "version": "",
       "ecosystem": "Debian",
-      "source": "schunk_svh_simulation\\CMakeLists.txt",
+      "source": "schunk_svh_simulation/CMakeLists.txt",
       "upstream_repo": ""
     },
     {
       "name": "glfw3",
       "version": "",
       "ecosystem": "Debian",
-      "source": "schunk_svh_simulation\\CMakeLists.txt",
+      "source": "schunk_svh_simulation/CMakeLists.txt",
       "upstream_repo": ""
     }
   ],
