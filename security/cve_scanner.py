@@ -338,50 +338,78 @@ def extract_cmake_deps(root_dir: Path) -> list[Dependency]:
 
 
 def deduplicate_deps(deps: list[Dependency]) -> list[Dependency]:
-    """Entfernt doppelte Abhängigkeiten (gleicher Name + Ecosystem)."""
+    """Remove duplicate dependencies (same name + ecosystem + version)."""
     seen: set[str] = set()
     unique: list[Dependency] = []
     for d in deps:
-        key = f"{d.ecosystem}:{d.name}"
+        key = f"{d.ecosystem}:{d.name}:{d.version}"
         if key not in seen:
             seen.add(key)
             unique.append(d)
     return unique
 
 
-# ── GitHub Advisory Scan für ROS upstream repos ──────────────────────
+# ── GitHub Advisory scan for ROS upstream repos ──────────────────────
 def scan_github_advisories(dep: Dependency) -> list[dict]:
-    """Scannt GitHub Advisory Database für ein bestimmtes Repository."""
+    """Scan GitHub Advisory Database for a specific repository.
+
+    Queries multiple ecosystems since ROS packages may have advisories
+    filed under different ecosystems (pip, Go, etc.).
+    Falls back to the repository's own security advisories endpoint.
+    """
     if not dep.upstream_repo:
         return []
 
-    url = "https://api.github.com/advisories"
-    try:
-        resp = requests.get(url, timeout=15, params={
-            "ecosystem": "pip",  # Trick: GitHub API braucht ein Ecosystem
-            "affects": dep.upstream_repo,
-        }, headers={
-            "Accept": "application/vnd.github+json",
-            "X-GitHub-Api-Version": "2022-11-28",
-        })
-        if resp.status_code == 200:
-            return resp.json()
-    except requests.RequestException:
-        pass
+    all_advisories: list[dict] = []
+    seen_ids: set[str] = set()
 
-    # Alternative: Direkt über Repository Security Advisories
+    # Try global advisories endpoint with different ecosystems
+    # (ROS packages are not a recognized ecosystem in GitHub Advisory DB)
+    url = "https://api.github.com/advisories"
+    for ecosystem in ("pip", "go", "rust", "npm"):
+        try:
+            resp = requests.get(
+                url,
+                timeout=15,
+                params={
+                    "ecosystem": ecosystem,
+                    "affects": dep.upstream_repo,
+                },
+                headers={
+                    "Accept": "application/vnd.github+json",
+                    "X-GitHub-Api-Version": "2022-11-28",
+                },
+            )
+            if resp.status_code == 200:
+                for adv in resp.json():
+                    adv_id = adv.get("ghsa_id", "")
+                    if adv_id and adv_id not in seen_ids:
+                        seen_ids.add(adv_id)
+                        all_advisories.append(adv)
+        except requests.RequestException:
+            pass
+
+    # Also check repository-specific security advisories
     repo_url = f"https://api.github.com/repos/{dep.upstream_repo}/security-advisories"
     try:
-        resp = requests.get(repo_url, timeout=15, headers={
-            "Accept": "application/vnd.github+json",
-            "X-GitHub-Api-Version": "2022-11-28",
-        })
+        resp = requests.get(
+            repo_url,
+            timeout=15,
+            headers={
+                "Accept": "application/vnd.github+json",
+                "X-GitHub-Api-Version": "2022-11-28",
+            },
+        )
         if resp.status_code == 200:
-            return resp.json()
+            for adv in resp.json():
+                adv_id = adv.get("ghsa_id", "")
+                if adv_id and adv_id not in seen_ids:
+                    seen_ids.add(adv_id)
+                    all_advisories.append(adv)
     except requests.RequestException:
         pass
 
-    return []
+    return all_advisories
 
 
 # ── OSV-API-Abfragen ────────────────────────────────────────────────
