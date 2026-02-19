@@ -1,6 +1,6 @@
 # CVE-Scan Report – schunk_svh_ros_driver
 
-**Scan-Zeitpunkt:** 2026-02-18T13:29:41Z  
+**Scan-Zeitpunkt:** 2026-02-19T06:17:20Z  
 **Repository:** SCHUNK-SE-Co-KG/schunk_svh_ros_driver  
 **Abhängigkeiten geprüft:** 13  
 **Schwachstellen gefunden:** 0
