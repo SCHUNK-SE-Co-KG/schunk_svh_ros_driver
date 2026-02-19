@@ -338,11 +338,11 @@ def extract_cmake_deps(root_dir: Path) -> list[Dependency]:
 
 
 def deduplicate_deps(deps: list[Dependency]) -> list[Dependency]:
-    """Entfernt doppelte Abhängigkeiten (gleicher Name + Ecosystem)."""
+    """Entfernt doppelte Abhängigkeiten (gleicher Name + Ecosystem + Version)."""
     seen: set[str] = set()
     unique: list[Dependency] = []
     for d in deps:
-        key = f"{d.ecosystem}:{d.name}"
+        key = f"{d.ecosystem}:{d.name}:{d.version}"
         if key not in seen:
             seen.add(key)
             unique.append(d)
@@ -351,25 +351,44 @@ def deduplicate_deps(deps: list[Dependency]) -> list[Dependency]:
 
 # ── GitHub Advisory Scan für ROS upstream repos ──────────────────────
 def scan_github_advisories(dep: Dependency) -> list[dict]:
-    """Scannt GitHub Advisory Database für ein bestimmtes Repository."""
+    """Scannt GitHub Advisory Database für ein bestimmtes Repository.
+
+    Fragt mehrere Ecosystems ab, da ROS-Pakete Advisories unter
+    verschiedenen Ecosystems haben können (pip, Go, Rust, npm).
+    Dedupliziert Ergebnisse anhand der GHSA-ID.
+    """
     if not dep.upstream_repo:
         return []
 
-    url = "https://api.github.com/advisories"
-    try:
-        resp = requests.get(url, timeout=15, params={
-            "ecosystem": "pip",  # Trick: GitHub API braucht ein Ecosystem
-            "affects": dep.upstream_repo,
-        }, headers={
-            "Accept": "application/vnd.github+json",
-            "X-GitHub-Api-Version": "2022-11-28",
-        })
-        if resp.status_code == 200:
-            return resp.json()
-    except requests.RequestException:
-        pass
+    all_advisories: list[dict] = []
+    seen_ids: set[str] = set()
 
-    # Alternative: Direkt über Repository Security Advisories
+    # Globale Advisories mit verschiedenen Ecosystems abfragen
+    url = "https://api.github.com/advisories"
+    for ecosystem in ("pip", "go", "rust", "npm"):
+        try:
+            resp = requests.get(
+                url,
+                timeout=15,
+                params={
+                    "ecosystem": ecosystem,
+                    "affects": dep.upstream_repo,
+                },
+                headers={
+                    "Accept": "application/vnd.github+json",
+                    "X-GitHub-Api-Version": "2022-11-28",
+                },
+            )
+            if resp.status_code == 200:
+                for adv in resp.json():
+                    adv_id = adv.get("ghsa_id", "")
+                    if adv_id and adv_id not in seen_ids:
+                        seen_ids.add(adv_id)
+                        all_advisories.append(adv)
+        except requests.RequestException:
+            pass
+
+    # Fallback: Repository-spezifische Security Advisories
     repo_url = f"https://api.github.com/repos/{dep.upstream_repo}/security-advisories"
     try:
         resp = requests.get(repo_url, timeout=15, headers={
@@ -377,11 +396,15 @@ def scan_github_advisories(dep: Dependency) -> list[dict]:
             "X-GitHub-Api-Version": "2022-11-28",
         })
         if resp.status_code == 200:
-            return resp.json()
+            for adv in resp.json():
+                adv_id = adv.get("ghsa_id", "")
+                if adv_id and adv_id not in seen_ids:
+                    seen_ids.add(adv_id)
+                    all_advisories.append(adv)
     except requests.RequestException:
         pass
 
-    return []
+    return all_advisories
 
 
 # ── OSV-API-Abfragen ────────────────────────────────────────────────
@@ -595,10 +618,10 @@ def generate_markdown_report(result: ScanResult) -> str:
     lines: list[str] = []
     lines.append("# CVE-Scan Report – schunk_svh_ros_driver")
     lines.append("")
-    lines.append(f"**Scan-Zeitpunkt:** {result.timestamp}  ")
-    lines.append(f"**Repository:** {result.repository}  ")
+    lines.append(f"**Scan-Zeitpunkt:** {result.timestamp}")
+    lines.append(f"**Repository:** {result.repository}")
     lines.append(
-        f"**Abhängigkeiten geprüft:** {result.dependencies_scanned}  "
+        f"**Abhängigkeiten geprüft:** {result.dependencies_scanned}"
     )
     lines.append(
         f"**Schwachstellen gefunden:** {result.vulnerabilities_found}"
@@ -725,7 +748,7 @@ def save_reports(result: ScanResult, report_dir: Path) -> tuple[Path, Path]:
     md_path = report_dir / "cve_report.md"
 
     json_path.write_text(
-        json.dumps(asdict(result), indent=2, ensure_ascii=False),
+        json.dumps(asdict(result), indent=2, ensure_ascii=False) + "\n",
         encoding="utf-8",
     )
     md_path.write_text(generate_markdown_report(result), encoding="utf-8")
