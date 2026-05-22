@@ -36,14 +36,14 @@ The Hand is controlled via RS485 (Full Duplex)
 •	Stop Bits: 1  
 •	All packets are sent with little endian encoding.
 
-To connect the hand to the control pc it is recommended to use the provided RS485 / USB serial adapter and the provided connection cable.   
+To connect the hand to the control PC it is recommended to use the provided RS485 / USB serial adapter and the provided connection cable.   
 <img src="resources/images/PinLayout-JST.png" alt="Pin-Layout on the manual tool changer system FWS115" style="width: 50%;"/>
 
 JST Pinout  
 | JST-Pin | Standard Cable Colour | Function |   
 |------------|--------------|-----------|  
-|1           | Yellow       | RXD-|  
-|2           | Brown        | RXD+|
+|1           | Yellow       | RXD+|  
+|2           | Brown        | RXD-|
 |3           | Green        | TXD+|
 |4           | White        | TXD-|  
 
