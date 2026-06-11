@@ -1,10 +1,24 @@
 {
-  "timestamp": "2026-06-10T07:18:45Z",
+  "timestamp": "2026-06-11T07:29:16Z",
   "repository": "SCHUNK-SE-Co-KG/schunk_svh_ros_driver",
   "dependencies_scanned": 13,
   "vulnerabilities_found": 0,
   "high_severity_count": 0,
   "dependencies": [
+    {
+      "name": "launch",
+      "version": "",
+      "ecosystem": "ROS",
+      "source": "schunk_svh_tests/package.xml",
+      "upstream_repo": "ros2/launch"
+    },
+    {
+      "name": "launch_ros",
+      "version": "",
+      "ecosystem": "ROS",
+      "source": "schunk_svh_tests/package.xml",
+      "upstream_repo": "ros2/launch_ros"
+    },
     {
       "name": "hardware_interface",
       "version": "",
@@ -46,20 +60,6 @@
       "ecosystem": "ROS",
       "source": "schunk_svh_simulation/package.xml",
       "upstream_repo": "ros-controls/ros2_controllers"
-    },
-    {
-      "name": "launch",
-      "version": "",
-      "ecosystem": "ROS",
-      "source": "schunk_svh_simulation/package.xml",
-      "upstream_repo": "ros2/launch"
-    },
-    {
-      "name": "launch_ros",
-      "version": "",
-      "ecosystem": "ROS",
-      "source": "schunk_svh_simulation/package.xml",
-      "upstream_repo": "ros2/launch_ros"
     },
     {
       "name": "rviz2",
