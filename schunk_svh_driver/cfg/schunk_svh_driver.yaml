@@ -11,6 +11,8 @@ controller_manager:
     right_hand:
       type: joint_trajectory_controller/JointTrajectoryController
 
+    streaming_controller:
+      type: position_controllers/JointGroupPositionController
 
 left_hand:
   ros__parameters:
@@ -49,3 +51,16 @@ right_hand:
     state_interfaces:
       - position
       - velocity
+
+streaming_controller:
+  ros__parameters:
+    joints:
+      - Right_Hand_Thumb_Flexion
+      - Right_Hand_Thumb_Opposition
+      - Right_Hand_Index_Finger_Distal
+      - Right_Hand_Index_Finger_Proximal
+      - Right_Hand_Middle_Finger_Distal
+      - Right_Hand_Middle_Finger_Proximal
+      - Right_Hand_Ring_Finger
+      - Right_Hand_Pinky
+      - Right_Hand_Finger_Spread
