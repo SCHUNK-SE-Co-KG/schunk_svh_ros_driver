@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-10-20T06:01:07Z",
+  "timestamp": "2026-10-21T06:00:35Z",
   "repository": "SCHUNK-SE-Co-KG/schunk_svh_ros_driver",
   "dependencies_scanned": 13,
   "vulnerabilities_found": 0,
@@ -9,71 +9,57 @@
       "name": "hardware_interface",
       "version": "",
       "ecosystem": "ROS",
-      "source": "schunk_svh_simulation/package.xml",
+      "source": "schunk_svh_driver/package.xml",
       "upstream_repo": "ros-controls/ros2_control"
     },
     {
       "name": "pluginlib",
       "version": "",
       "ecosystem": "ROS",
-      "source": "schunk_svh_simulation/package.xml",
+      "source": "schunk_svh_driver/package.xml",
       "upstream_repo": "ros/pluginlib"
     },
     {
       "name": "rclcpp",
       "version": "",
       "ecosystem": "ROS",
-      "source": "schunk_svh_simulation/package.xml",
+      "source": "schunk_svh_driver/package.xml",
       "upstream_repo": "ros2/rclcpp"
     },
     {
       "name": "controller_manager",
       "version": "",
       "ecosystem": "ROS",
-      "source": "schunk_svh_simulation/package.xml",
+      "source": "schunk_svh_driver/package.xml",
       "upstream_repo": "ros-controls/ros2_control"
     },
     {
       "name": "joint_state_broadcaster",
       "version": "",
       "ecosystem": "ROS",
-      "source": "schunk_svh_simulation/package.xml",
+      "source": "schunk_svh_driver/package.xml",
       "upstream_repo": "ros-controls/ros2_controllers"
     },
     {
       "name": "joint_trajectory_controller",
       "version": "",
       "ecosystem": "ROS",
-      "source": "schunk_svh_simulation/package.xml",
+      "source": "schunk_svh_driver/package.xml",
       "upstream_repo": "ros-controls/ros2_controllers"
     },
     {
       "name": "launch",
       "version": "",
       "ecosystem": "ROS",
-      "source": "schunk_svh_simulation/package.xml",
+      "source": "schunk_svh_driver/package.xml",
       "upstream_repo": "ros2/launch"
     },
     {
       "name": "launch_ros",
       "version": "",
       "ecosystem": "ROS",
-      "source": "schunk_svh_simulation/package.xml",
+      "source": "schunk_svh_driver/package.xml",
       "upstream_repo": "ros2/launch_ros"
-    },
-    {
-      "name": "rviz2",
-      "version": "",
-      "ecosystem": "ROS",
-      "source": "schunk_svh_simulation/package.xml",
-      "upstream_repo": "ros2/rviz"
-    },
-    {
-      "name": "xacro",
-      "version": "",
-      "ecosystem": "ROS",
-      "source": "schunk_svh_simulation/package.xml",
-      "upstream_repo": "ros/xacro"
     },
     {
       "name": "robot_state_publisher",
@@ -81,6 +67,20 @@
       "ecosystem": "ROS",
       "source": "schunk_svh_driver/package.xml",
       "upstream_repo": "ros/robot_state_publisher"
+    },
+    {
+      "name": "xacro",
+      "version": "",
+      "ecosystem": "ROS",
+      "source": "schunk_svh_driver/package.xml",
+      "upstream_repo": "ros/xacro"
+    },
+    {
+      "name": "rviz2",
+      "version": "",
+      "ecosystem": "ROS",
+      "source": "schunk_svh_simulation/package.xml",
+      "upstream_repo": "ros2/rviz"
     },
     {
       "name": "glew",
