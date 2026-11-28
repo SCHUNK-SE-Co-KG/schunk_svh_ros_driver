@@ -26,7 +26,7 @@
 This is the repository for the Schunk SVH ROS2 driver.
 It completes the [standalone
 library](https://github.com/SCHUNK-SE-Co-KG/schunk_svh_library)
-with everything that you need to operate the five finger hand in a ROS2 context.
+with everything that you need to operate the five finger hand in a ROS2 context. It also contains simulation support.
 
 
 ## Installation
@@ -71,7 +71,10 @@ An easy example is provided with the `schunk_svh_driver/scripts/example.py` scri
 Call that in a sourced terminal and you can move individual fingers with sliders in a minimalistic GUI.
 
 ## Simulation
+### MuJoCo
 There's a _MuJoCo_-based [simulation environment](schunk_svh_simulation) for controller development and testing.
+### Isaac Sim
+There are [.usda files](schunk_svh_description/isaac/) for the left and right Hand. They have been tested on Version 4.5.0. The control of the joints is done via the ros2 bridge of Isaac Sim, an example to drive simulation and real hand at the same time is provided in the `schunk_svh_driver/scripts/isaac_example.py` script.
 
 ## Setup on a Raspberry Pi
 Here's a [step-by-step tutorial](doc/raspberry_pi.md) of how to setup the Schunk SVH ROS2 driver on a Raspberry Pi 4.
